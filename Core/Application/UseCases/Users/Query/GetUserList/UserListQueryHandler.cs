@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.UseCases.User.Query.GetUserList
+namespace Application.UseCases.Users.Query.GetUserList
 {
     public class UserListQueryHandler : IRequestHandler<UserListQueryRequest, List<UserListDto>>
     {
@@ -30,10 +30,10 @@ namespace Application.UseCases.User.Query.GetUserList
             var query=_userRepoRead.Queryable;
             if(!string.IsNullOrEmpty(request.UserName))
                 query = query.Where(x => x.UserName == request.UserName);   
-            if(!string.IsNullOrEmpty(request.FullName))
-                query=query.Where(p=>(p.FirstName+ " "+p.LastName).Contains(request.FullName));
-            if (!string.IsNullOrEmpty(request.NationalCode))
-                query = query.Where(p => p.NationalCode.Contains(request.NationalCode));
+            //if(!string.IsNullOrEmpty(request.FullName))
+            //    query=query.Where(p=>(p.FirstName+ " "+p.LastName).Contains(request.FullName));
+            //if (!string.IsNullOrEmpty(request.NationalCode))
+            //    query = query.Where(p => p.NationalCode.Contains(request.NationalCode));
             if (!string.IsNullOrEmpty(request.MobileNumber))
                 query = query.Where(p => p.MobileNumber.Contains(request.MobileNumber));
             return  query.ProjectTo<UserListDto>(_mappingProfile.ConfigurationProvider).ToList();

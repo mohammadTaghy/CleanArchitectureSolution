@@ -1,5 +1,6 @@
 ﻿using Common;
 using Domain;
+using Domain.Entities;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Validation
 {
-    public sealed class UserValidation : ValidationRuleBase<IUser>, IUserValidation
+    public sealed class UserValidation : ValidationRuleBase<User>, IUserValidation
     {
         public IUserRepoRead UserRepo { get; set; }
         public UserValidation(IUserRepoRead repo)
@@ -23,7 +24,7 @@ namespace Application.Validation
             RuleFor(p => p.UserName).Must(
                 (rootObject, list, context) => 
                 UserRepo.CheckUniqUserName(rootObject.UserName, rootObject.Id))
-                .WithMessage(string.Format(CommonMessage.IsDuplicateUserName, nameof(IUser.UserName)));
+                .WithMessage(string.Format(CommonMessage.IsDuplicateUserName, nameof(User.UserName)));
         }
 
     }

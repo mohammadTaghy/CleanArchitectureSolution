@@ -1,6 +1,8 @@
-﻿namespace Domain
+﻿using Domain.Entities;
+
+namespace Domain
 {
-    public class UserRead : User, IUserRead
+    public class UserRead : User
     {
     }
 }

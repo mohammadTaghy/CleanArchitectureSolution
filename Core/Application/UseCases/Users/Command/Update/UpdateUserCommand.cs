@@ -4,13 +4,14 @@ using Application.Decorators;
 using Application.Validation;
 using Common;
 using Domain;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.UseCases.User.Command.Update
+namespace Application.UseCases.Users.Command.Update
 {
     public class UpdateUserCommand : ICommand
     {
@@ -41,15 +42,14 @@ namespace Application.UseCases.User.Command.Update
             {
                 userRepo.CancellationToken = cancellationToken;
 
-                IUser user = userRepo.FindAsync(command.Id).Result;
+                User user = userRepo.FindAsync(command.Id).Result;
 
                 if (user == null)
                 {
                     return Result.Fail(string.Format(CommonMessage.NotFound, command.UserName));
                 }
 
-                user.FirstName = command.FirstName;
-                user.LastName = command.LastName;
+               
                 user.UserName = command.UserName;
                 Result result;
                 var validate = userValidation.ValidateAsync(user, cancellationToken);

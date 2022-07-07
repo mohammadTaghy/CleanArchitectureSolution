@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.UseCases.User.Query.GetUserList
+namespace Application.UseCases.Users.Query.GetUserList
 {
     public class UserListQueryRequest: IRequest<List<UserListDto>>
     {

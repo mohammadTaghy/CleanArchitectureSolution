@@ -4,17 +4,30 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.IdentityModel.Protocols;
 using Microsoft.Extensions.Configuration;
+using Domain.Entities;
+
 namespace Persistence
 {
     public class PersistanceDBContext : DbContext, IPersistanceDBContext
     {
-        IConfiguration _Configuration;
+        readonly IConfiguration _Configuration;
+        public PersistanceDBContext(DbContextOptions<PersistanceDBContext> options):base(options)
+        {
+
+        }
         public PersistanceDBContext(DbContextOptions<PersistanceDBContext> options, IConfiguration configuration) : base(options)
         {
             _Configuration = configuration;
         }
 
-        public DbSet<IUser> Users { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserProfile> Profiles { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Roles> Roles { get; set; }
+        public DbSet<RolesPermission> RolesPermissions { get; set; }
+        public DbSet<UserRoles> UserRoles { get; set; }
+        DbSet<User> IPersistanceDBContext.Users { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -22,8 +35,8 @@ namespace Persistence
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema(_Configuration.GetSection("DbSetting").GetSection("Schema").Value);
-            base.OnModelCreating(modelBuilder);
+            //modelBuilder.HasDefaultSchema(_Configuration.GetSection("DbSetting").GetSection("Schema").Value);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(PersistanceDBContext).Assembly);
         }
     }
     //public static class ModelBuilderExtensions

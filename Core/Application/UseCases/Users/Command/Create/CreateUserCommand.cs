@@ -1,11 +1,12 @@
 ﻿using Application.Common;
 using Application.Mappings;
 using Domain;
+using Domain.Entities;
 using MediatR;
 
-namespace Application.UseCases.User.Command.Create
+namespace Application.UseCases.Users.Command.Create
 {
-    public class CreateUserCommand:IRequest<CommandRequest<int>>,IMapFrom<IUser>
+    public class CreateUserCommand:IRequest<CommandRequest<int>>,IMapFrom<User>
     {
         
         public string UserName { get; set; }

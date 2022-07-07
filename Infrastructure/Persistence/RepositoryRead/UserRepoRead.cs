@@ -1,5 +1,6 @@
 ﻿using Application;
 using Domain;
+using Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Persistence
 {
-    public class UserRepoRead: RepositoryReadBase<IUser>, IUserRepoRead
+    public class UserRepoRead: RepositoryReadBase<User>, IUserRepoRead
     {
         public UserRepoRead(IConfiguration config):base(config)
         {

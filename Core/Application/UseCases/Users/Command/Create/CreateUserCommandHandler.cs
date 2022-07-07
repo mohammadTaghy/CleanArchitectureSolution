@@ -6,7 +6,7 @@ using Common;
 using Domain;
 using MediatR;
 
-namespace Application.UseCases.User.Command.Create
+namespace Application.UseCases.Users.Command.Create
 {
 
     public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, CommandRequest<int>>
@@ -25,7 +25,7 @@ namespace Application.UseCases.User.Command.Create
         public Task<CommandRequest<int>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             
-            IUserRead user = _mappingProfile.Map<UserRead>(request);
+            UserRead user = _mappingProfile.Map<UserRead>(request);
 
             var validate = _userValidation.ValidateAsync(user, cancellationToken);
             if (validate.IsFaulted)
