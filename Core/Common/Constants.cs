@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Extention;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,8 +31,19 @@ namespace Common
         }
         public enum Gender
         {
+            [EnumDisplayName(DisplayName ="آقا")]
             Male,
+            [EnumDisplayName(DisplayName = "خانم")]
             Female
+        }
+        public enum Status:byte
+        {
+            [EnumDisplayName(DisplayName = "در حال بررسی")]
+            InCheck,
+            [EnumDisplayName(DisplayName = "تایید شده")]
+            Confirm,
+            [EnumDisplayName(DisplayName = "تایید نشده")]
+            UnConfirm
         }
     }
 }

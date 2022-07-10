@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using Application.Common.Interfaces;
+using Domain;
 using Domain.Entities;
 using FluentValidation;
 using System;
@@ -11,6 +12,6 @@ namespace Application.Validation
 {
     public interface IUserValidation:IValidationRuleBase<User>, IValidator<User>
     {
-        IUserRepoRead UserRepo { get; set; }
+        IUserRepo UserRepo { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace Application.Common.Exceptions
         public BadRequestException(string message)
             : base(message)
         {
+           
         }
     }
 }

@@ -21,17 +21,18 @@ namespace Application
         T Find(Expression<Func<T, bool>> predicate);
         Task<T> FindAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken);
         Task<IList<T>> ItemList(Expression<Func<T, bool>> predicate);
+        Task<bool> AnyEntity(Expression<Func<T, bool>> predicate);
         #endregion
         #region Manipulate
         void Add(T entity);
         void Attach(T entity);
-        T Insert(T entity);
-        T Update(T entity);
-        T DeleteItem(T entity);
+        Task<T> Insert(T entity);
+        Task<T> Update(T entity);
+        Task<T> DeleteItem(T entity);
         Task<T> DeleteItem(int id);
-        bool DeleteItems(IList<T> items);
-        Task<bool> DeleteItems(IList<int> ids);
-        void Save();
+        Task<bool> DeleteItems(IList<T> items);
+        bool DeleteItems(IList<int> ids);
+        Task Save();
         #endregion
     }
 }

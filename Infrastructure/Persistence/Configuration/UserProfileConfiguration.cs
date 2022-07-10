@@ -14,7 +14,9 @@ namespace Persistence.Configuration
         public void Configure(EntityTypeBuilder<UserProfile> builder)
         {
             builder.ToTable(nameof(UserProfile));
-            
+            builder.HasOne(p => p.User)
+                .WithOne(p => p.UserProfile)
+                .HasForeignKey<UserProfile>(p => p.Id);
 
             builder.Property(p=>p.FirstName).HasMaxLength(1024).IsRequired();
             builder.Property(p => p.LastName).HasMaxLength(1024).IsRequired();

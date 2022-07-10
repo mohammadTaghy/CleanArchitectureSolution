@@ -1,29 +1,41 @@
-using Infrastructure;
+using API.Common;
+using Application.DI;
+using Common.DI;
+using FluentValidation.AspNetCore;
 using Infrastructure.DI;
-using Infrastructure.Utils;
+using Persistence;
+using Microsoft.AspNetCore.Builder;
+using Application.Common.Interfaces;
+using API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddInfrastructure(builder.Configuration, builder.Host);
+builder.Services.AddCommonDependency(builder.Configuration, builder.Host);
+builder.Services.AddApplicationDependency(builder.Configuration, builder.Host);
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers()
+    .AddFluentValidation(p=>p.RegisterValidatorsFromAssemblyContaining<PersistanceDBContext>());
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddInfrastructure(builder.Configuration, builder.Host);
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseCustomExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseAuthorization();
 
-app.MapControllers();
-builder.Services.AddMemoryCache();
+app.MapControllerRoute(name: "default",
+               pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();

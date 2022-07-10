@@ -22,8 +22,8 @@ namespace Domain.Entities
         public bool IsUserConfirm { get ; set ; }
         [Column(IsRequired = true, Title = "مدیر کاریر را تایید کرده است")]
         public byte ManagerConfirm { get ; set ; }
-        [Column(IsRequired = true, Title = "شناسه دستگاه")]
-        public string DeviceId { get ; set ; }
+        [Column( Title = "شناسه دستگاه")]
+        public string? DeviceId { get ; set ; }
         public UserProfile UserProfile { get ; set ; }
         public ICollection<UserRoles> UserRoles { get ; set ; }
     }

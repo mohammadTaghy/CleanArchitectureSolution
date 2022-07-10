@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class UserProfile : User
+    public class UserProfile :Entity
     {
+
         [Column(IsRequired = true, Title = "جنسیت")]
         public byte Gender { get; set; }
         [Column(IsRequired = true, Title = "کد پستی")]
@@ -26,5 +27,8 @@ namespace Domain.Entities
         public string LastName { get; set; }
         [Column( Title = "مد ملی")]
         public string? NationalCode { get; set; }
+        
+
+        public User User { get; set; }
     }
 }

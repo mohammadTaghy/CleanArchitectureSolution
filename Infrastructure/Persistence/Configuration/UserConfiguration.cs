@@ -24,7 +24,7 @@ namespace Persistence.Configuration
                 ;
             builder.Property(p => p.UserName).HasMaxLength(512).IsRequired();
             builder.Property(p => p.UserCode).HasMaxLength(20).IsRequired();
-            builder.Property(p => p.DeviceId).HasMaxLength(512).IsRequired();
+            builder.Property(p => p.DeviceId).HasMaxLength(512);
             builder.Property(p => p.Email).HasMaxLength(128).IsRequired();
             builder.Property(p => p.MobileNumber).HasMaxLength(12).IsRequired();
             builder.Property(p => p.PasswordHash).HasMaxLength(2048).IsRequired();
