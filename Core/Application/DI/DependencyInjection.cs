@@ -17,7 +17,7 @@ namespace Application.DI
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApplicationDependency(this IServiceCollection services, IConfiguration configuration, IHostBuilder environment)
+        public static IServiceCollection AddApplicationDependency(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());

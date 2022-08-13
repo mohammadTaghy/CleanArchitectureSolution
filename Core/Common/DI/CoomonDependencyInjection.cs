@@ -13,7 +13,7 @@ namespace Common.DI
 {
     public static class CoomonDependencyInjection
     {
-        public static IServiceCollection AddCommonDependency(this IServiceCollection services, IConfiguration configuration, IHostBuilder environment)
+        public static IServiceCollection AddCommonDependency(this IServiceCollection services, IConfiguration configuration)
         {
             //services.AddSingleton<IMemoryCache>();
             //services.AddSingleton<IMemoryCacheManager, MemoryCacheManager>();

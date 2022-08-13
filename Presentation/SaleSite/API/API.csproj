@@ -1,14 +1,46 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <BaseOutputPath>../MainDll/bin</BaseOutputPath>
+    <FrontendRoot>FrontEnd-Ang</FrontendRoot>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="FrontEnd-Ang\src\app\cms\auth\login.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\auth\login.guard.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\auth\login.interceptor.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\auth\login.module.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\auth\store\login.action.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\auth\store\login.effects.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\auth\store\login.reducer.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\cms.module.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\cms.routing.module.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\constant\constant.common.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\filterRequestBody\filter-request-body.common.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\main\store\cms-module.action.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\main\store\cms-module.effects.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\main\store\cms-module.reducer.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\store\cms.reducer.ts" />
+    <None Remove="FrontEnd-Ang\src\app\commonComponent\apiAddresses.common.ts" />
+    <None Remove="FrontEnd-Ang\src\app\commonComponent\callAPI.common.ts" />
+    <None Remove="FrontEnd-Ang\src\app\commonComponent\common.module.ts" />
+    <None Remove="FrontEnd-Ang\src\app\commonComponent\placeholder\placeholder.directive.ts" />
+    <None Remove="FrontEnd-Ang\src\app\model\Permission.model.ts" />
+    <None Remove="FrontEnd-Ang\src\app\model\roles.model.ts" />
+    <None Remove="FrontEnd-Ang\src\app\model\user.model.ts" />
+    <None Remove="FrontEnd-Ang\src\app\model\userProfile.model.ts" />
+    <None Remove="FrontEnd-Ang\src\app\site\sites.module.ts" />
+    <None Remove="FrontEnd-Ang\src\app\site\sites.routing.module.ts" />
+    <None Remove="FrontEnd-Ang\src\app\store\app.reducer.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
@@ -18,7 +50,78 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\" />
+    <Folder Include="FrontEnd-Ang\src\app\cms\main\Modules\" />
+    <Folder Include="FrontEnd-Ang\src\app\site\auth\" />
+    <Folder Include="FrontEnd-Ang\src\app\site\commen\" />
+    <Folder Include="FrontEnd-Ang\src\app\site\main\" />
+    <Folder Include="FrontEnd-Ang\src\app\site\Modules\" />
+    <Folder Include="FrontEnd-Ang\src\app\site\store\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\auth\login.component.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\auth\login.guard.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\auth\login.interceptor.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\auth\login.module.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\auth\store\login.action.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\auth\store\login.effects.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\auth\store\login.reducer.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\cms.module.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\cms.routing.module.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\constant\constant.common.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\filterRequestBody\filter-request-body.common.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\store\cms-module.action.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\store\cms-module.effects.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\store\cms-module.reducer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\store\cms.reducer.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\commonComponent\apiAddresses\apiAddresses.common.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\commonComponent\callAPI\callAPI.common.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\commonComponent\common.module.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\commonComponent\placeholder\placeholder.directive.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\permission.model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\roles.model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\userProfile.model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\user.model.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\site\sites.module.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\site\sites.routing.module.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\store\app.reducer.ts" />
+  </ItemGroup>
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(FrontendRoot)node_modules') ">
+    
+   <!--Ensure Node.js is installed--> 
+  
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+    <Exec WorkingDirectory="$(FrontendRoot)" Command="npm install" />
+  </Target>
+  <Target Name="PublishAngular" AfterTargets="ComputeFilesToPublish">
+    <Exec Command="npm install" WorkingDirectory="$(FrontendRoot)" />
+    <Exec Command="npm run build -- --prod" WorkingDirectory="$(FrontendRoot)" />
+    <ItemGroup>
+      <DistFiles Include="$(FrontendRoot)dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+</Target>
 </Project>

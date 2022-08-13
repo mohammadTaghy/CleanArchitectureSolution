@@ -5,7 +5,7 @@
         public CommandResponse(IEnumerable<string> error)
         {
             IsSuccess = false;
-            Error = error;
+            Errors = error;
         }
         public CommandResponse(bool success)
         {
@@ -20,7 +20,7 @@
         public T Result { get; set; }
         public bool IsSuccess { get; set; }
 
-        public IEnumerable<string> Error { get; set; }
+        public IEnumerable<string> Errors { get; set; }
     }
 
 }
