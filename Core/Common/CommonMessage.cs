@@ -20,5 +20,7 @@ namespace Common
         public const string Error = "خطایی وجود دارد";
 
         public const string ValidationMessage = "یک یا چند اعتبارسنجی با مشکل مواجه شده است";
+
+        public const string NullException = "مقدار پارامتر {0} برابر null می باشد ";
     }
 }

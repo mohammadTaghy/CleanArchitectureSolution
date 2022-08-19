@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class CallAPIComponent {\n  constructor(http) {\n    this.http = http;\n  }\n\n  PostApi(url, requestBody) {\n    return this.http.post(url, requestBody);\n  }\n\n}","map":null,"metadata":{},"sourceType":"module"}

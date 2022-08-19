@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using Application.Common.Interfaces;
+using Common;
 using Domain;
 using FluentValidation;
 using System.Reflection;

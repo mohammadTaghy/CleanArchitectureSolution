@@ -13,11 +13,10 @@ namespace Common.DI
 {
     public static class CoomonDependencyInjection
     {
-        public static IServiceCollection AddCommonDependency(this IServiceCollection services, IConfiguration configuration, IHostBuilder environment)
+        public static IServiceCollection AddCommonDependency(this IServiceCollection services, IConfiguration configuration)
         {
-            IMemoryCache memoryCache = new MemoryCache(new MemoryCacheOptions());
-            services.AddSingleton(memoryCache);
-            services.AddSingleton<IMemoryCacheManager>(new MemoryCacheManager(memoryCache));
+            //services.AddSingleton<IMemoryCache>();
+            //services.AddSingleton<IMemoryCacheManager, MemoryCacheManager>();
             return services;
         }
     }

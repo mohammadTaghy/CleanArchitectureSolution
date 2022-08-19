@@ -1,6 +1,8 @@
-﻿namespace Domain
+﻿using Domain.Entities;
+
+namespace Domain
 {
-    public class UserWrite:User, IUserWrite
+    public class UserWrite:User
     {
     }
 }

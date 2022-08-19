@@ -1,0 +1,1 @@
+{"ast":null,"code":"import * as FromCmsLogin from '../auth/store/login.reducer';\nexport const cmsReducer = {\n  loginState: FromCmsLogin.LoginReducer\n};","map":null,"metadata":{},"sourceType":"module"}

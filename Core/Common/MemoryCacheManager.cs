@@ -33,6 +33,7 @@ namespace Common
             if (_memoryCache.Get(key) != null)
                 _memoryCache.Remove(key);
             _memoryCache.Set<T>(key, value, DateTimeHelper.CurrentMDateTime.AddMinutes(minuteTimeOut));
+            await Task.Delay(1000);
         }
         public void Add<T>(string key, T value)
         {
@@ -55,6 +56,7 @@ namespace Common
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException(nameof(key));
             _memoryCache.Remove(key);
+            await Task.Delay(1000);
         }
         #endregion
         #region Get

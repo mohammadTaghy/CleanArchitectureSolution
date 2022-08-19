@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repository
 {
-    internal abstract class RepositoryBase<T> : IRepositoryBase<T>
+    public abstract class RepositoryBase<T> : IRepositoryBase<T>
         where T : class, IEntity
     {
 
@@ -26,7 +26,7 @@ namespace Persistence.Repository
         public CancellationToken CancellationToken { get; set; }
         public PersistanceDBContext Context;
 
-        bool isNoTracking = false;
+        bool isNoTracking = true;
         int maxId = 0;
         int MaxId
         {
@@ -79,7 +79,7 @@ namespace Persistence.Repository
             {
                 if (entity.State == EntityState.Added)
                 {
-                    SetID(entity);
+                   // SetID(entity);
                     SetCreate(entity);
 
                 }
@@ -134,50 +134,53 @@ namespace Persistence.Repository
         {
             return await GetAllAsQueryable().Where(predicate).ToListAsync(CancellationToken);
         }
-
+        public async Task<bool> AnyEntity(Expression<Func<T, bool>> predicate)
+        {
+            return await GetAllAsQueryable().AnyAsync(predicate);
+        }
         #endregion
         #region Manipulate
 
-        public virtual T DeleteItem(T entity)
+        public virtual async Task<T> DeleteItem(T entity)
         {
             Context.Entry(entity).State = EntityState.Deleted;
-            Save();
+             await  Save();
             return entity;
         }
-        public virtual Task<T> DeleteItem(int id)
+        public virtual async Task<T> DeleteItem(int id)
         {
             Task<T> entity = FindAsync(id);
             Context.Entry(entity).State = EntityState.Deleted;
-            Save();
-            return entity;
+            await Save();
+            return entity.Result;
         }
 
-        public virtual bool DeleteItems(IList<T> items)
+        public virtual async Task<bool> DeleteItems(IList<T> items)
         {
             foreach (T item in items)
             {
                 Context.Entry(item).State = EntityState.Deleted;
             }
-            Save();
+            await Save();
             return true;
         }
 
-        public virtual Task<bool> DeleteItems(IList<int> ids)
+        public virtual bool DeleteItems(IList<int> ids)
         {
-            Task<IList<T>> items = ItemList(p => ids.Contains(p.Id));
-            return items.ContinueWith(p=> DeleteItems(p.Result));
+            IList<T> items = ItemList(p => ids.Contains(p.Id)).Result;
+            return DeleteItems(items).Result;
         }
 
-        public virtual T Insert(T entity)
+        public virtual async Task<T> Insert(T entity)
         {
             Context.Entry(entity).State = EntityState.Added;
-            Save();
+            await Save();
             return entity;
         }
-        public virtual T Update(T entity)
+        public virtual async Task<T> Update(T entity)
         {
             Context.Entry(entity).State = EntityState.Modified;
-            Save();
+            await Save();
             return entity;
         }
         public void Add(T entity)
@@ -202,7 +205,7 @@ namespace Persistence.Repository
                  });
             });
         }
-        public async void Save()
+        public async Task Save()
         {
             var entities = Context.ChangeTracker.Entries().Where(p => p.State != EntityState.Unchanged);
            // await Task.Run(() =>
@@ -226,10 +229,6 @@ namespace Persistence.Repository
             }
 
         }
-
-
-
-
         #endregion
 
     }

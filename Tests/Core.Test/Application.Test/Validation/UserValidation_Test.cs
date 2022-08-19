@@ -1,6 +1,7 @@
 ﻿using Application.Validation;
 using Common;
 using Domain;
+using Domain.Entities;
 using FluentValidation.TestHelper;
 using Moq;
 using System;
@@ -15,22 +16,22 @@ namespace Application.Test.Validation
 {
     public class UserValidation_Test: UnitTestBase
     {
-        private readonly Mock<IUserRepoRead> _userRepo;
-        private readonly IUser _user;
+        private readonly Mock<IUserRepo> _userRepo;
+        private readonly User _user;
         private readonly UserValidation validation;
 
         public UserValidation_Test(ITestOutputHelper testOutputHelper):base(testOutputHelper)
         {
-            _userRepo = new Mock<IUserRepoRead>();
-            _user = Mock.Of<IUser>();
+            _userRepo = new Mock<IUserRepo>();
+            _user = Mock.Of<User>();
             validation = new UserValidation(_userRepo.Object);
         }
         [Fact]
         public void ValidationExceptionIfIsNull()
         {
 
-            _userRepo.Setup(x => x.CheckUniqUserName(It.IsAny<string>(), It.IsAny<int>())).
-                Returns(true);
+            //_userRepo.Setup(x => x.CheckUniqUserName(It.IsAny<string>(), It.IsAny<int>())).
+            //    Returns(true);
             _user.UserName = string.Empty;
             var validate = validation.TestValidate(_user);
             Assert.True(validate.IsValid);

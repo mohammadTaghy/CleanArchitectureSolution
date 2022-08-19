@@ -1,5 +1,6 @@
 ﻿using Common;
 using Domain;
+using Domain.Entities;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -9,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Application.Validation
 {
-    public sealed class UserValidation : ValidationRuleBase<IUser>, IUserValidation
+    public sealed class UserValidation : ValidationRuleBase<User>, IUserValidation
     {
-        public IUserRepoRead UserRepo { get; set; }
-        public UserValidation(IUserRepoRead repo)
+        public IUserRepo UserRepo { get; set; }
+        public UserValidation(IUserRepo repo)
         {
             this.UserRepo = repo;
             AddCheckValidation();
@@ -20,10 +21,10 @@ namespace Application.Validation
         public override void AddCheckValidation()
         {
             base.AddCheckValidation();
-            RuleFor(p => p.UserName).Must(
-                (rootObject, list, context) => 
-                UserRepo.CheckUniqUserName(rootObject.UserName, rootObject.Id))
-                .WithMessage(string.Format(CommonMessage.IsDuplicateUserName, nameof(IUser.UserName)));
+            //RuleFor(p => p.UserName).Must(
+            //    (rootObject, list, context) => 
+            //    UserRepo.CheckUniqUserName(rootObject.UserName, rootObject.Id))
+            //    .WithMessage(string.Format(CommonMessage.IsDuplicateUserName, nameof(User.UserName)));
         }
 
     }
