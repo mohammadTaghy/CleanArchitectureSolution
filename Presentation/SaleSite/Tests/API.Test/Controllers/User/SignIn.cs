@@ -18,7 +18,7 @@ namespace API.Test.Controllers.User
 
         }
         [Fact]
-        public void SignIn_ReturnSuccess_ResultTest()
+        public async Task SignIn_ReturnSuccess_ResultTest()
         {
             var result = new CommandResponse<string>(true,
                   JWTToken<BaseJwtPayload>.CreateToken(new BaseJwtPayload
@@ -36,10 +36,10 @@ namespace API.Test.Controllers.User
                 Password="1234",
                 UserName="test",
             };
-            var response = _userController.SignIn(query, CancellationToken.None);
+            var response = await _userController.SignIn(query, CancellationToken.None);
             Assert.NotNull(response);
-            Assert.True(response.IsCompletedSuccessfully);
-            Assert.Equal(response.Result.Result, result.Result);
+            Assert.True(response.IsSuccess);
+            Assert.Equal(response.Result, result.Result);
         }
         public void Dispose()
         {

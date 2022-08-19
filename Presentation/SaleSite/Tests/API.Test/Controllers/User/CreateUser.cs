@@ -24,8 +24,8 @@ namespace API.Test.Controllers.User
         [Fact]
         public async Task CreateUserAPI_ReturnsError_ResultTest()
         {
-           var result=  Assert.ThrowsAsync<ArgumentNullException>(() => _userController.CreateUser(null, CancellationToken.None));
-            Assert.Equal(string.Format(CommonMessage.NullException, "اطلاعات کاربر"), result.Result.Message);
+           var result= await  Assert.ThrowsAsync<ArgumentNullException>(() => _userController.CreateUser(null, CancellationToken.None));
+            Assert.Equal(string.Format(CommonMessage.NullException, "اطلاعات کاربر"), result.Message);
 
         }
         [Fact]
@@ -53,10 +53,10 @@ namespace API.Test.Controllers.User
                 .Returns(Task.FromResult(new CommandResponse<int>(true,1)));
 
 
-            var response = _userController.CreateUser(command, CancellationToken.None);
+            var response =await _userController.CreateUser(command, CancellationToken.None);
 
-            Assert.True(response.IsCompleted);
-            Assert.Equal(response.Result.Result, result.Result);
+            Assert.True(response.IsSuccess);
+            Assert.Equal(response.Result, result.Result);
         }
         public void Dispose()
         {
