@@ -1,5 +1,6 @@
 ﻿using Application.Common.Model;
 using Application.UseCases.UserCase.Command.Create;
+using Application.UseCases.UserCase.Query.SignIn;
 using Common;
 using Common.JWT;
 using MediatR;
@@ -42,6 +43,25 @@ namespace API.Controllers
                     IsSecondRegister = false,
                     IsUsrConfirm = true,
                     UserId = result.Result
+                })
+            );
+        }
+        [HttpPost]
+        //[Route("CreateUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<CommandResponse<string>> SignIn(SignInQuery signInQuery,CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(signInQuery, cancellationToken);
+            return new CommandResponse<string>(true,
+                JWTToken<BaseJwtPayload>.CreateToken(new BaseJwtPayload
+                {
+                    CurrentVersionCode = 1,
+                    IsManagerConfirm = false,
+                    IsSecondRegister = false,
+                    IsUsrConfirm = true,
+                    UserId = result
                 })
             );
         }

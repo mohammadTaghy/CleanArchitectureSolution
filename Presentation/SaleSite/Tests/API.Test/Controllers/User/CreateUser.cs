@@ -16,19 +16,10 @@ using System.Threading.Tasks;
 
 namespace API.Test.Controllers.User
 {
-    public class CreateUser :IClassFixture<WebApplicationFactory<Startup>>, IDisposable
+    public class CreateUser : BaseUserController, IDisposable
     {
-        private readonly WebApplicationFactory<Startup> _factory;
-        private readonly Mock<IMediator> _mediator;
-        private readonly UserController _userController;
-        private readonly HttpClient _client;
-
-        public CreateUser(WebApplicationFactory<Startup> factory)
+        public CreateUser()
         {
-            _factory= factory;
-            //_client = _factory.CreateClient();
-            _mediator = new Mock<IMediator>();
-            _userController = new UserController(_mediator.Object);
         }
         [Fact]
         public async Task CreateUserAPI_ReturnsError_ResultTest()

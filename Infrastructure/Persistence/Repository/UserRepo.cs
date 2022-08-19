@@ -22,7 +22,7 @@ namespace Persistence.Repository
 
         public async Task<User> FindAsync(int? id, string userName, CancellationToken cancellationToken)
         {
-            return await base.FindAsync(p => p.Id == id && p.UserName == userName, cancellationToken);
+            return await base.FindAsync(p => p.Id == id || p.UserName == userName, cancellationToken);
         }
 
         
