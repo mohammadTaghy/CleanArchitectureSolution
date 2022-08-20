@@ -27,10 +27,10 @@ namespace Application.UseCases.UserCase.Query.SignIn
         public async Task<int> Handle(SignInQuery request, CancellationToken cancellationToken)
         {
             User user =await _userRepoRead.FindAsync(null, request.UserName, cancellationToken);
-            if (user.PasswordHash == UtilizeFunction.CreateMd5(request.Password))
+            if (user!=null && user.PasswordHash == UtilizeFunction.CreateMd5(request.Password))
                 return user.Id;
             else
-                throw new NotFoundException(request.UserName, request.Password);
+                throw new NotFoundException(request.UserName,"");
         }
     }
 }

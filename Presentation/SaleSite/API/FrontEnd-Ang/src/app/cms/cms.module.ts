@@ -6,6 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { BrowserModule } from "@angular/platform-browser";
 import { StoreModule } from "@ngrx/store";
 import { EffectsFeatureModule, EffectsModule } from "@ngrx/effects";
@@ -32,7 +34,7 @@ import { ApiAddresses } from "../commonComponent/apiAddresses/apiAddresses.commo
     RouterModule,
     CmsRoutingModule,
     
-    MatInputModule, MatFormFieldModule, MatIconModule, MatProgressSpinnerModule,
+    MatInputModule, MatFormFieldModule, MatIconModule, MatProgressSpinnerModule, MatButtonModule, MatCardModule
     
   ],
   //,

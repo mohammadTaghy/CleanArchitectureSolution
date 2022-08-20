@@ -120,15 +120,15 @@ namespace Persistence.Repository
         }
         public async Task<T> FindAsync(int id)
         {
-            return await GetAllAsQueryable().FirstAsync(x => x.Id == id, CancellationToken);
+            return await GetAllAsQueryable().FirstOrDefaultAsync(x => x.Id == id, CancellationToken);
         }
         public T Find(Expression<Func<T, bool>> predicate)
         {
-            return GetAllAsQueryable().First(predicate);
+            return GetAllAsQueryable().FirstOrDefault(predicate);
         }
         public async Task<T> FindAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
         {
-            return await GetAllAsQueryable().FirstAsync(predicate, cancellationToken);
+            return await GetAllAsQueryable().FirstOrDefaultAsync(predicate, cancellationToken);
         }
         public async Task<IList<T>> ItemList(Expression<Func<T, bool>> predicate)
         {

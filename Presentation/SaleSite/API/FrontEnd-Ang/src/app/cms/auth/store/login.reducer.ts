@@ -14,12 +14,10 @@ const initialState: LoginState={
 }
 
 export function LoginReducer(state = initialState, action: LoginActions.LoginActions) {
-  console.log("start Reducer");
   console.log(action.type);
+  console.log(action);
   switch (action.type) {
-
     case LoginActions.LOGIN_START:
-      console.log("start Reducer login start");
       return {
         ...state,
         authError: '',

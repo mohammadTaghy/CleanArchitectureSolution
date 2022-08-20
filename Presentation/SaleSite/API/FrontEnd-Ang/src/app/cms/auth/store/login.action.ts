@@ -24,7 +24,7 @@ export class Logout implements Action {
 export class LoginStart implements Action {
   readonly type = LOGIN_START;
 
-  constructor(public payload: { userName: string; password: string }) { console.log("start constructor"); }
+  constructor(public payload: { userName: string; password: string }) {  }
 }
 
 export class LoginFail implements Action {

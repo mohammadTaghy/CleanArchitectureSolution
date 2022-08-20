@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -15,6 +16,7 @@ import { EffectsModule, EffectsFeatureModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { LoginEffects } from './cms/auth/store/login.effects';
 import * as fromLogin from './cms/auth/store/login.reducer';
+import * as fromCmsApp from "./cms/store/cms.reducer"
 
 
 
@@ -25,6 +27,7 @@ import * as fromLogin from './cms/auth/store/login.reducer';
   imports: [
     HttpClientModule,
     BrowserModule,
+    BrowserAnimationsModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -39,7 +42,7 @@ import * as fromLogin from './cms/auth/store/login.reducer';
     
 
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    StoreModule.forFeature('loginReducer', fromLogin.LoginReducer),
+    StoreModule.forRoot(fromCmsApp.cmsReducer),
     EffectsModule.forFeature([LoginEffects]),
 
     StoreRouterConnectingModule.forRoot(),
