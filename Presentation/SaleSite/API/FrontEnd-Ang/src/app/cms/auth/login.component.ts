@@ -13,38 +13,7 @@ import * as fromLoginAction from "./store/login.action"
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styles: [
-    `
-      :host {
-        display: flex;
-        justify-content: center;
-        margin: 100px 0px;
-      }
-
-      .mat-form-field {
-        width: 100%;
-        min-width: 300px;
-      }
-
-      mat-card-title,
-      mat-card-content {
-        display: flex;
-        justify-content: center;
-      }
-
-      .error {
-        padding: 16px;
-        width: 300px;
-        color: white;
-        background-color: red;
-      }
-
-      .button {
-        display: flex;
-        justify-content: flex-end;
-      }
-    `,
-  ],
+  styleUrls: ['/login.component.css'],
 })
 @Injectable()
 export class LoginComponent implements OnInit, OnDestroy {

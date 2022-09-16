@@ -5,16 +5,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Common
 {
     public class CurrentUserSession
     {
+        #region properties
+        private static CurrentUserSessionDto _userInfo = null;
+        private  readonly HttpContext _context;
         public static CurrentUserSessionDto UserInfo
         {
-            get;
-            set;
+            get
+            {
+                //if (_userInfo == null)
+                //    _userInfo = JsonConvert.DeserializeObject<CurrentUserSessionDto>(
+                //        _context.Session.GetString("UserInfo"));
+                return _userInfo;
+
+            }
+            set { _userInfo = value; }
         }
+        #endregion
+        public CurrentUserSession(HttpContext context)
+        {
+            _context = context;
+        }
+        //public static void AddUserIfoSession(CurrentUserSessionDto userSessionDto)
+        //{
+        //    _context.Session.SetString("userInfo", JsonConvert.SerializeObject(userSessionDto));
+        //}
+       
+
+       
+
     }
     public class CurrentUserSessionDto
     {

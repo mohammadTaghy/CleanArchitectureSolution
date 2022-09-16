@@ -30,6 +30,9 @@ namespace Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("AutoCode")
+                        .HasColumnType("int");
+
                     b.Property<string>("CommandName")
                         .IsRequired()
                         .HasMaxLength(1024)
@@ -44,8 +47,18 @@ namespace Persistence.Migrations
                     b.Property<byte>("FeatureType")
                         .HasColumnType("tinyint");
 
+                    b.Property<string>("FullKeyCode")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LevelChar")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<int?>("ModifyBy")
                         .HasColumnType("int");
@@ -58,12 +71,17 @@ namespace Persistence.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Permission", (string)null);
                 });
@@ -295,6 +313,15 @@ namespace Persistence.Migrations
                     b.ToTable("UserRoles", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.Permission", b =>
+                {
+                    b.HasOne("Domain.Entities.Permission", "ParentEntity")
+                        .WithMany("ChildList")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("ParentEntity");
+                });
+
             modelBuilder.Entity("Domain.Entities.RolesPermission", b =>
                 {
                     b.HasOne("Domain.Entities.Permission", "Permission")
@@ -346,6 +373,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Permission", b =>
                 {
+                    b.Navigation("ChildList");
+
                     b.Navigation("RolesPermissions");
                 });
 

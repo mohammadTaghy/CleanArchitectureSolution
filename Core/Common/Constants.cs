@@ -45,5 +45,12 @@ namespace Common
             [EnumDisplayName(DisplayName = "تایید نشده")]
             UnConfirm
         }
+        public enum FeatureType
+        {
+            Menu,
+            Form,
+            Tab,
+            Command
+        }
     }
 }

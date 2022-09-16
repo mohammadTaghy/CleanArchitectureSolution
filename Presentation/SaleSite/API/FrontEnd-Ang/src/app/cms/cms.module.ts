@@ -21,10 +21,11 @@ import { LoginEffects } from "./auth/store/login.effects";
 import { LoginGuard } from "./auth/login.guard";
 import { CallAPIComponent } from "../commonComponent/callAPI/callAPI.common";
 import { ApiAddresses } from "../commonComponent/apiAddresses/apiAddresses.common";
+import { AdminPanelComponent } from "./main/AdminPanel.component";
 
 @NgModule({
   declarations: [
-    LoginComponent
+    LoginComponent, AdminPanelComponent
   ],
   providers: [LoginGuard, LoginEffects, CallAPIComponent,
     ApiAddresses],

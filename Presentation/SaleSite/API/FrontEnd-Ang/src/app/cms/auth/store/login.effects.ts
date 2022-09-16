@@ -30,6 +30,7 @@ export class LoginEffects {
             new LoginRequestClass(data.payload.userName, data.payload.password))
           .pipe(
             map(resData => {
+              var user = new User();
               localStorage.setItem('userData', JSON.stringify(resData));
               return new LoginActions.LoginSuccess(resData);
             }),
@@ -40,24 +41,24 @@ export class LoginEffects {
 
       })
     );
-  //@Effect({ dispatch: false })
-  //authRedirect = this.actions$.pipe(
-  //  ofType(LoginActions.Login_SUCCESS),
-  //  tap(() => {
-  //    this.router.navigate(['/AdminPanel']);
-  //  })
-  //);
-  //@Effect()
-  //autoLogin = this.actions$.pipe(
-  //  ofType(LoginActions.AUTO_LOGIN),
-  //  map(() => {
-  //    const user: User = JSON.parse(localStorage.getItem('userData'));
-  //    if (!user) {
-  //      return { type: 'عدم دسترسی' };
-  //    }
-  //    return new LoginActions.LoginSuccess(user);
-  //  })
-  //);
+  @Effect({ dispatch: false })
+  authRedirect = this.actions$.pipe(
+    ofType(LoginActions.Login_SUCCESS),
+    tap(() => {
+      this.router.navigate(['/']);
+    })
+  );
+  @Effect()
+  autoLogin = this.actions$.pipe(
+    ofType(LoginActions.AUTO_LOGIN),
+    map(() => {
+      const user: User = JSON.parse(localStorage.getItem('userData'));
+      if (!user) {
+        return { type: 'عدم دسترسی' };
+      }
+      return new LoginActions.LoginSuccess(user);
+    })
+  );
   //@Effect()
   //logout = this.actions$.pipe(
   //  ofType(LoginActions.LOGOUT),
@@ -71,7 +72,8 @@ export class LoginEffects {
     private sources: EffectSources,
     private actions$: Actions,
     private callAPIComponent: CallAPIComponent,
-    private apiAddresses: ApiAddresses
+    private apiAddresses: ApiAddresses,
+    private router: Router
   ) {
      /*sources.addEffects(this);*/
     console.log('effect inject');

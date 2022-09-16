@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Core\Application\Application.csproj" />
     <ProjectReference Include="..\..\..\..\Infrastructure\Persistence\Persistence.csproj" />
+    <ProjectReference Include="..\..\..\..\Tests\Common_Test\Common_Test.csproj" />
     <ProjectReference Include="..\..\API\API.csproj" />
   </ItemGroup>
 

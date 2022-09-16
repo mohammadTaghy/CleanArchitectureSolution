@@ -21,7 +21,6 @@ namespace Persistence
         public DbSet<Roles> Roles { get; set; }
         public DbSet<RolesPermission> RolesPermissions { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
-        DbSet<User> IPersistanceDBContext.Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

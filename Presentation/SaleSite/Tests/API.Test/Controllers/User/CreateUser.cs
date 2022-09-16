@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace API.Test.Controllers.User
 {
-    public class CreateUser : BaseUserController, IDisposable
+    public class CreateUser : BaseController_Test<UserController>, IDisposable
     {
         public CreateUser()
         {
@@ -24,7 +24,7 @@ namespace API.Test.Controllers.User
         [Fact]
         public async Task CreateUserAPI_ReturnsError_ResultTest()
         {
-           var result= await  Assert.ThrowsAsync<ArgumentNullException>(() => _userController.CreateUser(null, CancellationToken.None));
+           var result= await  Assert.ThrowsAsync<ArgumentNullException>(() => _controller.CreateUser(null, CancellationToken.None));
             Assert.Equal(string.Format(CommonMessage.NullException, "اطلاعات کاربر"), result.Message);
 
         }
@@ -53,7 +53,7 @@ namespace API.Test.Controllers.User
                 .Returns(Task.FromResult(new CommandResponse<int>(true,1)));
 
 
-            var response =await _userController.CreateUser(command, CancellationToken.None);
+            var response =await _controller.CreateUser(command, CancellationToken.None);
 
             Assert.True(response.IsSuccess);
             Assert.Equal(response.Result, result.Result);

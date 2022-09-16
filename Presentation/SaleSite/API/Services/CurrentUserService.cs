@@ -6,9 +6,9 @@ namespace API.Services
 {
     public class CurrentUserService : ICurrentUserService
     {
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+        public CurrentUserService(HttpContext httpContext)
         {
-            UserId = 1;
+            UserId = httpContext.Session.GetInt32("UserId");
             IsAuthenticated = UserId != null;
         }
 

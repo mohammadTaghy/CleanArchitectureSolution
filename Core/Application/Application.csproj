@@ -29,8 +29,11 @@
 
   <ItemGroup>
     <Folder Include="Notifications\Models\" />
-    <Folder Include="UseCases\UserProfileCase\Command\Delete\" />
-    <Folder Include="UseCases\UserProfileCase\Command\Update\" />
+    <Folder Include="UseCases\Membership\Permission\Command\Update\" />
+    <Folder Include="UseCases\Membership\RolesPermission\Command\Update\" />
+    <Folder Include="UseCases\Membership\Roles\Command\Update\" />
+    <Folder Include="UseCases\Membership\UserProfileCase\Command\Delete\" />
+    <Folder Include="UseCases\Membership\UserProfileCase\Command\Update\" />
   </ItemGroup>
 
 </Project>

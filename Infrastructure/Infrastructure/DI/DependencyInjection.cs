@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Infrastructure.Authentication;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Persistence.DI;
-using Microsoft.AspNetCore.Hosting;
+
 
 namespace Infrastructure.DI
 {
@@ -12,7 +12,7 @@ namespace Infrastructure.DI
         {
             //services.AddHandlers();
             services.AddPersistence(configuration);
-            
+
             return services;
         }
     }

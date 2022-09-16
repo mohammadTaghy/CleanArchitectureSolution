@@ -1,4 +1,5 @@
-﻿using Application.Common.Model;
+﻿using API.Controllers;
+using Application.Common.Model;
 using Application.UseCases.UserCase.Query.SignIn;
 using Common.JWT;
 using MediatR;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace API.Test.Controllers.User
 {
-    public class SignIn : BaseUserController, IDisposable
+    public class SignIn : BaseController_Test<UserController>
     {
         public SignIn()
         {
@@ -36,13 +37,10 @@ namespace API.Test.Controllers.User
                 Password="1234",
                 UserName="test",
             };
-            var response = await _userController.SignIn(query, CancellationToken.None);
+            var response = await _controller.SignIn(query, CancellationToken.None);
             Assert.NotNull(response);
             Assert.True(response.IsSuccess);
             Assert.Equal(response.Result, result.Result);
-        }
-        public void Dispose()
-        {
         }
     }
 }

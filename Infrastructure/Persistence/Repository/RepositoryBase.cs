@@ -141,18 +141,17 @@ namespace Persistence.Repository
         #endregion
         #region Manipulate
 
-        public virtual async Task<T> DeleteItem(T entity)
+        public virtual async Task<bool> DeleteItem(T entity)
         {
             Context.Entry(entity).State = EntityState.Deleted;
              await  Save();
-            return entity;
+            return true;
         }
-        public virtual async Task<T> DeleteItem(int id)
+        public virtual async Task DeleteItem(int id)
         {
             Task<T> entity = FindAsync(id);
             Context.Entry(entity).State = EntityState.Deleted;
             await Save();
-            return entity.Result;
         }
 
         public virtual async Task<bool> DeleteItems(IList<T> items)
@@ -171,17 +170,15 @@ namespace Persistence.Repository
             return DeleteItems(items).Result;
         }
 
-        public virtual async Task<T> Insert(T entity)
+        public virtual async Task Insert(T entity)
         {
             Context.Entry(entity).State = EntityState.Added;
             await Save();
-            return entity;
         }
-        public virtual async Task<T> Update(T entity)
+        public virtual async Task Update(T entity)
         {
             Context.Entry(entity).State = EntityState.Modified;
             await Save();
-            return entity;
         }
         public void Add(T entity)
         {

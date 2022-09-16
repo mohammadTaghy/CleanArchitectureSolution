@@ -14,8 +14,8 @@ namespace Application
         public CancellationToken CancellationToken { get; set; }
         #endregion
         #region Get
-        IQueryable<T> GetAllAsQueryable();
-        IQueryable<T> GetAllAsQueryable(string[] includeList);
+        protected IQueryable<T> GetAllAsQueryable();
+        protected IQueryable<T> GetAllAsQueryable(string[] includeList);
         T Find(int id);
         Task<T> FindAsync(int id);
         T Find(Expression<Func<T, bool>> predicate);
@@ -26,10 +26,10 @@ namespace Application
         #region Manipulate
         void Add(T entity);
         void Attach(T entity);
-        Task<T> Insert(T entity);
-        Task<T> Update(T entity);
-        Task<T> DeleteItem(T entity);
-        Task<T> DeleteItem(int id);
+        Task Insert(T entity);
+        Task Update(T entity);
+        Task<bool> DeleteItem(T entity);
+        Task DeleteItem(int id);
         Task<bool> DeleteItems(IList<T> items);
         bool DeleteItems(IList<int> ids);
         Task Save();

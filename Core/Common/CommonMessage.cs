@@ -22,5 +22,11 @@ namespace Common
         public const string ValidationMessage = "یک یا چند اعتبارسنجی با مشکل مواجه شده است";
 
         public const string NullException = "مقدار پارامتر {0} برابر null می باشد ";
+        public const string Unauthorized="شما دسترسی ندارید";
+
+        public const string AccessDenied = "";
+        public const string IsDuplicate= "مقدار {0} تکراری می باشد";
+
+        public const string EmptyResponse = "داده ای تعریف نشده است";
     }
 }

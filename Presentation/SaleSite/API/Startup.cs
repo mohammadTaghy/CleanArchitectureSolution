@@ -1,22 +1,17 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
-using Newtonsoft;
-
-using API.Common;
+﻿using API.Common;
 using API.Services;
 using Application.Common.Interfaces;
 using Application.DI;
 using Common.DI;
+using Domain.Entities;
+using FluentValidation.AspNetCore;
+using Infrastructure.Authentication;
 using Infrastructure.DI;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Persistence;
+using System.ComponentModel;
 
 namespace API
 {
@@ -42,8 +37,11 @@ namespace API
             //services.AddHealthChecks()
             //   .AddDbContextCheck<PersistanceDBContext>();
 
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+
             services.AddHttpContextAccessor();
             services.AddHttpClient();
             services.Configure<ApiBehaviorOptions>(options =>
@@ -95,7 +93,11 @@ namespace API
             app.UseSpaStaticFiles();
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.UseMiddleware<JwtMiddleware>();//.ServerFeatures.Get<IEndpointFeature>().Endpoint.Metadata.Any(p=>p is AuthorizeAttribute);
+
+            //app.UseAuthentication();
+            //app.UseIdentityServer();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
