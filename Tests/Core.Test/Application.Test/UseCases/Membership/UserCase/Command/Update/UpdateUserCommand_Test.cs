@@ -19,7 +19,7 @@ using Xunit.Abstractions;
 
 namespace Application.Test.UseCases.UserCase.Command.Update
 {
-    public class UpdateUserCommand_Test:UnitTestBase<User, IUserRepo, IUserValidation>
+    public class UpdateUserCommand_Test:UnitTestBase<Membership_User, IUserRepo, IUserValidation>
     {
         private readonly UpdateUserCommandHandler _handler;
         private readonly UpdateUserCommand _updateCommand;
@@ -51,7 +51,7 @@ namespace Application.Test.UseCases.UserCase.Command.Update
         public void UpdateUserCommandHandler_UserNotFound_RequestTest()
         {
             _repoMock.Setup(p => p.FindAsync(It.IsAny<int>(), It.IsAny<string>(),CancellationToken.None))
-                .Returns(()=>Task.FromResult<User>(null));
+                .Returns(()=>Task.FromResult<Membership_User>(null));
             var result = Assert.ThrowsAsync<NotFoundException>(()=> _handler.Handle(_updateCommand, CancellationToken.None));
             _repoMock.Verify(p => p.Save(), Times.Never);
             Assert.Equal(String.Format(CommonMessage.NotFound, "کاربر"),result.Result.Message);
@@ -60,7 +60,7 @@ namespace Application.Test.UseCases.UserCase.Command.Update
         [Fact]
         public void UpdateUserCommandHandler_GiveCommand_ResultTest()
         {
-            User _user = new User
+            Membership_User _user = new Membership_User
             {
                 Id = _updateCommand.Id,
                 UserName = _updateCommand.UserName,
@@ -70,7 +70,7 @@ namespace Application.Test.UseCases.UserCase.Command.Update
             _repoMock.Setup(x => x.FindAsync(It.IsAny<int>(), It.IsAny<string>(), CancellationToken.None))
                 .ReturnsAsync(_user);
             var result= _handler.Handle(_updateCommand, CancellationToken.None);
-            _repoMock.Verify(p => p.Update(It.IsAny<User>()), Times.Once);
+            _repoMock.Verify(p => p.Update(It.IsAny<Membership_User>()), Times.Once);
             Assert.True(result.IsCompleted);
         }
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application
 {
-    public interface IUserRepoRead: IRepositoryReadBase<User>
+    public interface IUserRepoRead: IRepositoryReadBase<Membership_User>
     {
         bool CheckUniqUserName(string userName, int id);
 

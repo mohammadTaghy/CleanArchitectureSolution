@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, Injectable, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { Component, ComponentFactoryResolver, Injectable, NgModule, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 
 import { Store } from "@ngrx/store";
@@ -15,7 +15,8 @@ import * as fromLoginAction from "./store/login.action"
   templateUrl: './login.component.html',
   styleUrls: ['/login.component.css'],
 })
-@Injectable()
+
+
 export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild(PlaceholderDirective, { static: false }) alertHost: PlaceholderDirective;
   private closeSub: Subscription;
@@ -25,28 +26,22 @@ export class LoginComponent implements OnInit, OnDestroy {
   public hide: boolean;
   public loginForm;
   constructor(
-    private store: Store<fromCmsApp.CmsState>,
+    private store: Store<fromCmsApp.CmsState<any>>,
     private componentFactoryResolver: ComponentFactoryResolver) {
-    console.log("LoginComponent");
+    console.log("login");
     this.isLoading = false;
     this.hide = true;
   }
  
   ngOnInit(): void {
-    console.log("LoginComponent");
     this.storeSub = this.store.select('loginState').subscribe(state => {
-      console.log("loginState subscribe");
-      console.log(state);
       this.isLoading = state.loading;
       if (state.authError)
         this.showErrorAlert(state.authError);
     })
   }
   onSubmit(loginForm: NgForm) {
-    console.log("submit");
-    console.log(loginForm.valid);
     if (!loginForm.valid) return;
-    console.log("start");
     this.store.dispatch(new fromLoginAction.LoginStart({ userName: loginForm.value.userName, password: loginForm.value.password }))
   }
   
@@ -67,7 +62,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
   }
   ngOnDestroy(): void {
-    console.log("destroy");
     this.storeSub.unsubscribe();
   }
 }

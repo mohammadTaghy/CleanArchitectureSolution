@@ -29,12 +29,12 @@ namespace Application.UseCases.UserCase.Command.Create
             if (request == null)
                 throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "User"));
 
-            User user = _mappingProfile.Map<User>(request);
+            Membership_User user = _mappingProfile.Map<Membership_User>(request);
             bool existUser = await _userRepo.AnyEntity(user);
             if (existUser)
                 throw new ValidationException(new List<FluentValidation.Results.ValidationFailure>
                 {
-                    new FluentValidation.Results.ValidationFailure(nameof(User.UserName), String.Format(CommonMessage.IsDuplicateUserName, user.UserName))
+                    new FluentValidation.Results.ValidationFailure(nameof(Membership_User.UserName), String.Format(CommonMessage.IsDuplicateUserName, user.UserName))
                 });
             user.UserCode = UtilizeFunction.GenerateStringAndNumberRandomCode(6);
             await _userRepo.Insert(user);

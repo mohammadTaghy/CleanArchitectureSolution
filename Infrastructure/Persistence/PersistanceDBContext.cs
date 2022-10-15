@@ -15,12 +15,12 @@ namespace Persistence
 
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserProfile> Profiles { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
-        public DbSet<Roles> Roles { get; set; }
-        public DbSet<RolesPermission> RolesPermissions { get; set; }
-        public DbSet<UserRoles> UserRoles { get; set; }
+        public DbSet<Membership_User> Users { get; set; }
+        public DbSet<Membership_UserProfile> Profiles { get; set; }
+        public DbSet<Membership_Permission> Permissions { get; set; }
+        public DbSet<Membership_Roles> Roles { get; set; }
+        public DbSet<Membership_RolesPermission> RolesPermissions { get; set; }
+        public DbSet<Membership_UserRoles> UserRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

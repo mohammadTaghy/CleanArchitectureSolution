@@ -10,12 +10,6 @@ namespace Application.UseCases
 {
     public class PermissionsAsTreeQuery : IRequest<QueryResponse<List<PermissionTreeDto>>>
     {
-        public PermissionsAsTreeQuery() { }
-        public PermissionsAsTreeQuery(int roleId)
-        {
-            RoleId = roleId;
-        }
-
-        public int RoleId { get; set; }
+        public int? RoleId { get; set; }
     }
 }

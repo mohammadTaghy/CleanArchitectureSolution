@@ -10,7 +10,7 @@
 //{
 //    public class GetRolesQuery : IRequest<QueryResponse<List<RolesDto>>>
 //    {
-       
+
 
 //        public string SerchText { get; set; }
 //        public int PageIndex { get; set; }

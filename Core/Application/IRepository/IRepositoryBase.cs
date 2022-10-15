@@ -24,8 +24,10 @@ namespace Application
         Task<bool> AnyEntity(Expression<Func<T, bool>> predicate);
         #endregion
         #region Manipulate
+
         void Add(T entity);
         void Attach(T entity);
+        void Delete(T entity);
         Task Insert(T entity);
         Task Update(T entity);
         Task<bool> DeleteItem(T entity);

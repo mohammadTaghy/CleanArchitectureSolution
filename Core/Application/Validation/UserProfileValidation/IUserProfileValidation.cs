@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Validation.UserProfileValidation
 {
-    public interface IUserProfileValidation : IValidationRuleBase<UserProfile>, IValidator<UserProfile>
+    public interface IUserProfileValidation : IValidationRuleBase<Membership_UserProfile>, IValidator<Membership_UserProfile>
     {
     }
 }

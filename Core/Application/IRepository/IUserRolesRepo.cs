@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application
 {
-    public interface IUserRolesRepo : IRepositoryBase<UserRoles>
+    public interface IUserRolesRepo : IRepositoryBase<Membership_UserRoles>
     {
         Task<List<int>> GetRolesId(int userId);
         Task<bool> Insert(CreateUserRolesCommand request);

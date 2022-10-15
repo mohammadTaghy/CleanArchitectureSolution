@@ -19,9 +19,9 @@ namespace Application.UseCases
 
         public async override Task<QueryResponse<RolesDto>> Handle(GetRoleItemQuery request, CancellationToken cancellationToken)
         {
-            Roles role =await _repo.FindAsync(request.Id);
+            Membership_Roles role =await _repo.FindAsync(request.Id);
             if (role is null)
-                throw new NotFoundException($"نقش با کد رایانه {request.Id}",nameof(Roles));
+                throw new NotFoundException($"نقش با کد رایانه {request.Id}",nameof(Membership_Roles));
 
             return QueryResponse<RolesDto>.CreateInstance(_mapper.Map<RolesDto>(role), "", 1);
         }

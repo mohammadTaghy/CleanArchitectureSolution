@@ -15,7 +15,7 @@ using Xunit.Abstractions;
 
 namespace Application.Test.UseCases.PermissionUseCase.Query.GetPermissionAsTree
 {
-    public class CurrentUserPermissionsAsTreeQueryHandler_Test : UnitTestBase<RolesPermission, IRolesPermissionRepo, IValidationRuleBase<RolesPermission>>
+    public class CurrentUserPermissionsAsTreeQueryHandler_Test : UnitTestBase<Membership_Permission, IPermissionRepo, IValidationRuleBase<Membership_Permission>>
     {
         private readonly CurrentUserPermissionsAsTreeQuery _query;
         private readonly CurrentUserPermissionsAsTreeQueryHandler _handler;

@@ -12,16 +12,19 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class CreatePermissionCommand : IRequest<CommandResponse<Permission>>, IMapFrom<Permission>
+    public class CreatePermissionCommand : IRequest<CommandResponse<Membership_Permission>>, IMapFrom<Membership_Permission>
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
         public string CommandName { get; set; }
         public byte FeatureType { get; set; }
         public bool IsActive { get; set; }
+        public int ParentId { get; set; }
+
         public void Mapping(MappingProfile profile)
         {
-            profile.CreateMap<CreatePermissionCommand, Permission>();
+            profile.CreateMap<CreatePermissionCommand, Membership_Permission>();
         }
     }
 }

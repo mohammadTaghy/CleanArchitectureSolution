@@ -6,6 +6,7 @@ using Common;
 using Common.JWT;
 using MediatR;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,13 @@ using System.Threading.Tasks;
 
 namespace API.Test.Controllers.User
 {
-    public class CreateUser : BaseController_Test<UserController>, IDisposable
+    public class CreateUser : BaseController_Test, IDisposable
     {
+        private readonly UserController _controller;
         public CreateUser()
         {
+
+            _controller = new UserController(_mediator.Object,_currentUserService.Object,_configuration.Object);
         }
         [Fact]
         public async Task CreateUserAPI_ReturnsError_ResultTest()
@@ -39,7 +43,7 @@ namespace API.Test.Controllers.User
                       IsSecondRegister = false,
                       IsUsrConfirm = true,
                       UserId = 1
-                  }));
+                  }, _configuration.Object["Jwt:Key"]));
 
             var command = new CreateUserCommand
             {

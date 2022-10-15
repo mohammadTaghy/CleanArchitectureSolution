@@ -7,11 +7,15 @@ using Domain.Entities;
 using FluentValidation.AspNetCore;
 using Infrastructure.Authentication;
 using Infrastructure.DI;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.IdentityModel.Tokens;
 using Persistence;
 using System.ComponentModel;
+using System.Text;
 
 namespace API
 {
@@ -29,7 +33,6 @@ namespace API
         public IWebHostEnvironment Environment { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddInfrastructure(Configuration);
             services.AddCommonDependency(Configuration);
             services.AddApplicationDependency(Configuration);
@@ -38,6 +41,8 @@ namespace API
             //   .AddDbContextCheck<PersistanceDBContext>();
 
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddScoped<ICurrentUserService, CurrentUserService>();
 
@@ -61,7 +66,8 @@ namespace API
                 options.SuppressModelStateInvalidFilter = true;
             });
 
-
+            services.AddSession();
+            services.AddMvc(option => option.EnableEndpointRouting = false).AddSessionStateTempDataProvider();
 
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
@@ -75,11 +81,30 @@ namespace API
                     .AllowAnyHeader();
                 });
             });
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new
+                    SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes
+                    (Configuration["Jwt:Key"]))
+                };
+            });
             _services = services;
         }
         public void Configure(IApplicationBuilder app)
         {
             app.UseCustomExceptionHandler();
+            app.UseSession();
+            app.UseMvc();
             app.UseCors();
 
             if (Environment.IsDevelopment())
@@ -101,10 +126,11 @@ namespace API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller}/{action=Index}/{id?}");
+                //endpoints.MapControllerRoute(
+                //    name: "default",
+                //    pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapControllers();
+
             });
             app.UseSpa(spa =>
             {
@@ -116,6 +142,7 @@ namespace API
                 }
             });
 
+            
             //app.Run();
         }
     }

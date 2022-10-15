@@ -71,14 +71,14 @@ export class ChangedView implements Action {
 }
 
 
-export type CmsActions<T> =
-  RequestSuccess<T>
-  | AddRequestStart<T>
-  | EditRequestStart<T>
-  | DeleteRequestStart<T>
+export type CmsActions =
+  RequestSuccess<any>
+  | AddRequestStart<any>
+  | EditRequestStart<any>
+  | DeleteRequestStart<any>
   | RequestFail
   | ClearError
   | FetchData
-  | SetData<T>
+  | SetData<any>
   | ChangedView
   ;

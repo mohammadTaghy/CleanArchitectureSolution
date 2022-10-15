@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.UseCases;
+using Common;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,69 +11,44 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repository
 {
-    public class RolesPermissionRepo : RepositoryBase<RolesPermission>, IRolesPermissionRepo
+    public class RolesPermissionRepo : RepositoryBase<Membership_RolesPermission>, IRolesPermissionRepo
     {
-        private readonly IUserRolesRepo _userRolesRepo;
-        public RolesPermissionRepo(PersistanceDBContext context, IUserRolesRepo userRolesRepo) : base(context)
+        public RolesPermissionRepo(PersistanceDBContext context, ICurrentUserSession currentUserSession) : base(context, currentUserSession)
         {
-            _userRolesRepo = userRolesRepo;
         }
+
+        
+
+
         #region CustomGet
-
-        public async Task<List<PermissionTreeDto>> GetCurrentRolePermissions(int userId)
+        public List<int> GetRolePermissions(List<int> rolesId)
         {
-            List<int> rolesId = await _userRolesRepo.GetRolesId(userId);
-            List<PermissionTreeDto> permissionTreeDtos = GetAllAsQueryable()
-                .Where(p => rolesId.Contains(p.RolesId)).
-                    Select(p => new PermissionTreeDto
-                    {
-                        Id = p.PermissionId,
-                        Title = p.Permission.Title,
-                        Name = p.Permission.Name,
-                        ParentId = p.Permission.ParentId
-                    }).ToList();
-            List<PermissionTreeDto> parents = permissionTreeDtos.Where(p => p.ParentId == null).ToList();
-            ChangeToHierarchy(parents, permissionTreeDtos.Except(parents).ToList());
-            return parents;
-
+            return GetAllAsQueryable().Where(p=>rolesId.Contains(p.RoleId))
+                .Select(p=>p.PermissionId)
+                .ToList();
         }
-
-        public async Task<List<PermissionTreeDto>> GetPermissions(int roleId)
+        public async Task<List<int>> GetPermissions(int? roleId)
         {
-            List<int> permissionIds = await GetAllAsQueryable().Where(p=>p.RolesId==roleId).
-                Select(p=>p.PermissionId).ToListAsync();
-            List<PermissionTreeDto> permissionTreeDtos = GetAllAsQueryable()
-                   .Select(p => new PermissionTreeDto
-                   {
-                       Id = p.PermissionId,
-                       Title = p.Permission.Title,
-                       Name = p.Permission.Name,
-                       ParentId = p.Permission.ParentId
-                   }).ToList();
-            permissionTreeDtos.Where(p => permissionIds.Contains(p.Id)).ToList().ForEach(
-                p => p.HasPermission = true
-                );
-            List<PermissionTreeDto> parents = permissionTreeDtos.Where(p => p.ParentId == null).ToList();
-            ChangeToHierarchy(parents, permissionTreeDtos.Except(parents).ToList());
-            return parents;
+            return await GetAllAsQueryable().Where(p => p.RoleId == roleId).Select(p => p.PermissionId).ToListAsync();
         }
-
-
         #endregion
         #region Manipulate
         public async Task<bool> Insert(CreateRolesPermissionCommand request)
         {
             try
             {
-                List<int> oldPermissionIds = await GetAllAsQueryable().Where(p => p.RolesId == request.RolesId).
-                Select(p => p.PermissionId).ToListAsync();
-                List<int> deletedPermissions = oldPermissionIds.Except(request.PermissionIds).ToList();
+                List<Membership_RolesPermission> oldPermissionIds = await GetAllAsQueryable().Where(p => p.RoleId == request.RolesId).ToListAsync();
+                List<int> deletedPermissions = oldPermissionIds.Where(p=>!request.PermissionIds.Contains(p.PermissionId))
+                    .Select(p=>p.PermissionId).ToList();
                 List<int> newPermissions = request.PermissionIds.Except(deletedPermissions).ToList();
-                deletedPermissions.ForEach(p => base.Context.Entry(p).State = EntityState.Deleted);
-                newPermissions.ForEach(p => new RolesPermission
-                {
-                    PermissionId = p,
-                    RolesId = request.RolesId
+                oldPermissionIds.Where(p=>deletedPermissions.Contains(p.PermissionId)).ToList().ForEach(p => Delete(p));
+                newPermissions.ForEach(p => {
+                    var entity = new Membership_RolesPermission
+                    {
+                        PermissionId = p,
+                        RoleId = request.RolesId
+                    };
+                    Add(entity);
                 });
                 await base.Save();
                 return true;
@@ -87,21 +63,7 @@ namespace Persistence.Repository
         }
         #endregion
         #region PrivateMethod
-        private void ChangeToHierarchy(List<PermissionTreeDto> parents, List<PermissionTreeDto> childs)
-        {
-            List<int> parentIds = new List<int>();
-            List<PermissionTreeDto> nextLevel = new List<PermissionTreeDto>();
-            parents.ForEach(p =>
-            {
-                p.ChildList.AddRange(childs.Where(q => q.ParentId == p.Id));
-                parentIds.Add(p.Id);
-                nextLevel.AddRange(childs.Where(q => q.ParentId == p.Id));
-            });
-            var othersChild = childs.Except(nextLevel).ToList();
-            if (othersChild.Any())
-                ChangeToHierarchy(nextLevel, othersChild);
-
-        }
+        
         #endregion
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Validation
 {
-    public sealed class UserValidation : ValidationRuleBase<User>, IUserValidation
+    public sealed class UserValidation : ValidationRuleBase<Membership_User>, IUserValidation
     {
         public IUserRepo UserRepo { get; set; }
         public UserValidation(IUserRepo repo)

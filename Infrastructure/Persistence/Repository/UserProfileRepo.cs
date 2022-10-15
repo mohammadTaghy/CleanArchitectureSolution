@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.UseCases.UserProfileCase.Query.GetUserList;
+using Common;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,19 +10,19 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repository
 {
-    public class UserProfileRepo : RepositoryBase<UserProfile>, IUserProfileRepo
+    public class UserProfileRepo : RepositoryBase<Membership_UserProfile>, IUserProfileRepo
     {
-        public UserProfileRepo(PersistanceDBContext context) : base(context)
+        public UserProfileRepo(PersistanceDBContext context, ICurrentUserSession currentUserSession) : base(context,currentUserSession)
         {
 
         }
 
-        public Task<UserProfile> FindAsync(int id, string userName,CancellationToken cancellationToken)
+        public Task<Membership_UserProfile> FindAsync(int id, string userName,CancellationToken cancellationToken)
         {
             return base.FindAsync(p => p.Id == id || p.User.UserName == userName,cancellationToken);
         }
 
-        public Task<List<UserProfile>> ItemList(UserListQuery userListQueryHandler, out int total)
+        public Task<List<Membership_UserProfile>> ItemList(UserListQuery userListQueryHandler, out int total)
         {
             var query = GetAllAsQueryable();
             if(!string.IsNullOrEmpty(userListQueryHandler.UserName))

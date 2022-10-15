@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.UseCases;
+using Common;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repository
 {
-    public class RolesRepo : RepositoryBase<Roles>, IRolesRepo
+    public class RolesRepo : RepositoryBase<Membership_Roles>, IRolesRepo
     {
-        public RolesRepo(PersistanceDBContext context) : base(context)
+        public RolesRepo(PersistanceDBContext context, ICurrentUserSession currentUserSession) : base(context, currentUserSession)
         {
 
         }

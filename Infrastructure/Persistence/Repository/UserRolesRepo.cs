@@ -1,5 +1,6 @@
 ﻿using Application;
 using Application.UseCases;
+using Common;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repository
 {
-    public class UserRolesRepo : RepositoryBase<UserRoles>,IUserRolesRepo
+    public class UserRolesRepo : RepositoryBase<Membership_UserRoles>,IUserRolesRepo
     {
-        public UserRolesRepo(PersistanceDBContext context) : base(context)
+        public UserRolesRepo(PersistanceDBContext context, ICurrentUserSession currentUserSession) : base(context,currentUserSession)
         {
         }
         #region CustomGet
@@ -28,15 +29,17 @@ namespace Persistence.Repository
         {
             try
             {
-                List<int> oldRoleIds = await GetAllAsQueryable().Where(p => p.UserId == request.UserId).
-                Select(p => p.RoleId).ToListAsync();
-                List<int> deletedRoles = oldRoleIds.Except(request.RoleIds).ToList();
+                List<Membership_UserRoles> oldRoleIds = await GetAllAsQueryable().Where(p => p.UserId == request.UserId).ToListAsync();
+                List<int> deletedRoles = oldRoleIds.Where(p=>!request.RoleIds.Contains(p.RoleId)).Select(p=>p.RoleId).ToList();
                 List<int> newRoles = request.RoleIds.Except(deletedRoles).ToList();
-                deletedRoles.ForEach(p => base.Context.Entry(p).State = EntityState.Deleted);
-                newRoles.ForEach(p => new UserRoles
-                {
-                    RoleId = p,
-                    UserId = request.UserId
+                oldRoleIds.Where(p=>deletedRoles.Contains(p.RoleId)).ToList().ForEach(p => Delete(p));
+                newRoles.ForEach(p => {
+                    var entity= new Membership_UserRoles
+                    {
+                        RoleId = p,
+                        UserId = request.UserId
+                    };
+                    Add(entity);
                 });
                 await base.Save();
                 return true;

@@ -6,11 +6,11 @@ namespace Application.Common.Interfaces
 {
     public interface IPersistanceDBContext
     {
-        DbSet<User> Users { get; set; }
-        DbSet<UserProfile> Profiles { get; set; }
-        DbSet<Permission> Permissions { get; set; }
-        DbSet<Roles> Roles { get; set; }
-        DbSet<RolesPermission> RolesPermissions { get; set; }
-        DbSet<UserRoles> UserRoles { get; set; }
+        DbSet<Membership_User> Users { get; set; }
+        DbSet<Membership_UserProfile> Profiles { get; set; }
+        DbSet<Membership_Permission> Permissions { get; set; }
+        DbSet<Membership_Roles> Roles { get; set; }
+        DbSet<Membership_RolesPermission> RolesPermissions { get; set; }
+        DbSet<Membership_UserRoles> UserRoles { get; set; }
     }
 }

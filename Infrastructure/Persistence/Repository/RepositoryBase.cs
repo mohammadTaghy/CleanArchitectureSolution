@@ -15,17 +15,18 @@ namespace Persistence.Repository
     public abstract class RepositoryBase<T> : IRepositoryBase<T>
         where T : class, IEntity
     {
+        private readonly ICurrentUserSession _currentUserSession;
 
 
-        public RepositoryBase(PersistanceDBContext context)
+        public RepositoryBase(PersistanceDBContext context, ICurrentUserSession currentUserSession)
         {
             Context = context;
+            _currentUserSession = currentUserSession;
         }
 
         #region Properties
         public CancellationToken CancellationToken { get; set; }
         public PersistanceDBContext Context;
-
         bool isNoTracking = true;
         int maxId = 0;
         int MaxId
@@ -42,31 +43,31 @@ namespace Persistence.Repository
         #region CustomMethod
         private void SetModify(EntityEntry entity)
         {
-            if (entity is IChangeProperty)
+            if (entity.Entity is IChangeProperty)
             {
-                IChangeProperty changeProperty = (IChangeProperty)entity;
+                IChangeProperty changeProperty = (IChangeProperty)entity.Entity;
                 changeProperty.ModifyDate = DateTimeHelper.CurrentMDateTime;
-                changeProperty.ModifyBy = CurrentUserSession.UserInfo.UserId;
+                changeProperty.ModifyBy = _currentUserSession.UserId;
 
             }
         }
 
         private void SetCreate(EntityEntry entity)
         {
-            if (entity is ICreateProperty)
+            if (entity.Entity is ICreateProperty)
             {
-                ICreateProperty changeProperty = (ICreateProperty)entity;
+                ICreateProperty changeProperty = (ICreateProperty)entity.Entity;
                 changeProperty.CreateDate = DateTimeHelper.CurrentMDateTime;
-                changeProperty.CreateBy = CurrentUserSession.UserInfo.UserId;
+                changeProperty.CreateBy = _currentUserSession.UserId??0;
 
             }
         }
         private int SetID(EntityEntry entity)
         {
             int id = 0;
-            if (entity is IEntity)
+            if (entity.Entity is IEntity)
             {
-                IEntity item = (IEntity)entity;
+                IEntity item = (IEntity)entity.Entity;
                 MaxId++;
                 id = MaxId;
             }
@@ -184,6 +185,11 @@ namespace Persistence.Repository
         {
             Detach();
             Context.Entry(entity).State = EntityState.Added;
+        }
+        public void Delete(T entity)
+        {
+            Detach();
+            Context.Entry(entity).State = EntityState.Deleted;
         }
         public void Attach(T entity)
         {

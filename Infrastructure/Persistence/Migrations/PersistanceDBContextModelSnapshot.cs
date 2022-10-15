@@ -22,7 +22,7 @@ namespace Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Domain.Entities.Permission", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_Permission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,6 +52,11 @@ namespace Persistence.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<string>("IConPath")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -74,6 +79,11 @@ namespace Persistence.Migrations
                     b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
+                    b.Property<long>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(512)
@@ -83,10 +93,10 @@ namespace Persistence.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Permission", (string)null);
+                    b.ToTable("Membership_Permission", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Roles", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_Roles", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,6 +110,9 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("ModifyBy")
                         .HasColumnType("int");
 
@@ -111,12 +124,17 @@ namespace Persistence.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
+                    b.Property<long>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Membership_Roles", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.RolesPermission", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_RolesPermission", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -139,19 +157,24 @@ namespace Persistence.Migrations
                     b.Property<int>("PermissionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RolesId")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
+
+                    b.Property<long>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PermissionId");
 
-                    b.HasIndex("RolesId");
+                    b.HasIndex("RoleId");
 
-                    b.ToTable("RolesPermission", (string)null);
+                    b.ToTable("Membership_RolesPermission", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.User", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -202,6 +225,11 @@ namespace Persistence.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
+                    b.Property<long>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bigint");
+
                     b.Property<string>("UserCode")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -217,10 +245,10 @@ namespace Persistence.Migrations
                     b.HasIndex("UserName")
                         .IsUnique();
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("Membership_User", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserProfile", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_UserProfile", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -269,16 +297,21 @@ namespace Persistence.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
+                    b.Property<long>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bigint");
+
                     b.Property<string>("UserDescription")
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserProfile", (string)null);
+                    b.ToTable("Membership_UserProfile", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserRoles", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_UserRoles", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -301,6 +334,11 @@ namespace Persistence.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
+                    b.Property<long>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("bigint");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -310,29 +348,29 @@ namespace Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoles", (string)null);
+                    b.ToTable("Membership_UserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Permission", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_Permission", b =>
                 {
-                    b.HasOne("Domain.Entities.Permission", "ParentEntity")
+                    b.HasOne("Domain.Entities.Membership_Permission", "ParentEntity")
                         .WithMany("ChildList")
                         .HasForeignKey("ParentId");
 
                     b.Navigation("ParentEntity");
                 });
 
-            modelBuilder.Entity("Domain.Entities.RolesPermission", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_RolesPermission", b =>
                 {
-                    b.HasOne("Domain.Entities.Permission", "Permission")
+                    b.HasOne("Domain.Entities.Membership_Permission", "Permission")
                         .WithMany("RolesPermissions")
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Roles", "Role")
+                    b.HasOne("Domain.Entities.Membership_Roles", "Role")
                         .WithMany("RolesPermission")
-                        .HasForeignKey("RolesId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -341,26 +379,26 @@ namespace Persistence.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserProfile", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_UserProfile", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "User")
+                    b.HasOne("Domain.Entities.Membership_User", "User")
                         .WithOne("UserProfile")
-                        .HasForeignKey("Domain.Entities.UserProfile", "Id")
+                        .HasForeignKey("Domain.Entities.Membership_UserProfile", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserRoles", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_UserRoles", b =>
                 {
-                    b.HasOne("Domain.Entities.Roles", "Role")
+                    b.HasOne("Domain.Entities.Membership_Roles", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.User", "User")
+                    b.HasOne("Domain.Entities.Membership_User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -371,21 +409,21 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Permission", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_Permission", b =>
                 {
                     b.Navigation("ChildList");
 
                     b.Navigation("RolesPermissions");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Roles", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_Roles", b =>
                 {
                     b.Navigation("RolesPermission");
 
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("Domain.Entities.User", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_User", b =>
                 {
                     b.Navigation("UserProfile")
                         .IsRequired();

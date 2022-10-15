@@ -21,7 +21,7 @@ using Xunit.Abstractions;
 
 namespace Application.Test.UseCases
 {
-    public class CreateRolesCommand_Test : UnitTestBase<Roles,IRolesRepo,IValidationRuleBase<Roles>>, IDisposable
+    public class CreateRolesCommand_Test : UnitTestBase<Membership_Roles,IRolesRepo,IValidationRuleBase<Membership_Roles>>, IDisposable
     {
         private readonly CreateRoleCommand _createCommand;
         private readonly CreateRoleCommandHandler _handler;
@@ -47,7 +47,7 @@ namespace Application.Test.UseCases
         [Fact]
         public void CreateRoleCommand_IsDuplicateName_ResultTest()
         {
-            _repoMock.Setup(p => p.AnyEntity(It.IsAny<Expression<Func<Roles, bool>>>()))
+            _repoMock.Setup(p => p.AnyEntity(It.IsAny<Expression<Func<Membership_Roles, bool>>>()))
                 .Returns(Task.FromResult(true));
             var exception = Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(_createCommand, CancellationToken.None));
             Assert.Equal(String.Format(CommonMessage.IsDuplicate, "نام نقش"), exception.Result.Failures.First().Value.First());
@@ -55,9 +55,9 @@ namespace Application.Test.UseCases
         [Fact]
         public void CreateRoleCommand_SuccessResult_ResultTest()
         {
-            Task<CommandResponse<Roles>> result = null;
+            Task<CommandResponse<Membership_Roles>> result = null;
             result = _handler.Handle(_createCommand, CancellationToken.None);
-            _repoMock.Verify(p => p.Insert(It.IsAny<Roles>()), Times.Once);
+            _repoMock.Verify(p => p.Insert(It.IsAny<Membership_Roles>()), Times.Once);
 
             Assert.True(result.Result.IsSuccess);
         }

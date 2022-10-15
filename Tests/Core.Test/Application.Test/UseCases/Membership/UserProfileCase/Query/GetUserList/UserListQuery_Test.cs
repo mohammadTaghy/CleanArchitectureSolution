@@ -15,7 +15,7 @@ using Xunit.Abstractions;
 
 namespace Application.Test.UseCases.UserProfileCase.Query.GetUserList
 {
-    public class UserListQuery_Test : UnitTestBase<UserProfile, IUserProfileRepo, IValidationRuleBase<UserProfile>>
+    public class UserListQuery_Test : UnitTestBase<Membership_UserProfile, IUserProfileRepo, IValidationRuleBase<Membership_UserProfile>>
     {
         private readonly UserListQueryHandler _handler;
         private readonly UserListQuery _userListQueryRequest;

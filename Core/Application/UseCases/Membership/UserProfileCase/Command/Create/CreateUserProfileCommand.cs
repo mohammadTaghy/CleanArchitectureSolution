@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.UserProfileCase.Command.Create
 {
-    public class CreateUserProfileCommand: UserCommandBase, IRequest<CommandResponse<int>>, IMapFrom<UserProfile>
+    public class CreateUserProfileCommand: UserCommandBase, IRequest<CommandResponse<int>>, IMapFrom<Membership_UserProfile>
     {
         public int? UserId { get; set; }
         public byte Gender { get; set; }
@@ -26,7 +26,7 @@ namespace Application.UseCases.UserProfileCase.Command.Create
         public string? NationalCode { get; set; }
         public void Mapping(MappingProfile profile)
         {
-            profile.CreateMap<CreateUserProfileCommand, UserProfile>().
+            profile.CreateMap<CreateUserProfileCommand, Membership_UserProfile>().
                 ForMember(t=>t.BirthDate,s=>s.MapFrom(source=>
                         !string.IsNullOrEmpty(source.BirthDate)?DateTimeHelper.ToDateTime(source.BirthDate):DateTimeHelper.CurrentMDateTime));
         }

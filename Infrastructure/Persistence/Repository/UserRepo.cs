@@ -1,4 +1,5 @@
 ﻿using Application;
+using Common;
 using Domain;
 using Domain.Entities;
 using System;
@@ -9,18 +10,18 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repository
 {
-    public class UserRepo: RepositoryBase<User>,IUserRepo
+    public class UserRepo: RepositoryBase<Membership_User>,IUserRepo
     {
-        public UserRepo(PersistanceDBContext context):base(context)
+        public UserRepo(PersistanceDBContext context, ICurrentUserSession currentUserSession) :base(context,currentUserSession)
         {
             
         }
-        public async Task<bool> AnyEntity(User user)
+        public async Task<bool> AnyEntity(Membership_User user)
         {
             return await base.AnyEntity(p=>p.UserName==user.UserName);
         }
 
-        public async Task<User> FindAsync(int? id, string userName, CancellationToken cancellationToken)
+        public async Task<Membership_User> FindAsync(int? id, string userName, CancellationToken cancellationToken)
         {
             return await base.FindAsync(p => p.Id == id || p.UserName == userName, cancellationToken);
         }

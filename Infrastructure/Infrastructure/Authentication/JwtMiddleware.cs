@@ -1,6 +1,7 @@
 ﻿using Common;
 using Common.JWT;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -15,11 +16,13 @@ namespace Infrastructure.Authentication
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly IConfiguration _configuration;
         private readonly AppSettings _appSettings;
 
-        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings)
+        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings, IConfiguration configuration)
         {
             _next = next;
+            _configuration = configuration;
             _appSettings = appSettings.Value;
         }
 
@@ -52,7 +55,8 @@ namespace Infrastructure.Authentication
                 var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
                 // attach user to context on successful jwt validation
-                context.Request.Headers.Add("Token", JWTToken<TokenObject>.CreateToken(new TokenObject { Id = userId, UserType = 0 }));
+                context.Request.Headers.Add("Token", JWTToken<TokenObject>.CreateToken(new TokenObject { Id = userId, UserType = 0 },
+                    _configuration["Jwt:Key"]));
             }
             catch
             {

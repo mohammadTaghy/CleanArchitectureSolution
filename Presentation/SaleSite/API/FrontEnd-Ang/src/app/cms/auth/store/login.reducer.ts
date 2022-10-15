@@ -1,9 +1,9 @@
-import { User } from "../../../model/user.model";
+import { Membership_User } from "../../../model/membership_user.model";
 import * as LoginActions from './login.action'
 
 
 export interface LoginState {
-  user: User;
+  user: Membership_User;
   authError: string;
   loading: boolean;
 }
@@ -14,8 +14,6 @@ const initialState: LoginState={
 }
 
 export function LoginReducer(state = initialState, action: LoginActions.LoginActions) {
-  console.log(action.type);
-  console.log(action);
   switch (action.type) {
     case LoginActions.LOGIN_START:
       return {

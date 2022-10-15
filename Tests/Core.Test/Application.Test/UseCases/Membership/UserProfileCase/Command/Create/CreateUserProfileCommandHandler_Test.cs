@@ -18,11 +18,11 @@ using Xunit.Abstractions;
 
 namespace Application.Test.UseCases.UserProfileCase.Command.Create
 {
-    public class CreateUserProfileCommandHandler_Test : UnitTestBase<UserProfile, IUserProfileRepo, IValidationRuleBase<UserProfile>>, IDisposable
+    public class CreateUserProfileCommandHandler_Test : UnitTestBase<Membership_UserProfile, IUserProfileRepo, IValidationRuleBase<Membership_UserProfile>>, IDisposable
     {
         private readonly Mock<IUserRepo> _userRepo;
         private readonly CreateUserProfileCommand _createCommand;
-        private readonly List<UserProfile> _userProfile;
+        private readonly List<Membership_UserProfile> _userProfile;
         private readonly CreateUserProfileCommandHandler _handler;
         private delegate void MockAnyEntityCallback(string number, ref int output);
 
@@ -53,7 +53,7 @@ namespace Application.Test.UseCases.UserProfileCase.Command.Create
         {
 
             var exception = Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(null, CancellationToken.None));
-            _repoMock.Verify(p => p.Insert(It.IsAny<UserProfile>()), Times.Never);
+            _repoMock.Verify(p => p.Insert(It.IsAny<Membership_UserProfile>()), Times.Never);
             Assert.Equal(string.Format(CommonMessage.NullException, "UserProfile"), exception.Result.Message);
         }
         [Fact]
@@ -63,7 +63,7 @@ namespace Application.Test.UseCases.UserProfileCase.Command.Create
             _createCommand.LastName = null;
             _createCommand.MobileNumber = null;
             var exception = Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(_createCommand, CancellationToken.None));
-            _repoMock.Verify(p => p.Insert(It.IsAny<UserProfile>()), Times.Never);
+            _repoMock.Verify(p => p.Insert(It.IsAny<Membership_UserProfile>()), Times.Never);
             Assert.Equal(String.Format(CommonMessage.NullException,
                 $"{nameof(CreateUserProfileCommand.FirstName)}-{nameof(CreateUserProfileCommand.LastName)}-{nameof(CreateUserProfileCommand.MobileNumber)}"), 
                 exception.Result.Message);
@@ -72,11 +72,11 @@ namespace Application.Test.UseCases.UserProfileCase.Command.Create
         public void CreateUserCommandHandler_IfUserNotExistUserMustBeInsert_ResultTest()
         {
             _userRepo.Setup(p => p.FindAsync(It.IsAny<int>(), It.IsAny<string>(), CancellationToken.None))
-                .Returns( Task.FromResult<User>(null));
-            _userRepo.Setup(p => p.Insert(It.IsAny<User>()))
-               .Returns(Task.FromResult(new User { Id=1}));
-            _mapper.Setup(p => p.Map<UserProfile>(It.IsAny<CreateUserProfileCommand>()))
-               .Returns(new UserProfile
+                .Returns( Task.FromResult<Membership_User>(null));
+            _userRepo.Setup(p => p.Insert(It.IsAny<Membership_User>()))
+               .Returns(Task.FromResult(new Membership_User { Id=1}));
+            _mapper.Setup(p => p.Map<Membership_UserProfile>(It.IsAny<CreateUserProfileCommand>()))
+               .Returns(new Membership_UserProfile
                {
                    FirstName = "Taghy",
                    LastName = "Yami",
@@ -84,8 +84,8 @@ namespace Application.Test.UseCases.UserProfileCase.Command.Create
                    BirthDate = DateTimeHelper.ToDateTime("1368/03/21")
                });
             Task<CommandResponse<int>> result = _handler.Handle(_createCommand, CancellationToken.None);
-            _repoMock.Verify(p => p.Insert(It.IsAny<UserProfile>()), Times.Never);
-            _userRepo.Verify(p => p.Insert(It.IsAny<User>()), Times.Once);
+            _repoMock.Verify(p => p.Insert(It.IsAny<Membership_UserProfile>()), Times.Never);
+            _userRepo.Verify(p => p.Insert(It.IsAny<Membership_User>()), Times.Once);
             Assert.True(result.IsCompleted);
             Assert.True(result.Result.IsSuccess);
         }
@@ -93,11 +93,11 @@ namespace Application.Test.UseCases.UserProfileCase.Command.Create
         public void CreateUserCommandHandler_IfUserExistInsertProfile_ResultTest()
         {
             _userRepo.Setup(p => p.FindAsync(It.IsAny<int>(), It.IsAny<string>(), CancellationToken.None))
-                 .Returns(Task.FromResult<User>(new User { Id = 1 }));
-            _repoMock.Setup(p => p.Insert(It.IsAny<UserProfile>()))
-               .Returns(Task.FromResult(new UserProfile { Id = 1 }));
-            _mapper.Setup(p => p.Map<UserProfile>(It.IsAny<CreateUserProfileCommand>()))
-                .Returns(new UserProfile
+                 .Returns(Task.FromResult<Membership_User>(new Membership_User { Id = 1 }));
+            _repoMock.Setup(p => p.Insert(It.IsAny<Membership_UserProfile>()))
+               .Returns(Task.FromResult(new Membership_UserProfile { Id = 1 }));
+            _mapper.Setup(p => p.Map<Membership_UserProfile>(It.IsAny<CreateUserProfileCommand>()))
+                .Returns(new Membership_UserProfile
                 {
                     FirstName = "Taghy",
                     LastName = "Yami",
@@ -105,8 +105,8 @@ namespace Application.Test.UseCases.UserProfileCase.Command.Create
                     BirthDate = DateTimeHelper.ToDateTime("1368/03/21")
                 });
             Task<CommandResponse<int>> result = _handler.Handle(_createCommand, CancellationToken.None);
-            _repoMock.Verify(p => p.Insert(It.IsAny<UserProfile>()), Times.Once);
-            _userRepo.Verify(p => p.Insert(It.IsAny<User>()), Times.Never);
+            _repoMock.Verify(p => p.Insert(It.IsAny<Membership_UserProfile>()), Times.Once);
+            _userRepo.Verify(p => p.Insert(It.IsAny<Membership_User>()), Times.Never);
             Assert.True(result.IsCompleted);
             Assert.True(result.Result.IsSuccess);
         }

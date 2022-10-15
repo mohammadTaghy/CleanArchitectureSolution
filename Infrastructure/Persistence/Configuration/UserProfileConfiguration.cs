@@ -9,14 +9,13 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configuration
 {
-    internal class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
+    internal class UserProfileConfiguration : BaseConfiguration<Membership_UserProfile>
     {
-        public void Configure(EntityTypeBuilder<UserProfile> builder)
+        public override void BaseConfigure(EntityTypeBuilder<Membership_UserProfile> builder)
         {
-            builder.ToTable(nameof(UserProfile));
             builder.HasOne(p => p.User)
                 .WithOne(p => p.UserProfile)
-                .HasForeignKey<UserProfile>(p => p.Id);
+                .HasForeignKey<Membership_UserProfile>(p => p.Id);
 
             builder.Property(p=>p.FirstName).HasMaxLength(1024).IsRequired();
             builder.Property(p => p.LastName).HasMaxLength(1024).IsRequired();

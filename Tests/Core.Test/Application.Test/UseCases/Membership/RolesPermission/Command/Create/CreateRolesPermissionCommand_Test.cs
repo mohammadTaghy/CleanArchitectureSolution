@@ -20,7 +20,7 @@ using Xunit.Abstractions;
 namespace Application.Test.UseCases
 {
     
-    public class CreateRolesPermissionCommand_Test : UnitTestBase<RolesPermission, IRolesPermissionRepo, IValidationRuleBase<RolesPermission>>, IDisposable
+    public class CreateRolesPermissionCommand_Test : UnitTestBase<Membership_RolesPermission, IRolesPermissionRepo, IValidationRuleBase<Membership_RolesPermission>>, IDisposable
     {
         private readonly CreateRolesPermissionCommand _createCommand;
         private readonly CreateRolesPermissionCommandHandler _handler;

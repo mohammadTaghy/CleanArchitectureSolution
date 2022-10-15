@@ -26,7 +26,7 @@ namespace Application.UseCases.UserProfileCase.Query.GetUserItem
         {
             if(request == null)
                 throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "Request"));
-            UserProfile userProfile = await _userProfileRepoRead.FindAsync(request.Id, request.UserName,cancellationToken);
+            Membership_UserProfile userProfile = await _userProfileRepoRead.FindAsync(request.Id, request.UserName,cancellationToken);
             return _mappingProfile.Map<UserItemDto>(userProfile);
         }
     }

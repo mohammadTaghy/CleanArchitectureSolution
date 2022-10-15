@@ -26,7 +26,7 @@ namespace Application.UseCases.UserCase.Query.SignIn
 
         public async Task<int> Handle(SignInQuery request, CancellationToken cancellationToken)
         {
-            User user =await _userRepoRead.FindAsync(null, request.UserName, cancellationToken);
+            Membership_User user =await _userRepoRead.FindAsync(null, request.UserName, cancellationToken);
             if (user!=null && user.PasswordHash == UtilizeFunction.CreateMd5(request.Password))
                 return user.Id;
             else

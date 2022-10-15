@@ -15,7 +15,7 @@ using Xunit.Abstractions;
 
 namespace Application.Test.Validation
 {
-    public class UserValidation_Test: UnitTestBase<User,IUserRepo,IUserValidation>
+    public class UserValidation_Test: UnitTestBase<Membership_User,IUserRepo,IUserValidation>
     {
 
         public UserValidation_Test(ITestOutputHelper testOutputHelper):base(testOutputHelper)

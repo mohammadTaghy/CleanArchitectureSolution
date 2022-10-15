@@ -2,7 +2,7 @@
 
 namespace Domain
 {
-    public class UserWrite:User
+    public class UserWrite:Membership_User
     {
     }
 }

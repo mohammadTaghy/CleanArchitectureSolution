@@ -15,7 +15,7 @@ using Application.Common.Exceptions;
 
 namespace Application.Test.UseCases
 {
-    public class GetRoleItemQueryHandler_Test : UnitTestBase<Roles, IRolesRepo, IValidationRuleBase<Roles>>
+    public class GetRoleItemQueryHandler_Test : UnitTestBase<Membership_Roles, IRolesRepo, IValidationRuleBase<Membership_Roles>>
     {
         private readonly GetRoleItemQuery _query;
         private readonly GetRoleItemQueryHandler _handler;
@@ -28,7 +28,7 @@ namespace Application.Test.UseCases
         [Fact]
         public void GetRoleItemQueryHandler_NotFind_QueryTest()
         {
-            Roles roles = null;
+            Membership_Roles roles = null;
             _repoMock.Setup(p => p.FindAsync(It.IsAny<int>()))
                 .Returns(Task.FromResult(roles));
             var result = Assert.ThrowsAnyAsync<NotFoundException>(()=>_handler.Handle(_query, CancellationToken.None));
@@ -39,7 +39,7 @@ namespace Application.Test.UseCases
         [Fact]
         public void GetRolesAsTreeQueryHandler_GetData_QueryTest()
         {
-            var roles = new Roles
+            var roles = new Membership_Roles
             {
                 IsAdmin = false,
                 RoleName = "test",
@@ -51,7 +51,7 @@ namespace Application.Test.UseCases
             };
             _repoMock.Setup(p => p.FindAsync(It.IsAny<int>()))
                 .Returns(Task.FromResult(roles));
-            _mapper.Setup(p=>p.Map<RolesDto>(It.IsAny<Roles>()))
+            _mapper.Setup(p=>p.Map<RolesDto>(It.IsAny<Membership_Roles>()))
             .Returns(rolesDto);
             var result = _handler.Handle(_query, CancellationToken.None);
             Assert.True(result.Result.IsSuccess);

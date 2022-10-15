@@ -15,7 +15,7 @@ using Xunit.Abstractions;
 
 namespace Application.Test.UseCases
 {
-    public class GetRolesQueryHandler_Test : UnitTestBase<Roles, IRolesRepo, IValidationRuleBase<Roles>>
+    public class GetRolesQueryHandler_Test : UnitTestBase<Membership_Roles, IRolesRepo, IValidationRuleBase<Membership_Roles>>
     {
         private readonly GetRolesQuery _query;
         private readonly GetRolesQueryHandler _handler;

@@ -1,7 +1,9 @@
 import { Injectable } from "@angular/core";
 
 export enum ApiUrlPostfix {
-  CmsLogin = "user/SignIn"
+  CmsLogin = "user/SignIn",
+  AdminPanelPermission = "permission/GetCurrentUserPermissions",
+  MembershipUsers="User/GetAll"
 };
 @Injectable({
   providedIn: 'root'

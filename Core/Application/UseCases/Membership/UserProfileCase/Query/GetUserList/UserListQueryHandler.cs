@@ -34,7 +34,7 @@ namespace Application.UseCases.UserProfileCase.Query.GetUserList
             if (request.Index < 0)
                 request.Index = 0;
             int total = 0;
-            List<UserProfile> userProfiles = await _userProfileRepoRead.ItemList(request,out total);
+            List<Membership_UserProfile> userProfiles = await _userProfileRepoRead.ItemList(request,out total);
             return new UserListResponse
             {
                 Total = total,

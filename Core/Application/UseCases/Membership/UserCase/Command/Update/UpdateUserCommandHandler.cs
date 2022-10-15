@@ -31,13 +31,13 @@ namespace Application.UseCases.UserCase.Command.Update
             userRepo.CancellationToken = cancellationToken;
             if (command.UserName == null && command.Id == 0)
                 throw new ArgumentNullException("",string.Format(CommonMessage.NullException, $"{nameof(UpdateUserCommand.Id)} یا {nameof(UpdateUserCommand.UserName)}"));
-            User user = await userRepo.FindAsync(command.Id,command.UserName,cancellationToken);
+            Membership_User user = await userRepo.FindAsync(command.Id,command.UserName,cancellationToken);
 
             if (user == null)
             {
                 throw new NotFoundException("کاربر", new { command.Id,command.UserName });
             }
-            user = _mappingProfile.Map<User>(command);
+            user = _mappingProfile.Map<Membership_User>(command);
             await userRepo.Update(user);
 
             ///Call event for insert into read DB

@@ -11,35 +11,30 @@ using Newtonsoft.Json;
 
 namespace Common
 {
-    public class CurrentUserSession
+    public interface ICurrentUserSession
+    {
+        int? UserId { get; }
+
+        bool IsAuthenticated { get; }
+    }
+    public class CurrentUserSession: ICurrentUserSession
     {
         #region properties
-        private static CurrentUserSessionDto _userInfo = null;
-        private  readonly HttpContext _context;
-        public static CurrentUserSessionDto UserInfo
-        {
-            get
-            {
-                //if (_userInfo == null)
-                //    _userInfo = JsonConvert.DeserializeObject<CurrentUserSessionDto>(
-                //        _context.Session.GetString("UserInfo"));
-                return _userInfo;
-
-            }
-            set { _userInfo = value; }
-        }
+        private  readonly IHttpContextAccessor _context;
+        
         #endregion
-        public CurrentUserSession(HttpContext context)
+        public CurrentUserSession(IHttpContextAccessor httpContext)
         {
-            _context = context;
+            UserId = httpContext.HttpContext.Session.GetInt32("UserId");
+            IsAuthenticated = UserId != null;
+            _context = httpContext;
         }
-        //public static void AddUserIfoSession(CurrentUserSessionDto userSessionDto)
-        //{
-        //    _context.Session.SetString("userInfo", JsonConvert.SerializeObject(userSessionDto));
-        //}
-       
+        public int? UserId { get; }
 
-       
+        public bool IsAuthenticated { get; }
+
+
+
 
     }
     public class CurrentUserSessionDto

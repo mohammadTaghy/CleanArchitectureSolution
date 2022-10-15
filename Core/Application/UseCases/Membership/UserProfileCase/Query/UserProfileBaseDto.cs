@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.UserProfileCase.Query
 {
-    public class UserProfileBaseDto : IMapFrom<UserProfile>
+    public class UserProfileBaseDto : IMapFrom<Membership_UserProfile>
     {
         public int Id { get; set; }
         public string UserName { get; set; }
@@ -33,7 +33,7 @@ namespace Application.UseCases.UserProfileCase.Query
         public string? NationalCode { get; set; }
         public void Mapping(MappingProfile profile)
         {
-            profile.CreateMap<UserProfile, UserProfileBaseDto>().
+            profile.CreateMap<Membership_UserProfile, UserProfileBaseDto>().
                 ForMember(d => d.FullName, s => s.MapFrom(source => source.FirstName + " " + source.LastName))
                 .ForMember(d => d.BirthDate, s => s.MapFrom(source =>
                         source.BirthDate != null ? DateTimeHelper.ToLocalDateTimeSh(source.BirthDate.Value) : ""))

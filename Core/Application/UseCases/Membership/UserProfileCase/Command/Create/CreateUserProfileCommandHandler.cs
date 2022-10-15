@@ -32,12 +32,12 @@ namespace Application.UseCases.UserProfileCase.Command.Create
                 throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "UserProfile"));
             if (request.FirstName == null || request.LastName == null || request.MobileNumber == null)
                 throw new ArgumentNullException("", string.Format(CommonMessage.NullException, $"{nameof(CreateUserProfileCommand.FirstName)}-{nameof(CreateUserProfileCommand.LastName)}-{nameof(CreateUserProfileCommand.MobileNumber)}"));
-            UserProfile userProfile = _mappingProfile.Map<UserProfile>(request);
-            User user = await _userRepo.FindAsync(request.UserId, request.UserName, cancellationToken);
+            Membership_UserProfile userProfile = _mappingProfile.Map<Membership_UserProfile>(request);
+            Membership_User user = await _userRepo.FindAsync(request.UserId, request.UserName, cancellationToken);
             int id = 0;
             if (user == null)
             {
-                user = new User
+                user = new Membership_User
                 {
                     Email = request.Email,
                     UserProfile = userProfile,

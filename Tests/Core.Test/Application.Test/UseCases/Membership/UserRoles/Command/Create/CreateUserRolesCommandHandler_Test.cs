@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Application.Test.UseCases
 {
-    public class CreateUserRolesCommandHandler_Test : UnitTestBase<UserRoles, IUserRolesRepo, IValidationRuleBase<UserRoles>>, IDisposable
+    public class CreateUserRolesCommandHandler_Test : UnitTestBase<Membership_UserRoles, IUserRolesRepo, IValidationRuleBase<Membership_UserRoles>>, IDisposable
     {
         private readonly CreateUserRolesCommand _createCommand;
         private readonly CreateUserRolesCommandHandler _handler;

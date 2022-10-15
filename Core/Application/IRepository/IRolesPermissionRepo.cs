@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Application
 {
-    public interface IRolesPermissionRepo : IRepositoryBase<RolesPermission>
+    public interface IRolesPermissionRepo : IRepositoryBase<Membership_RolesPermission>
     {
-        Task<List<PermissionTreeDto>> GetCurrentRolePermissions(int userId);
-        Task<List<PermissionTreeDto>> GetPermissions(int roleId);
+        Task<List<int>> GetPermissions(int? roleId);
+        List<int> GetRolePermissions(List<int> rolesId);
         Task<bool> Insert(CreateRolesPermissionCommand request);
     }
 }

@@ -17,7 +17,7 @@ using Xunit.Abstractions;
 
 namespace Application.Test.UseCases.UserCase.Query.SignIn
 {
-    public class SignInQuery_Test : UnitTestBase<User, IUserRepo, IUserValidation>
+    public class SignInQuery_Test : UnitTestBase<Membership_User, IUserRepo, IUserValidation>
     {
         private readonly SignInQueryHandler _handler;
         private readonly SignInQuery _signInQuery;
@@ -34,7 +34,7 @@ namespace Application.Test.UseCases.UserCase.Query.SignIn
         public void SignIn_CorrectInfo_QueryTest()
         {
             _repoMock.Setup(p => p.FindAsync(It.IsAny<int?>(), It.IsAny<string>(), CancellationToken.None))
-                .Returns(Task.FromResult(new User()
+                .Returns(Task.FromResult(new Membership_User()
                 {
                     UserName = _signInQuery.UserName,
                     PasswordHash = UtilizeFunction.CreateMd5("1234"),
@@ -49,7 +49,7 @@ namespace Application.Test.UseCases.UserCase.Query.SignIn
         public void SignIn_InCorrectInfo_QueryTest()
         {
             _repoMock.Setup(p => p.FindAsync(It.IsAny<int?>(), It.IsAny<string>(), CancellationToken.None))
-                .Returns(Task.FromResult(new User()
+                .Returns(Task.FromResult(new Membership_User()
                 {
                     UserName = _signInQuery.UserName,
                     PasswordHash = UtilizeFunction.CreateMd5("12345"),

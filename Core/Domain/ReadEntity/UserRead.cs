@@ -2,7 +2,7 @@
 
 namespace Domain
 {
-    public class UserRead : User
+    public class UserRead : Membership_User
     {
     }
 }

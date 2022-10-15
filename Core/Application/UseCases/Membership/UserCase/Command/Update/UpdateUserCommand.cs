@@ -15,12 +15,12 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.UserCase.Command.Update
 {
-    public class UpdateUserCommand :UserCommandBase, IRequest<CommandResponse<bool>>, IMapFrom<User>
+    public class UpdateUserCommand :UserCommandBase, IRequest<CommandResponse<bool>>, IMapFrom<Membership_User>
     {
         public int Id { get; set; }
         public void Mapping(MappingProfile profile)
         {
-            profile.CreateMap<UpdateUserCommand, User>();
+            profile.CreateMap<UpdateUserCommand, Membership_User>();
         }
     }
 }

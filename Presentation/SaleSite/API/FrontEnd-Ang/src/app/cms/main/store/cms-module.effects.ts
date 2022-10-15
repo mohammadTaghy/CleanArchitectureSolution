@@ -18,7 +18,7 @@ function SendRequestProcess<TRequest, TRespnse>(url: string, payLoad, callAPICom
   return callAPIComponent.PostApi<TRequest, TRespnse>(url, payLoad)
     .pipe(
       map(resData => {
-        return new CmsActions.RequestSuccess(resData);
+        return new CmsActions.RequestSuccess<TRespnse>(resData);
       }),
       catchError((errorRes: any) => {
         return of(new CmsActions.RequestFail(errorRes.error));

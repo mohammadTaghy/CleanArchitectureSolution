@@ -9,12 +9,10 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configuration
 {
-    public class RolesConfiguration : IEntityTypeConfiguration<Roles>
+    public class RolesConfiguration : BaseConfiguration<Membership_Roles>
     {
-        public void Configure(EntityTypeBuilder<Roles> builder)
+        public override void BaseConfigure(EntityTypeBuilder<Membership_Roles> builder)
         {
-            builder.ToTable(nameof(Roles));
-            builder.HasKey(p => p.Id);
             builder.Property(p => p.RoleName).HasMaxLength(512).IsRequired();
         }
     }

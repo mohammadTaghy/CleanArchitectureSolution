@@ -19,7 +19,7 @@ using Xunit.Abstractions;
 
 namespace Application.Test.UseCases
 {
-    public class CreatePermissionCommand_Test : UnitTestBase<Permission,IPermissionRepo,IValidationRuleBase<Permission>>, IDisposable
+    public class CreatePermissionCommand_Test : UnitTestBase<Membership_Permission,IPermissionRepo,IValidationRuleBase<Membership_Permission>>, IDisposable
     {
         private readonly CreatePermissionCommand _createCommand;
         private readonly CreatePermissionCommandHandler _handler;
@@ -48,9 +48,9 @@ namespace Application.Test.UseCases
         [Fact]
         public void CreatePermissionCommand_SuccessResult_ResultTest()
         {
-            Task<CommandResponse<Permission>> result = null;
+            Task<CommandResponse<Membership_Permission>> result = null;
             result = _handler.Handle(_createCommand, CancellationToken.None);
-            _repoMock.Verify(p => p.Insert(It.IsAny<Permission>()), Times.Once);
+            _repoMock.Verify(p => p.Insert(It.IsAny<Membership_Permission>()), Times.Once);
 
             Assert.True(result.Result.IsSuccess);
         }

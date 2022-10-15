@@ -12,11 +12,11 @@ using System.Threading.Tasks;
 namespace Application.UseCases
 {
     public class CurrentUserPermissionsAsTreeQueryHandler : 
-        BaseCommandHandler<CurrentUserPermissionsAsTreeQuery, QueryResponse<List<PermissionTreeDto>>, IRolesPermissionRepo>
+        BaseCommandHandler<CurrentUserPermissionsAsTreeQuery, QueryResponse<List<PermissionTreeDto>>, IPermissionRepo>
     {
        
 
-        public CurrentUserPermissionsAsTreeQueryHandler(IRolesPermissionRepo rolesPermissionRepo, IMapper mapper):base(rolesPermissionRepo,mapper)
+        public CurrentUserPermissionsAsTreeQueryHandler(IPermissionRepo rolesPermissionRepo, IMapper mapper):base(rolesPermissionRepo,mapper)
         {
            
         }

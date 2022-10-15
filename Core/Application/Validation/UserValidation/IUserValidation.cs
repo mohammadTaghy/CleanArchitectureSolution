@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Validation
 {
-    public interface IUserValidation:IValidationRuleBase<User>, IValidator<User>
+    public interface IUserValidation:IValidationRuleBase<Membership_User>, IValidator<Membership_User>
     {
         IUserRepo UserRepo { get; set; }
     }

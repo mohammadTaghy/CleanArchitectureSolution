@@ -1,6 +1,6 @@
 import { Action } from "rxjs/internal/scheduler/Action";
 import { last } from "rxjs/operators";
-import { User } from "../../../model/user.model";
+import { Membership_User } from "../../../model/membership_user.model";
 import { CurrentState } from "../../common/constant/constant.common";
 import * as CmsActions from './cms-module.action'
 
@@ -9,14 +9,14 @@ export interface CmsModuleState<T> {
   items: T[];
   selectedData: T,
   selectedId: number,
-  currentSatate: CurrentState,
+  currentSatate: string,
   error: string;
   loading: boolean;
   pageNumber: number,
   pageSize:number
 }
 
-export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions.CmsActions<T>) {
+export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions.CmsActions) {
   switch (action.type) {
     case CmsActions.Changed_View:
       let selected:T = null;
@@ -27,7 +27,7 @@ export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions
         ...state,
         error: '',
         loading: false,
-        currentSatate: action.type,
+        currentSatate: action.type.toString(),
         selectedData: selected
       }
     case CmsActions.Add_Request_Start:
@@ -35,7 +35,7 @@ export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions
         ...state,
         error: '',
         loading: true,
-        currentSatate: action.type,
+        currentSatate: action.type.toString(),
         selectedData: null
       };
     case CmsActions.Edit_Request_Start:
@@ -43,7 +43,7 @@ export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions
         ...state,
         error: '',
         loading: true,
-        currentSatate: action.type,
+        currentSatate: action.type.toString(),
         selectedData: state.items.find(p => p["Id"] == action.payload["Id"])
       };
     case CmsActions.Delete_Request_Start:
@@ -60,7 +60,7 @@ export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions
         error: "",
         loading: false,
         selectedData: null,
-        currentSatate: CurrentState.List
+        currentSatate: CurrentState.List.toString()
       };
     
     case CmsActions.Request_FAIL:
@@ -82,7 +82,7 @@ export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions
         loading: false,
         items: action.payload,
         selectedId: null,
-        currentSatate: CurrentState.List
+        currentSatate: CurrentState.List.toString()
       };
     default:
       return state;

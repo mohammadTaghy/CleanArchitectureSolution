@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Application
 {
-    public interface IUserRepo : IRepositoryBase<User>
+    public interface IUserRepo : IRepositoryBase<Membership_User>
     {
-        Task<bool> AnyEntity(User user);
-        Task<User> FindAsync(int? id, string userName,CancellationToken cancellationToken);
+        Task<bool> AnyEntity(Membership_User user);
+        Task<Membership_User> FindAsync(int? id, string userName,CancellationToken cancellationToken);
         
     }
 }
