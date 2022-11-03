@@ -31,17 +31,9 @@ namespace Application.UseCases.UserProfileCase.Query
         public string BirthDate { get; set; }
         public string? EducationGrade { get; set; }
         public string? NationalCode { get; set; }
-        public void Mapping(MappingProfile profile)
-        {
-            profile.CreateMap<Membership_UserProfile, UserProfileBaseDto>().
-                ForMember(d => d.FullName, s => s.MapFrom(source => source.FirstName + " " + source.LastName))
-                .ForMember(d => d.BirthDate, s => s.MapFrom(source =>
-                        source.BirthDate != null ? DateTimeHelper.ToLocalDateTimeSh(source.BirthDate.Value) : ""))
-                .ForMember(d => d.GenderString, s => s.MapFrom(source => GetGenderString(source.Gender)))
-                ;
-        }
+        
 
-        private object GetGenderString(byte gender)
+        protected object GetGenderString(byte gender)
         {
             switch (gender)
             {

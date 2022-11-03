@@ -1,6 +1,6 @@
 import { Action } from "@ngrx/store";
 import { CurrentState } from "../../common/constant/constant.common";
-import { FilterRequestBody } from "../../common/filterRequestBody/filter-request-body.common";
+import { FilterRequestBody, QueryRequestBody } from "../../common/filterRequestBody/filter-request-body.common";
 
 export const Add_Request_Start = '[Module] Add Request Start';
 export const Edit_Request_Start = '[Module] Edit Request Start';
@@ -50,7 +50,7 @@ export class FetchData implements Action {
   readonly type = Fetch_Data;
 
   constructor(
-    public payload: FilterRequestBody[], public serviceUrl: string, public httpType: string
+    public payload: string, public serviceUrl: string, public httpType: string
   ) { }
 }
 

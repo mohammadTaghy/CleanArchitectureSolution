@@ -14,6 +14,7 @@ namespace Common
         public const string MinimumLength = "طول {0} کافی نیست";
         public const string NotFound = "اطلاعاتی برای '{0}' یافت نشد";
         public const string SucceedUpdate = "اطلاعات '{0}' با موفقیت ذخیره شد";
+        public const string SucceedData = "اطلاعات موجود برای '{0}'";
         public const string DeleteFailure = "حذف اینتیتی \"{0}\" ({1}) نا مئفق بود. {2}";
         public const string IsDuplicateUserName = "نام کاربری {0} تکراری می باشد";
 

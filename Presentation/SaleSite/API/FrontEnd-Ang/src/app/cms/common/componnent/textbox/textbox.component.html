@@ -1,0 +1,10 @@
+<mat-form-field class="{{width}}" appearance="fill">
+  <mat-label>{{placeHolder}}</mat-label>
+  <input *ngIf="!isSecurity" matInput [placeholder]="placeHolder" [Required]="isRequired?true:false"
+         [disabled]="isDisabled?true:false"
+         type="{{inputType}}" [(ngModel)]="inputValue" name="{{name}}">
+  <input *ngIf="isSecurity" matInput placeholder="{{placeHolder}}" [Required]="isRequired?true:false"
+         [disabled]="isDisabled?true:false"
+         type="{{hide ? 'password' : 'text'}}" [(ngModel)]="inputValue" name="{{name}}">
+  <mat-icon *ngIf="isSecurity" matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+</mat-form-field>

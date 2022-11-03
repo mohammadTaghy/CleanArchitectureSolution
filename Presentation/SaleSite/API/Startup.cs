@@ -7,10 +7,13 @@ using Domain.Entities;
 using FluentValidation.AspNetCore;
 using Infrastructure.Authentication;
 using Infrastructure.DI;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
@@ -57,9 +60,10 @@ namespace API
             {
                 configuration.RootPath = "FrontEnd-Ang/dist";
             });
+            services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters();
             services.AddControllers()
-                .AddNewtonsoftJson()
-                .AddFluentValidation(p => p.RegisterValidatorsFromAssemblyContaining<PersistanceDBContext>());
+                .AddNewtonsoftJson();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -67,7 +71,17 @@ namespace API
             });
 
             services.AddSession();
-            services.AddMvc(option => option.EnableEndpointRouting = false).AddSessionStateTempDataProvider();
+            services.AddApiVersioning(p=>p.DefaultApiVersion=ApiVersion.Default);
+            services.AddOData().EnableApiVersioning();
+            //services.AddODataApiExplorer();
+
+            services.AddMvcCore(options =>
+            {
+                options.EnableEndpointRouting = false;
+            });
+            services.AddMvc()
+                .AddSessionStateTempDataProvider();
+
 
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
@@ -100,11 +114,15 @@ namespace API
             });
             _services = services;
         }
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app, VersionedODataModelBuilder modelBuilder)
         {
             app.UseCustomExceptionHandler();
             app.UseSession();
-            app.UseMvc();
+            app.UseMvc(builder =>
+            {
+                builder.Select().Expand().Filter().OrderBy().Count().MaxTop(100);
+                builder.MapVersionedODataRoute("odata", "odata", modelBuilder.GetEdmModels());
+            });
             app.UseCors();
 
             if (Environment.IsDevelopment())
@@ -118,7 +136,7 @@ namespace API
             app.UseSpaStaticFiles();
             app.UseRouting();
 
-            app.UseMiddleware<JwtMiddleware>();//.ServerFeatures.Get<IEndpointFeature>().Endpoint.Metadata.Any(p=>p is AuthorizeAttribute);
+            //app.UseMiddleware<JwtMiddleware>();//.ServerFeatures.Get<IEndpointFeature>().Endpoint.Metadata.Any(p=>p is AuthorizeAttribute);
 
             //app.UseAuthentication();
             //app.UseIdentityServer();

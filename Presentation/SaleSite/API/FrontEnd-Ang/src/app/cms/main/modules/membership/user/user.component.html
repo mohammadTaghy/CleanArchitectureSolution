@@ -1,1 +1,3 @@
-<p>test</p>
+<app-grid *ngIf="state==4" [dataSource]="users" [columns]="columns" [totalData]="totalData" (rowActionEvent)="actionEvent($event)"></app-grid>
+<app-generate *ngIf="state!=4" [columns]="dialogColumns" [state]="state" [selectedData]="selectedItem" ></app-generate>
+<md-persian-datepicker ></md-persian-datepicker>

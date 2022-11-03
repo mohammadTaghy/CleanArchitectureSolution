@@ -1,4 +1,5 @@
-﻿using Application.Mappings;
+﻿using Application.Common.Model;
+using Application.Mappings;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Common;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.UserProfileCase.Query.GetUserList
 {
-    public class UserListQueryHandler : IRequestHandler<UserListQuery, UserListResponse>
+    public class UserListQueryHandler : IRequestHandler<UserListQuery, QueryResponse<List<UserProfileListDto>>>
     {
         private readonly IUserProfileRepo _userProfileRepoRead;
         public readonly IMapper _mappingProfile;
@@ -27,20 +28,21 @@ namespace Application.UseCases.UserProfileCase.Query.GetUserList
         }
 
 
-        public async Task<UserListResponse> Handle(UserListQuery request, CancellationToken cancellationToken)
+        public async Task<QueryResponse<List<UserProfileListDto>>> Handle(UserListQuery request, CancellationToken cancellationToken)
         {
-            if(request == null)
+            if (request == null)
                 throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "Request"));
             if (request.Index < 0)
                 request.Index = 0;
             int total = 0;
-            List<Membership_UserProfile> userProfiles = await _userProfileRepoRead.ItemList(request,out total);
-            return new UserListResponse
-            {
-                Total = total,
-                UserList=_mappingProfile.Map<List<UserProfileListDto>>(userProfiles)
-            };
-            
+
+            List<Membership_UserProfile> userProfiles = await _userProfileRepoRead.ItemList(request, out total);
+            return QueryResponse<List<UserProfileListDto>>.CreateInstance(
+                _mappingProfile.Map<List<UserProfileListDto>>(userProfiles),
+                String.Format(CommonMessage.SucceedData, "کاربر"),
+                total,
+                true);
+
         }
     }
 }

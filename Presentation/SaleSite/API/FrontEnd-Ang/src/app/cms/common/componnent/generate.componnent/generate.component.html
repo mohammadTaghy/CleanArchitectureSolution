@@ -1,0 +1,20 @@
+<span *ngIf="state!=4">
+  <span *ngFor="let element of columns; index as i">
+    <app-textbox *ngIf="element.componentType==0" [placeHolder]="element.header" [inputType]="element.type"
+                 [name]="element.field"
+                 [isSecurity]="element.isPassword" [disabled]="element.isReadonly"
+                 [width]="element.width" [inputValue]="selectedData[element.field]"></app-textbox>
+    <app-checkbox *ngIf="element.componentType==1" [color]="accent" [title]="element.header"
+                  [name]="element.field"
+                  [disabled]="element.isReadonly"
+                  [width]="element.width"
+                  [checked]="selectedData[element.field]"></app-checkbox>
+    <app-dropdown *ngIf="element.componentType==3" [title]="element.header"
+                  [name]="element.field"
+                  [isDisabled]="element.isReadonly"
+                  [width]="element.width"
+                  [value]="selectedData[element.field]"
+                  [dataSource]="element.dataSource"
+                  (selectedActionEvent)="changeDropDown($event)"></app-dropdown>
+  </span>
+</span>

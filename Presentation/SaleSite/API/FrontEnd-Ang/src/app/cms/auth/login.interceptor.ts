@@ -6,7 +6,8 @@ import {
   HttpParams,
   HttpResponse,
   HttpEvent,
-  HttpErrorResponse
+  HttpErrorResponse,
+  HttpEventType
 } from '@angular/common/http';
 import { take, exhaustMap, map, tap, retryWhen, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -53,7 +54,7 @@ export class AuthInterceptorService implements HttpInterceptor {
               //console.log(error);
               if (error?.status === 401) {
                 location.href = "http://localhost:18023/admin/auth";
-                //this.router.navigate(['/auth']);
+                //return this.router.createUrlTree(["/auth"]);
               }
               return throwError(error.error.message);
             })

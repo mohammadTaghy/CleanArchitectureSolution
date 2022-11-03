@@ -25,11 +25,12 @@ export class LoginEffects {
         .pipe(
           map(resData => {
             var user = new Membership_User();
+            console.log("login result");
             localStorage.setItem('userData', JSON.stringify(resData));
             return new LoginActions.LoginSuccess(resData);
           }),
           catchError((errorRes: any) => {
-           //console.log(errorRes);
+           console.log(errorRes);
             return of(new LoginActions.LoginFail(errorRes.error));
           }
           ))

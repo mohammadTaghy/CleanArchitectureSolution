@@ -34,33 +34,16 @@ export class AdminPanelComponent implements OnInit {
     this.store.dispatch(new fromAdminPanelAction.AdminPanelStartLoad());
     this.store.select("adminPanelState").subscribe(
       (data) => {
-        console.log(FeatureType.Menu == 0);
+        //console.log(FeatureType.Menu == 0);
         if (data.permissions != null)
-          this.dataSource.data = data.permissions.filter(p => p.featureType == FeatureType.Menu || p.featureType == FeatureType.Form);
-        console.log(this.dataSource.data);
+          this.dataSource = data.permissions.filter(p => p.featureType == FeatureType.Menu || p.featureType == FeatureType.Form);
+        //console.log(this.dataSource.data);
       }
     )
   }
-  private _transformer = (node: Membership_Permission, level: number) => {
-    console.log("node");
-    console.log(node);
-    return {
-      expandable: node.featureType == FeatureType.Menu,
-      name: node.name,
-      level: level,
-      title: node.title
-    };
-  }
-
-  treeControl = new FlatTreeControl<IFlatNode>(
-    node => node.level, node => node.expandable);
-
-  treeFlattener = new MatTreeFlattener(
-    this._transformer, node => node.level, node => node.expandable, node => node.childList);
-
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
-
-  hasChild = (_: number, node: IFlatNode) => node.expandable;
+  //#region properties
+  dataSource: Membership_Permission[];
+  //#endregion
 
   public isExpanded: boolean = false;
   public toggleMenu() {

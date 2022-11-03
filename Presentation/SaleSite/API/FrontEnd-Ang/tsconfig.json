@@ -15,9 +15,13 @@
     "lib": [
       "es2018",
       "dom"
+    ],
+    "types": [
+      "hammerjs"
     ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false
   }
+
 }

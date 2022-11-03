@@ -10,11 +10,11 @@ import { Action } from 'rxjs/internal/scheduler/Action'
 export interface CmsState<T> {
   loginState: fromCmsLogin.LoginState,
   adminPanelState: fromAdminPanelReducer.AdminPanelState,
-  cmsState: fromCmsReducer.CmsModuleState<T>
+  moduleState: fromCmsReducer.CmsModuleState<T>
 }
 
 export const cmsReducer: ActionReducerMap<CmsState<any>> = {
   loginState: fromCmsLogin.LoginReducer,
   adminPanelState: fromAdminPanelReducer.AdminPanelReducer,
-  cmsState: fromCmsReducer.CmsModuleReducer<any>
+  moduleState: fromCmsReducer.CmsModuleReducer<any>
 }

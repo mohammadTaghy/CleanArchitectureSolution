@@ -18,7 +18,7 @@ namespace API.Controllers
         {
         }
         #region GetAPI
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -28,12 +28,12 @@ namespace API.Controllers
             var result = await _mediator.Send(new CurrentUserPermissionsAsTreeQuery(_currentUserService.UserId.Value),cancellationToken);
             return result;
         }
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [CMSAuthorize]
-        public async Task<QueryResponse<List<PermissionTreeDto>>> GetPermissions(PermissionsAsTreeQuery permissionsAsTreeQuery,CancellationToken cancellationToken)
+        public async Task<QueryResponse<List<PermissionTreeDto>>> GetPermissions([FromQuery]PermissionsAsTreeQuery permissionsAsTreeQuery,CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(permissionsAsTreeQuery,cancellationToken);
             return result;

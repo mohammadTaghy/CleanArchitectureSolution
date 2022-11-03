@@ -19,12 +19,12 @@ export class AdminPanelEffects {
   adminPanleStartLoad$ = this.actions$.pipe(
     ofType(adminPanelActions.AdminPanel_StartLoad),
     switchMap((data: adminPanelActions.AdminPanelStartLoad) => {
-      console.log("get adminpanel");
-      return this.callAPIComponent.PostApi<any, QueryResponse<Membership_Permission[]>>
+      //console.log("get adminpanel");
+      return this.callAPIComponent.GetApi<QueryResponse<Membership_Permission[]>>
         (this.apiAddresses.GetServiceUrl(ApiUrlPostfix.AdminPanelPermission), "")
         .pipe(
           map(resData => {
-            console.log(resData);
+            //console.log(resData);
             return new adminPanelActions.AdminPanelLoaded(resData.result);
           }),
           catchError((errorRes: any) => {

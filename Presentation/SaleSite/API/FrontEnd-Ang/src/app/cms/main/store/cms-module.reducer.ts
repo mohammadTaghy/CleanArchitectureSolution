@@ -9,25 +9,36 @@ export interface CmsModuleState<T> {
   items: T[];
   selectedData: T,
   selectedId: number,
-  currentSatate: string,
+  currentSatate: CurrentState,
   error: string;
   loading: boolean;
   pageNumber: number,
   pageSize:number
 }
 
-export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions.CmsActions) {
-  switch (action.type) {
+const initialState: CmsModuleState<any> = {
+  error: "",
+  loading: true,
+  items: null,
+  selectedId: null,
+  currentSatate: CurrentState.List,
+  pageNumber: 1,
+  pageSize: 10,
+  selectedData:null
+}
+
+export function CmsModuleReducer<T>(state = initialState, action: CmsActions.CmsActions) {
+  switch (action.type) { 
     case CmsActions.Changed_View:
       let selected:T = null;
       if (action.viewType == CurrentState.Delete || action.viewType == CurrentState.Edit ||
         action.viewType == CurrentState.Details)
-        selected = state.items.filter(p => p["Id"] == action.selectedId)[0];
+        selected = state.items.filter(p => p["id"] == action.selectedId)[0];
       return {
         ...state,
         error: '',
         loading: false,
-        currentSatate: action.type.toString(),
+        currentSatate: action.viewType,
         selectedData: selected
       }
     case CmsActions.Add_Request_Start:
@@ -35,7 +46,6 @@ export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions
         ...state,
         error: '',
         loading: true,
-        currentSatate: action.type.toString(),
         selectedData: null
       };
     case CmsActions.Edit_Request_Start:
@@ -43,8 +53,7 @@ export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions
         ...state,
         error: '',
         loading: true,
-        currentSatate: action.type.toString(),
-        selectedData: state.items.find(p => p["Id"] == action.payload["Id"])
+        selectedData: state.items.find(p => p["id"] == action.payload["id"])
       };
     case CmsActions.Delete_Request_Start:
       return {
@@ -60,7 +69,7 @@ export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions
         error: "",
         loading: false,
         selectedData: null,
-        currentSatate: CurrentState.List.toString()
+        currentSatate: CurrentState.List
       };
     
     case CmsActions.Request_FAIL:
@@ -76,13 +85,15 @@ export function CmsModuleReducer<T>(state: CmsModuleState<T>, action: CmsActions
         loading: false,
       };
     case CmsActions.Set_Data:
+      //console.log("setData");
+      //console.log(action.payload);
       return {
         ...state,
         error: "",
         loading: false,
         items: action.payload,
         selectedId: null,
-        currentSatate: CurrentState.List.toString()
+        currentSatate: CurrentState.List
       };
     default:
       return state;

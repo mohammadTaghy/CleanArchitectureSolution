@@ -1,0 +1,13 @@
+<mat-sidenav-container class="example-container" (backdropClick)="close('backdrop')" *ngIf="shouldRun">
+  <mat-sidenav #sidenav (keydown.escape)="close('escape')" disableClose>
+    <mat-icon (click)="sidenav.close()">
+       "keyboard_backspace"
+    </mat-icon>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-icon (click)="sidenav.open()">
+       "dehaze"
+    </mat-icon>
+  </mat-sidenav-content>
+</mat-sidenav-container>

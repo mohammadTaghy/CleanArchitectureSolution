@@ -22,13 +22,25 @@ namespace Persistence.Repository
             return base.FindAsync(p => p.Id == id || p.User.UserName == userName,cancellationToken);
         }
 
-        public Task<List<Membership_UserProfile>> ItemList(UserListQuery userListQueryHandler, out int total)
+        public Task<List<Membership_UserProfile>> ItemList(UserListQuery userListQuery, out int total)
         {
+            int index = userListQuery.Index - 1;
+            if (index < 0)
+                index = 0;
             var query = GetAllAsQueryable();
-            if(!string.IsNullOrEmpty(userListQueryHandler.UserName))
-                query=query.Where(p=>p.User.UserName.Contains(userListQueryHandler.UserName));
-            total=query.Count();
-            return Task.FromResult(query.ToList());
+            if(!string.IsNullOrEmpty(userListQuery.UserName))
+                query=query.Where(p=>p.User.UserName.Contains(userListQuery.UserName));
+            if (!string.IsNullOrEmpty(userListQuery.FirstName))
+                query = query.Where(p => p.FirstName.Contains(userListQuery.FirstName));
+            if (!string.IsNullOrEmpty(userListQuery.LastName))
+                query = query.Where(p => p.LastName.Contains(userListQuery.LastName));
+            if (!string.IsNullOrEmpty(userListQuery.MobileNumber))
+                query = query.Where(p => p.User.MobileNumber.Contains(userListQuery.MobileNumber));
+            if (!string.IsNullOrEmpty(userListQuery.NationalCode))
+                query = query.Where(p => p.NationalCode.Contains(userListQuery.NationalCode));
+            
+            total =query.Count();
+            return Task.FromResult(query.Skip(index*userListQuery.PageSize).Take(userListQuery.PageSize).ToList());
         }
     }
 }

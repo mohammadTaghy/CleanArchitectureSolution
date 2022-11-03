@@ -1,70 +1,45 @@
-<mat-drawer-container class="container" autosize>
+<div class="mat-typography mat-app-background">
 
-  <mat-drawer #drawer class="sidenav" opened mode="side">
-    <section [class.sidenav]="isExpanded">
-      <div class="toggle">
-        <mat-icon (click)="toggleMenu()">
-          {{ isExpanded ? "keyboard_backspace" : "dehaze" }}
-        </mat-icon>
-      </div>
-      <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-        <!-- This is the tree node template for leaf nodes -->
-        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-          <!--use a disabled button to provide padding for tree leaf-->
-          <button mat-icon-button disabled></button>
-          <a href="./admin/membership_user">{{node.title}} </a>
-        </mat-tree-node>
-        <!-- This is the tree node template for expandable nodes -->
-        <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding>
-          <button mat-icon-button matTreeNodeToggle
-                  [attr.aria-label]="'Toggle ' + node.name">
-            <mat-icon class="mat-icon-rtl-mirror">
-              {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-            </mat-icon>
-          </button>
-          {{node.title}}
-        </mat-tree-node>
-      </mat-tree>
-    </section>
-  </mat-drawer>
-  <mat-drawer-content>
-    <div class="content-container">
-      <router-outlet></router-outlet>
-    </div>
-  </mat-drawer-content>
+  <mat-drawer-container class="container" autosize>
 
-</mat-drawer-container>
-
-<!--<mat-drawer-container autosize class="container">
-  <mat-drawer #sidenav
-               fixedInViewport="true"
-               mode="side"
-               opened="{{ isExpanded }}" class="sidenav">
-    <section [class.sidenav]="isExpanded">
-      <div class="toggle">
-        <mat-icon (click)="toggleMenu()">
-          {{ isExpanded ? "keyboard_backspace" : "dehaze" }}
-        </mat-icon>
-      </div>
-
-      <mat-list class="nav" *ngFor="let route of routeLinks">
-        <a mat-list-item
-           routerLinkActive="active-link"
-           class="hover"
-           routerLink="{{ route.link }}">
-          <mat-icon mat-list-icon
-                    [matTooltip]="!isExpanded ? route.name : null"
-                    matTooltipPosition="right">
-            {{ route.icon }}
+    <mat-drawer #drawer class="sidenav" opened mode="side">
+      <section [class.sidenav]="isExpanded">
+        <div class="toggle">
+          <mat-icon (click)="toggleMenu()">
+            {{ isExpanded ? "keyboard_backspace" : "dehaze" }}
           </mat-icon>
-          <p matLine *ngIf="isExpanded">{{ route.name }}</p>
-        </a>
-      </mat-list>
-    </section>
-  </mat-drawer>
-  <mat-sidenav-content>
-    <div class="content-container">
-      <router-outlet></router-outlet>
-    </div>
-  </mat-sidenav-content>
-</mat-drawer-container>-->
+        </div>
+        <app-tree [inputData]="dataSource" ></app-tree>
+      </section>
+    </mat-drawer>
+    <mat-drawer-content>
+      <div class="content-container">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-drawer-content>
+
+  </mat-drawer-container>
+  <!--<mat-sidenav-container class="example-container" (backdropClick)="close()">
+    <mat-sidenav #sidenav (keydown.escape)="close()" disableClose>
+      <mat-icon (click)="close()">
+        close
+      </mat-icon>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <mat-icon (click)="sidenav.open()">
+        dehaze
+      </mat-icon>-->
+  <!--<app-tree (inputData)="dataSource"></app-tree>-->
+  <!--</mat-sidenav-content>
+  </mat-sidenav-container>-->
+  <!--<mat-sidenav-container class="example-container"
+                         (backdropClick)="sidenav.close()">
+    <mat-sidenav #sidenav mode="side">
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+      <p><button mat-button (click)="sidenav.toggle()">Open</button></p>
+    </mat-sidenav-content>
+  </mat-sidenav-container>-->
+</div>

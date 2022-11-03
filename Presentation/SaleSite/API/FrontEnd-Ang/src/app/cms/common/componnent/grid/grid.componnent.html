@@ -1,0 +1,21 @@
+<mat-table [dataSource]="dataSource" matSort #gridTable >
+  <ng-container *ngFor="let col of columns; let colIndex = index" matColumnDef="{{col.header}}">
+    <mat-header-cell *matHeaderCellDef mat-sort-header>
+      <p class="text-capitalize-first">{{col.header}}</p>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <span>{{element[col.field]}}</span>
+    </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row #gridRow *matRowDef="let row; columns: displayedColumns;"
+           [matRowKeyboardSelection]="this.selection"
+           [rowModel]="row"
+           [row]="gridRow"
+           [matTable]="gridTable"
+           [ngClass]="{selected: selection.isSelected(row)}"
+           (rowActionEvent)="actionEvent($event)"
+           ></mat-row>
+</mat-table>
+<mat-paginator *ngIf="isPagerHidden" [pageSize]="10" [pageSizeOptions]="selectOptions">
+</mat-paginator>

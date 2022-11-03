@@ -9,10 +9,10 @@ import { of } from "rxjs";
 import * as CmsActions from "./cms-module.action";
 import { CallAPIComponent } from "../../../commonComponent/callAPI/callAPI.common";
 import { ApiAddresses, ApiUrlPostfix } from "../../../commonComponent/apiAddresses/apiAddresses.common";
-import { FilterRequestBody } from "../../common/filterRequestBody/filter-request-body.common";
+import { FilterRequestBody, QueryRequestBody } from "../../common/filterRequestBody/filter-request-body.common";
 
 class CmsResponce<TResponse> {
-  constructor(public Errors: string, public IsSuccess: boolean, public Result: TResponse) { }
+  constructor(public errors: string, public isSuccess: boolean, public result: TResponse) { }
 }
 function SendRequestProcess<TRequest, TRespnse>(url: string, payLoad, callAPIComponent: CallAPIComponent) {
   return callAPIComponent.PostApi<TRequest, TRespnse>(url, payLoad)
@@ -56,10 +56,14 @@ export class CmsModuleEffects<TRequest, TRespnse> {
   fetchData = this.actions$.pipe(
     ofType(CmsActions.Fetch_Data),
     switchMap((data: CmsActions.FetchData) => {
-      return this.callAPIComponent.PostApi<FilterRequestBody[], CmsResponce<TRespnse[]>>(data.serviceUrl, data.payload)
+      //console.log("fetch data effect");
+      //console.log(data.payload);
+      return this.callAPIComponent.GetApi<CmsResponce<TRespnse[]>>(data.serviceUrl, data.payload)
     }),
     map(resData => {
-      return new CmsActions.SetData<TRespnse>(resData.Result)
+      //console.log("resData");
+      //console.log(resData);
+      return new CmsActions.SetData<TRespnse>(resData.result)
     })
   );
 }
