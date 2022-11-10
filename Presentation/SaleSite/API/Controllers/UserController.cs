@@ -89,5 +89,6 @@ namespace API.Controllers
             return await _mediator.Send(userListQuery, cancellationToken);
         }
 
+
     }
 }

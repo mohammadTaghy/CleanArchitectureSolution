@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { ColumnProperties, CurrentState } from "../../constant/constant.common";
+import { BaseUIComponent } from "../baseUI.compnent";
 
 @Component({
   selector: 'app-generate',
@@ -8,6 +9,7 @@ import { ColumnProperties, CurrentState } from "../../constant/constant.common";
   styleUrls: ['./generate.component.css']
 })
 export class GenerateComponnent implements OnInit, OnChanges {
+  //#region implement
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
     console.log(this.columns);
@@ -18,6 +20,10 @@ export class GenerateComponnent implements OnInit, OnChanges {
     console.log(this.columns);
     console.log(this.selectedData);
   }
+  //#endregion
+  //#region properties
+  @ViewChildren(BaseUIComponent) children: QueryList<BaseUIComponent>;
+  //#endregion
   //#region input
   @Input() columns: ColumnProperties[];
   @Input() selectedData: any;
@@ -30,6 +36,12 @@ export class GenerateComponnent implements OnInit, OnChanges {
   changeDropDown(event) {
     this.selectedActionEvent.emit(event);
   }
-
+  submitChanged() {
+    console.log(this.selectedData);
+    this.children.forEach(child => {
+      this.selectedData[child.name] = child.inputValue;
+    })
+    console.log(this.selectedData);
+  }
   //#endregion
 }

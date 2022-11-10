@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>دیتا فیلتر</h1>
+<div >
+  <button mat-button (click)="addFilterRow()">اضافه کرد</button>
+</div>
+<div mat-dialog-content *ngIf="filters">
+  <div *ngFor="let filter of filters">
+    <app-dropdown [title]="columnTitle"
+                  [name]="columnName"
+                  [width]="columnWidth"
+                  [value]="filter.selectedColumn"
+                  [dataSource]="filterColumns"></app-dropdown>
+    <app-dropdown [title]="filterTitle"
+                  [name]="filterName"
+                  [width]="filterWidth"
+                  [value]="filter.selectedFilterType"
+                  [dataSource]="filterTypes"></app-dropdown>
+    <app-textbox [placeHolder]="placeHolder" 
+                 [name]="filterValueName"
+                 [width]="filterValueWidth" [inputValue]="filter.value"></app-textbox>
+    <button mat-button (click)="onOkCkick(filter)" cdkFocusInitial>حذف کردن</button>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">انصراف</button>
+  <button mat-button (click)="onOkCkick()">فیلتر</button>
+</div>

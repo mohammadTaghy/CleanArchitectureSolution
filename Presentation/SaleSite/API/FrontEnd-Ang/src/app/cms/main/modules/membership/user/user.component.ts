@@ -19,6 +19,8 @@ import * as fromCmsAction from "../../../store/cms-module.action"
   templateUrl: './user.component.html'
 })
 export class UserCmsPage implements OnInit, OnDestroy {
+
+  //#region properties
   subscribe: Subscription;
   state: number;
   error: string;
@@ -29,6 +31,8 @@ export class UserCmsPage implements OnInit, OnDestroy {
   totalData: number;
   pageNumber: number;
   pageSize: number;
+  //#endregion
+  //#region implement
   ngOnInit(): void {
     //console.log("user");
     this.subscribe = this.store.select("moduleState")
@@ -40,12 +44,16 @@ export class UserCmsPage implements OnInit, OnDestroy {
         this.state = data.currentSatate;
         this.error = data.error;
         console.log(data.selectedData);
-        this.selectedItem = data.selectedData;
+        this.selectedItem = data.selectedData ?? new Membership_UserProfile();
         this.pageNumber = data.pageNumber;
         this.pageSize = data.pageSize;
       }
       );
   }
+  ngOnDestroy(): void {
+    this.subscribe.unsubscribe();
+  }
+  //#endregion
   constructor(private store: Store<fromCmsApp.CmsState<Membership_UserProfile>>, private router: Router, private apiAddresses: ApiAddresses, private userGrid: UserGrid) {
     this.store.dispatch(
       new fromCmsAction.FetchData(
@@ -53,15 +61,11 @@ export class UserCmsPage implements OnInit, OnDestroy {
         apiAddresses.GetServiceUrl(ApiUrlPostfix.MembershipUsers),
         "Get"));
   }
-
-
-
+  //#region method
   actionEvent(action: Action) {
     //console.log(action);
     this.store.dispatch(action);
   }
 
-  ngOnDestroy(): void {
-    this.subscribe.unsubscribe();
-  }
+  //#endregion
 }

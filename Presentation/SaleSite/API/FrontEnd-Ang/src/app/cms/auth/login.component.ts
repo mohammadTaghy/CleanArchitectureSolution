@@ -21,12 +21,13 @@ import * as fromLoginAction from "./store/login.action"
 export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild(PlaceholderDirective, { static: false }) alertHost: PlaceholderDirective;
   @ViewChildren(TextboxComponnent) children: QueryList<TextboxComponnent>;
-  private closeSub: Subscription;
-  private storeSub: Subscription;
-
-  public isLoading: boolean;
-  public hide: boolean;
-  public loginForm;
+  //#region private property
+  closeSub: Subscription;
+  storeSub: Subscription;
+  isLoading: boolean;
+  hide: boolean;
+  loginForm;
+  //#endregion
   constructor(
     private store: Store<fromCmsApp.CmsState<any>>,
     private componentFactoryResolver: ComponentFactoryResolver) {
@@ -34,28 +35,30 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isLoading = false;
     this.hide = true;
   }
- 
+  //#region implement
   ngOnInit(): void {
     this.storeSub = this.store.select('loginState').subscribe(state => {
       this.isLoading = state.loading;
       if (state.authError)
         this.showErrorAlert(state.authError);
     })
-   
+
   }
+  ngOnDestroy(): void {
+    this.storeSub.unsubscribe();
+    if (this.closeSub)
+      this.closeSub.unsubscribe();
+  }
+  //#endregion
+  //#region method
   onSubmit(loginForm: NgForm) {
     if (!loginForm.valid) return;
-    console.log(this.children);
-    console.log(this.children.find(p => p.name == "userName").inputValue);
-    console.log("value");
-    
     this.store.dispatch(new fromLoginAction.LoginStart({
       userName: this.children.find(p => p.name == "userName").inputValue,
       password: this.children.find(p => p.name == "password").inputValue
     }))
   }
-  
-  private showErrorAlert(message: string) {
+  showErrorAlert(message: string) {
     // const alertCmp = new AlertComponent();
     const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory(
       AlertComponent
@@ -71,7 +74,5 @@ export class LoginComponent implements OnInit, OnDestroy {
       hostViewContainerRef.clear();
     });
   }
-  ngOnDestroy(): void {
-    this.storeSub.unsubscribe();
-  }
+  //#endregion
 }

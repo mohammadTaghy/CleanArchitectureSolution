@@ -52,7 +52,7 @@ export class UserGrid {
     ]
     ),
     new ColumnProperties("postalCode", "کد پستی", "50px", ComponentType.Textbox, "number"),
-    new ColumnProperties("birthDate", "تاریخ تولد", "50px", ComponentType.Textbox, "string"),
+    new ColumnProperties("birthDate", "تاریخ تولد", "50px", ComponentType.DatePicker, "string"),
     new ColumnProperties("educationGrade", "مقطع تحصیلی", "50px", ComponentType.DropDown, "string"),
   ];
 }

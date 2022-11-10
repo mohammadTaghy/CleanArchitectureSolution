@@ -23,6 +23,7 @@ export enum ComponentType {
   List,
   Tree,
   HtmlEditor,
+  DatePicker
 }
 
 export class ConstantNameString {
@@ -51,9 +52,10 @@ export class ColumnProperties {
 export class dropdownDataType {
   constructor(
   public title: string,
-  public description: string,
-  public value: number | string,
+    public description: string,
+    public value: string | number,
     public disabled: boolean,) { }
 }
+
 
 

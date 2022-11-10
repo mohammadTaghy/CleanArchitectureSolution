@@ -26,11 +26,10 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSortModule } from "@angular/material/sort";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSelectModule } from "@angular/material/select";
+import { MatDialogModule } from "@angular/material/dialog";
+import { NgPersianDatepickerModule } from "ng-persian-datepicker";
 
-import { } from "angular-material-persian-datepicker";
 
-
-import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { LoginComponent } from "./auth/login.component";
 import { CmsRoutingModule } from "./cms.routing.module";
@@ -49,31 +48,37 @@ import { TextboxComponnent } from "./common/componnent/textbox/textbox.component
 import { GenerateComponnent } from "./common/componnent/generate.componnent/generate.component";
 import { CheckboxComponnent } from "./common/componnent/checkbox/checkbox.component";
 import { DropdownComponnent } from "./common/componnent/dropdown/dropdown.component";
+import { DatePickerComponnent } from "./common/componnent/datepicker/datepicker.component";
+import { FilterDialogComponnent } from "./common/componnent/grid/filter_dialog/filter_dialog.component";
+import { BaseUIComponent } from "./common/componnent/baseUI.compnent";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
+    BaseUIComponent,
     LoginComponent, AdminPanelComponent, UserCmsPage, MainCmsPage, GridComponnent,
     MatRowKeyboardSelectionDirective, TreeComponent, TextboxComponnent, GenerateComponnent,
-    CheckboxComponnent, DropdownComponnent
+    CheckboxComponnent, DropdownComponnent, DatePickerComponnent, FilterDialogComponnent
   ],
   providers: [LoginGuard, LoginEffects, CallAPIComponent, ApiAddresses, UserGrid],
   imports: [
     BrowserModule,
-    FormsModule,      
+    BrowserAnimationsModule,
+    FormsModule,
     RouterModule,
-    CmsRoutingModule,
-    FlexLayoutModule,
     ReactiveFormsModule,
+    CmsRoutingModule,
+    NgPersianDatepickerModule,
     MatInputModule, MatFormFieldModule, MatIconModule, MatProgressSpinnerModule, MatButtonModule,
     MatCardModule, MatToolbarModule, MatDividerModule, MatSidenavModule, MatListModule, MatButtonToggleModule,
     MatTooltipModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule, MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule, MatDialogModule
 
 
     
     
   ],
-  exports:[MatSidenavModule]
+  exports:[]
   //,
   //providers: [
   //  CallAPIComponent,

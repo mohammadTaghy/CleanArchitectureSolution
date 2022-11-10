@@ -1,9 +1,11 @@
 import { SelectionModel } from "@angular/cdk/collections";
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
-import { MatSort } from "@angular/material/sort";
+import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
+import { MatSort, Sort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { Action } from "@ngrx/store";
 import { ColumnProperties } from "../../constant/constant.common";
+import { FilterDialogComponnent } from "./filter_dialog/filter_dialog.component";
 
 @Component({
   selector: 'app-grid',
@@ -11,7 +13,7 @@ import { ColumnProperties } from "../../constant/constant.common";
   styleUrls: ['./grid.componnent.css']
 })
 export class GridComponnent implements OnInit {
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private cdr: ChangeDetectorRef, private dialog: MatDialog) {
     this.selection = new SelectionModel<ColumnProperties>(true);
   }
   ngOnInit(): void {
@@ -33,24 +35,29 @@ export class GridComponnent implements OnInit {
   isPagerHidden = false;
   selectOptions = [10, 15, 20, 50];
   public selection: SelectionModel<ColumnProperties>;
+
   //#endregion
   //#region event
+  onFilter(event: any) {
+    console.log("open dialog");
+    const dialogRef = this.dialog.open(FilterDialogComponnent);
+    dialogRef.componentInstance.columns = this.columns.filter(p => p.isGridVisible);
+    //this.dialog.closeAll();
+    //dialogRef.componentInstance.closeDialog.subscribe(() => {
+    //  console.log("after emit close");
+    //  dialogRef.close(true);
+    //  this.dialog.closeAll();
+    //})
+    //dialogRef.afterClosed().subscribe(result => {
+    //  console.log('The dialog was closed');
+    //  console.log(result);
+    //});
+  }
   actionEvent(action: Action) {
     //console.log(action);
     this.rowActionEvent.emit(action);
   }
-  filteringDone(event) {
-   //console.log(event);
-  }
-  reloadSorting($event) {
-   //console.log($event);
-  }
-  toggleColumn($event) {
-   //console.log($event);
-  }
-  ngAfterViewInit() {
-    this.dataSource.sort = this.empTbSort;
-  }
+
   //#endregion
 }
 

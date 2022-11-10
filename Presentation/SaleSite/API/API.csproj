@@ -18,9 +18,12 @@
     <None Remove="FrontEnd-Ang\src\app\cms\auth\store\login.reducer.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\cms.module.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\cms.routing.module.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\baseUI.compnent.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\checkbox\checkbox.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\datepicker\datepicker.component.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\dropdown\dropdown.component.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\generate.componnent\generate.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\grid\filter_dialog\filter_dialog.component.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\grid\mat-row-keyboard-selection.directive.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\sidenav\sidenav.componnent.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\textbox\textbox.component.ts" />
@@ -101,13 +104,20 @@
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\cms.routing.module.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\baseUI.compnent.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\checkbox\checkbox.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\datepicker\datepicker.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\dropdown\dropdown.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\generate.componnent\generate.component.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\grid\filter_dialog\filter_dialog.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\grid\mat-row-keyboard-selection.directive.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\textbox\textbox.component.ts">
       <SubType>Code</SubType>

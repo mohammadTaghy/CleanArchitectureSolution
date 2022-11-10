@@ -16,10 +16,9 @@ import { StoreModule } from '@ngrx/store';
 import { LoginEffects } from './cms/auth/store/login.effects';
 import * as fromCmsApp from "./cms/store/cms.reducer"
 import { AuthInterceptorService } from './cms/auth/login.interceptor';
-import { LoginComponent } from './cms/auth/login.component';
-import { AdminPanelComponent } from './cms/main/AdminPanel/AdminPanel.component';
 import { AdminPanelEffects } from './cms/main/AdminPanel/store/adminPanel.effects';
 import { CmsModuleEffects } from './cms/main/store/cms-module.effects';
+import { RouterModule } from '@angular/router';
 
 
 
@@ -40,6 +39,7 @@ import { CmsModuleEffects } from './cms/main/store/cms-module.effects';
     BrowserAnimationsModule,
     CommonModule,
     FormsModule,
+    RouterModule,
     ReactiveFormsModule,
     EffectsFeatureModule,
     EffectsModule.forRoot([]),

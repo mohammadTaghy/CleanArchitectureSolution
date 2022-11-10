@@ -1,6 +1,6 @@
-<mat-table [dataSource]="dataSource" matSort #gridTable >
-  <ng-container *ngFor="let col of columns; let colIndex = index" matColumnDef="{{col.header}}">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>
+<mat-table [dataSource]="dataSource"  #gridTable >
+  <ng-container *ngFor="let col of columns; let colIndex = index"  matColumnDef="{{col.header}}">
+    <mat-header-cell *matHeaderCellDef >
       <p class="text-capitalize-first">{{col.header}}</p>
     </mat-header-cell>
     <mat-cell *matCellDef="let element">
@@ -15,6 +15,7 @@
            [matTable]="gridTable"
            [ngClass]="{selected: selection.isSelected(row)}"
            (rowActionEvent)="actionEvent($event)"
+           (openFilterDialog)="onFilter($event)"
            ></mat-row>
 </mat-table>
 <mat-paginator *ngIf="isPagerHidden" [pageSize]="10" [pageSizeOptions]="selectOptions">

@@ -4,9 +4,9 @@
     <mat-select [formControl]="dropdownControl" [disabled]="isDisabled" 
                 [(ngModel)]="inputValue">
       <mat-option>-- None --</mat-option>
-      <!--<mat-option *ngFor="let data of dataSource" [value]="data.value" [disabled]="data.disabled">
+      <mat-option *ngFor="let data of dataSource" [value]="data.value" [disabled]="data.disabled">
         {{data.title}}
-      </mat-option>-->
+      </mat-option>
     </mat-select>
     <mat-error *ngIf="isRequired && selectFormControl.hasError('required')">لطفا یک آیتم را انتخاب کنید</mat-error>
     <mat-hint>{{dropdownControl.value?.description}}</mat-hint>
