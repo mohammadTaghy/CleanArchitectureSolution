@@ -4,20 +4,25 @@
 </div>
 <div mat-dialog-content *ngIf="filters">
   <div *ngFor="let filter of filters">
+    <app-dropdown [title]="joinConditionTitle"
+                  [name]="filter.name+joinConditionName"
+                  [width]="joinConditionWidth"
+                  [(inputValue)]="filter.joinCondition"
+                  [dataSource]="joinType"></app-dropdown>
     <app-dropdown [title]="columnTitle"
-                  [name]="columnName"
+                  [name]="filter.name+columnName"
                   [width]="columnWidth"
-                  [value]="filter.selectedColumn"
+                  [(inputValue)]="filter.selectedColumn"
                   [dataSource]="filterColumns"></app-dropdown>
     <app-dropdown [title]="filterTitle"
-                  [name]="filterName"
+                  [name]="filter.name+filterName"
                   [width]="filterWidth"
-                  [value]="filter.selectedFilterType"
+                  [(inputValue)]="filter.selectedFilterType"
                   [dataSource]="filterTypes"></app-dropdown>
-    <app-textbox [placeHolder]="placeHolder" 
-                 [name]="filterValueName"
-                 [width]="filterValueWidth" [inputValue]="filter.value"></app-textbox>
-    <button mat-button (click)="onOkCkick(filter)" cdkFocusInitial>حذف کردن</button>
+    <app-textbox [placeHolder]="placeHolder"
+                 [name]="filter.name"
+                 [width]="filterValueWidth" [(inputValue)]="filter.value"></app-textbox>
+    <button mat-button (click)="removeFilterRow(filter)" cdkFocusInitial>حذف کردن</button>
   </div>
 </div>
 <div mat-dialog-actions>

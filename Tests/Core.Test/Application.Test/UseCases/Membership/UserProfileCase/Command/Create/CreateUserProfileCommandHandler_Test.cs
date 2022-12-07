@@ -42,7 +42,7 @@ namespace Application.Test.UseCases.UserProfileCase.Command.Create
                 Password = "123456",
                 FirstName="Taghy",
                 LastName="Yami",
-                UserId=1,
+                Id=1,
                 BirthDate="1368/03/21",
             };
             

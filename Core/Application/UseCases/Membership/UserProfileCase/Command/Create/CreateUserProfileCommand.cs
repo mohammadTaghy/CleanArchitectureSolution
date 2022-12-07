@@ -1,6 +1,7 @@
 ﻿using Application.Common.Model;
 using Application.Mappings;
 using Application.UseCases.UserCase.Command;
+using Application.UseCases.UserProfileCase.Query.GetUserList;
 using Common;
 using Domain.Entities;
 using MediatR;
@@ -12,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.UserProfileCase.Command.Create
 {
-    public class CreateUserProfileCommand: UserCommandBase, IRequest<CommandResponse<int>>, IMapFrom<Membership_UserProfile>
+    public class CreateUserProfileCommand: UserCommandBase, IRequest<CommandResponse<UserProfileListDto>>, IMapFrom<Membership_UserProfile>
     {
-        public int? UserId { get; set; }
+        public int? Id { get; set; }
         public byte Gender { get; set; }
         public string? PostalCode { get; set; }
         public string? PicturePath { get; set; }
@@ -29,6 +30,7 @@ namespace Application.UseCases.UserProfileCase.Command.Create
             profile.CreateMap<CreateUserProfileCommand, Membership_UserProfile>().
                 ForMember(t=>t.BirthDate,s=>s.MapFrom(source=>
                         !string.IsNullOrEmpty(source.BirthDate)?DateTimeHelper.ToDateTime(source.BirthDate):DateTimeHelper.CurrentMDateTime));
+            profile.CreateMap<UserProfileListDto, CreateUserProfileCommand>();
         }
     }
 }

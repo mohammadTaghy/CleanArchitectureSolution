@@ -1,6 +1,7 @@
 ﻿using Application.Common.Model;
 using AutoMapper;
 using Common;
+using Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,8 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class PermissionsAsTreeQueryHandler : BaseCommandHandler<PermissionsAsTreeQuery, QueryResponse<List<PermissionTreeDto>>, IPermissionRepo>
+    public class PermissionsAsTreeQueryHandler : 
+        BaseLoadListQueryHandler<PermissionsAsTreeQuery, IPermissionRepo, Membership_Permission, PermissionTreeDto>
     {
         public PermissionsAsTreeQueryHandler(IPermissionRepo repo, IMapper mapper) : base(repo, mapper)
         {
@@ -20,6 +22,7 @@ namespace Application.UseCases
         {
             if (request is null)
                 throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "Permission"));
+
             List<PermissionTreeDto> permissionTreeDtos = await _repo.GetPermissions(request.RoleId);
             if (permissionTreeDtos == null || permissionTreeDtos.Count == 0)
                 return QueryResponse<List<PermissionTreeDto>>.CreateInstance(new(), CommonMessage.EmptyResponse , 0, false);

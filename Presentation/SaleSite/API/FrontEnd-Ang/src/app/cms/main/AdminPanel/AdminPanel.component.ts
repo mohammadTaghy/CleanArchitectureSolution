@@ -49,4 +49,7 @@ export class AdminPanelComponent implements OnInit {
   public toggleMenu() {
     this.isExpanded = !this.isExpanded;
   }
+  keyPressYes(event) {
+    console.log(event);
+  }
 }

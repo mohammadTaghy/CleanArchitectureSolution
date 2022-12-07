@@ -10,15 +10,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-   
+
     public class UserRolesController : BaseController
     {
         public UserRolesController(IMediator mediator, ICurrentUserService currentUserService) : base(mediator,currentUserService)
         {
         }
-        
+
         #region ManipulateAPI
         [HttpPost]
+        [ApiVersion("1.0")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

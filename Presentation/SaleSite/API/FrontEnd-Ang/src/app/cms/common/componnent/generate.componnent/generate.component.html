@@ -16,13 +16,13 @@
                   [value]="selectedData[element.field]"
                   [dataSource]="element.dataSource"
                   (selectedActionEvent)="changeDropDown($event)"></app-dropdown>
-    <app-datepicker *ngIf="element.componentType==9" [placeHolder]="element.header" [inputType]="element.type"
+    <!--<app-datepicker *ngIf="element.componentType==9" [placeHolder]="element.header" [inputType]="element.type"
                  [name]="element.field"
                  [disabled]="element.isReadonly"
-                 [width]="element.width" [inputValue]="selectedData[element.field]"></app-datepicker>
+                 [width]="element.width" [inputValue]="selectedData[element.field]"></app-datepicker>-->
   </span>
 </span>
 <div id="ManipulateButton" *ngIf="state!=4">
-  <button *ngIf="state==1||state==2" mat-button color="primary" (click)="submitChanged()">تایید</button>
+  <button *ngIf="state<3" mat-button color="primary" (click)="submitChanged()">تایید</button>
   <button mat-button color="primary" (click)="backToList()">بازگشت به لیست</button>
 </div>

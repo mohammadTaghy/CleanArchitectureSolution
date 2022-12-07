@@ -15,34 +15,13 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.UserProfileCase.Query.GetUserList
 {
-    public class UserListQueryHandler : IRequestHandler<UserListQuery, QueryResponse<List<UserProfileListDto>>>
+    public class UserListQueryHandler : 
+        BaseLoadListQueryHandler<UserListQuery, IUserProfileRepo,Membership_UserProfile, UserProfileListDto>
     {
-        private readonly IUserProfileRepo _userProfileRepoRead;
-        public readonly IMapper _mappingProfile;
-
-
-        public UserListQueryHandler(IUserProfileRepo userRepoRead, IMapper mappingProfile)
+        public UserListQueryHandler(IUserProfileRepo userRepoRead, IMapper mappingProfile):base(userRepoRead,mappingProfile)
         {
-            _userProfileRepoRead = userRepoRead;
-            _mappingProfile = mappingProfile;
+           
         }
 
-
-        public async Task<QueryResponse<List<UserProfileListDto>>> Handle(UserListQuery request, CancellationToken cancellationToken)
-        {
-            if (request == null)
-                throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "Request"));
-            if (request.Index < 0)
-                request.Index = 0;
-            int total = 0;
-
-            List<Membership_UserProfile> userProfiles = await _userProfileRepoRead.ItemList(request, out total);
-            return QueryResponse<List<UserProfileListDto>>.CreateInstance(
-                _mappingProfile.Map<List<UserProfileListDto>>(userProfiles),
-                String.Format(CommonMessage.SucceedData, "کاربر"),
-                total,
-                true);
-
-        }
     }
 }

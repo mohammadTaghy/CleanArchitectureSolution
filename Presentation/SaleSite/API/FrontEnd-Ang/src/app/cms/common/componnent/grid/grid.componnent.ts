@@ -1,16 +1,17 @@
 import { SelectionModel } from "@angular/cdk/collections";
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSort, Sort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import { Action } from "@ngrx/store";
-import { ColumnProperties } from "../../constant/constant.common";
+import { ColumnProperties, CurrentState, IFilterData } from "../../constant/constant.common";
 import { FilterDialogComponnent } from "./filter_dialog/filter_dialog.component";
+import * as fromCmsAction from "../../../main/store/cms-module.action"
 
 @Component({
   selector: 'app-grid',
   templateUrl: './grid.componnent.html',
-  styleUrls: ['./grid.componnent.css']
+  styleUrls: ['./grid.componnent.scss']
 })
 export class GridComponnent implements OnInit {
   constructor(private cdr: ChangeDetectorRef, private dialog: MatDialog) {
@@ -28,6 +29,22 @@ export class GridComponnent implements OnInit {
   //#endregion
   //#region output
   @Output() rowActionEvent = new EventEmitter<Action>();
+  @Output() setFilterAction = new EventEmitter<IFilterData[]>();
+
+  //#endregion
+  //#region listener
+  @HostListener('keydown', ['$event']) onKeydown(event: KeyboardEvent) {
+    let newRow;
+    console.log(event.key);
+    // this key for edit
+    if (event.key === 'Insert') {
+      this.actionEvent(new fromCmsAction.ChangedView(CurrentState.Insert, null));
+    }
+    else if (event.key === '+') {
+      console.log("+ clicked");
+      this.onFilter("");
+    }
+  }
   //#endregion
   //#region property
   displayedColumns: string[];
@@ -35,23 +52,20 @@ export class GridComponnent implements OnInit {
   isPagerHidden = false;
   selectOptions = [10, 15, 20, 50];
   public selection: SelectionModel<ColumnProperties>;
-
+  filterData: IFilterData[] = [];
   //#endregion
   //#region event
   onFilter(event: any) {
-    console.log("open dialog");
+   //console.log("open dialog");
     const dialogRef = this.dialog.open(FilterDialogComponnent);
     dialogRef.componentInstance.columns = this.columns.filter(p => p.isGridVisible);
-    //this.dialog.closeAll();
-    //dialogRef.componentInstance.closeDialog.subscribe(() => {
-    //  console.log("after emit close");
-    //  dialogRef.close(true);
-    //  this.dialog.closeAll();
-    //})
-    //dialogRef.afterClosed().subscribe(result => {
-    //  console.log('The dialog was closed');
-    //  console.log(result);
-    //});
+    dialogRef.componentInstance.filters = this.filterData;
+    dialogRef.componentInstance.filterDataResults.subscribe(data => {
+      //console.log(data);
+      this.filterData = data;
+      this.setFilterAction.emit(data)
+    });
+
   }
   actionEvent(action: Action) {
     //console.log(action);

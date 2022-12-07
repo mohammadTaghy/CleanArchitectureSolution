@@ -7,8 +7,8 @@ using Domain.Entities;
 using FluentValidation.AspNetCore;
 using Infrastructure.Authentication;
 using Infrastructure.DI;
-using Microsoft.AspNet.OData.Builder;
-using Microsoft.AspNet.OData.Extensions;
+//using Microsoft.AspNet.OData.Builder;
+//using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -72,7 +72,7 @@ namespace API
 
             services.AddSession();
             services.AddApiVersioning(p=>p.DefaultApiVersion=ApiVersion.Default);
-            services.AddOData().EnableApiVersioning();
+            //services.AddOData().EnableApiVersioning();
             //services.AddODataApiExplorer();
 
             services.AddMvcCore(options =>
@@ -114,15 +114,15 @@ namespace API
             });
             _services = services;
         }
-        public void Configure(IApplicationBuilder app, VersionedODataModelBuilder modelBuilder)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseCustomExceptionHandler();
             app.UseSession();
-            app.UseMvc(builder =>
-            {
-                builder.Select().Expand().Filter().OrderBy().Count().MaxTop(100);
-                builder.MapVersionedODataRoute("odata", "odata", modelBuilder.GetEdmModels());
-            });
+            //app.UseMvc(builder =>
+            //{
+            //    builder.Select().Expand().Filter().OrderBy().Count().MaxTop(100);
+            //    //builder.MapVersionedODataRoute("odata", "odata", modelBuilder.GetEdmModels());
+            //});
             app.UseCors();
 
             if (Environment.IsDevelopment())

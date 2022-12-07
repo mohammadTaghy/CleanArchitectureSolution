@@ -21,7 +21,7 @@ export class AdminPanelEffects {
     switchMap((data: adminPanelActions.AdminPanelStartLoad) => {
       //console.log("get adminpanel");
       return this.callAPIComponent.GetApi<QueryResponse<Membership_Permission[]>>
-        (this.apiAddresses.GetServiceUrl(ApiUrlPostfix.AdminPanelPermission), "")
+        (this.apiAddresses.GetServiceUrl(ApiUrlPostfix.AdminPanelPermission))
         .pipe(
           map(resData => {
             //console.log(resData);

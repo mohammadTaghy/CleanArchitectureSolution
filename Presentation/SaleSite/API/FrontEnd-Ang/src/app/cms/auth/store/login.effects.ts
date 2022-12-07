@@ -20,7 +20,7 @@ export class LoginEffects {
   login$ = this.actions$.pipe(
     ofType(LoginActions.LOGIN_START),
     switchMap((data: LoginActions.LoginStart) => {
-      return this.callAPIComponent.PostApi<LoginRequestClass, Membership_User>
+      return this.callAPIComponent.postApi<LoginRequestClass, Membership_User>
         (this.apiAddresses.GetServiceUrl(ApiUrlPostfix.CmsLogin), new LoginRequestClass(data.payload.userName, data.payload.password))
         .pipe(
           map(resData => {

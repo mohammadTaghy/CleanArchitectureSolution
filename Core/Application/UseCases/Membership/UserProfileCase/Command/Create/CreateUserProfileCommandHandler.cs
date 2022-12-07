@@ -1,4 +1,5 @@
 ﻿using Application.Common.Model;
+using Application.UseCases.UserProfileCase.Query.GetUserList;
 using AutoMapper;
 using Common;
 using Domain.Entities;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.UserProfileCase.Command.Create
 {
-    public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfileCommand, CommandResponse<int>>
+    public class CreateUserProfileCommandHandler : IRequestHandler<CreateUserProfileCommand, CommandResponse<UserProfileListDto>>
     {
 
         private IUserProfileRepo _userProfileRepo;
@@ -26,41 +27,47 @@ namespace Application.UseCases.UserProfileCase.Command.Create
             _mappingProfile = mappingProfile;
         }
 
-        public async Task<CommandResponse<int>> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
+        public async Task<CommandResponse<UserProfileListDto>> Handle(CreateUserProfileCommand request, CancellationToken cancellationToken)
         {
             if (request == null)
                 throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "UserProfile"));
             if (request.FirstName == null || request.LastName == null || request.MobileNumber == null)
                 throw new ArgumentNullException("", string.Format(CommonMessage.NullException, $"{nameof(CreateUserProfileCommand.FirstName)}-{nameof(CreateUserProfileCommand.LastName)}-{nameof(CreateUserProfileCommand.MobileNumber)}"));
             Membership_UserProfile userProfile = _mappingProfile.Map<Membership_UserProfile>(request);
-            Membership_User user = await _userRepo.FindAsync(request.UserId, request.UserName, cancellationToken);
-            int id = 0;
+            Membership_User user = await _userRepo.FindAsync(request.Id, request.UserName, cancellationToken);
             if (user == null)
             {
                 user = new Membership_User
                 {
                     Email = request.Email,
-                    UserProfile = userProfile,
-                    IsEmailConfirmed = false,
-                    IsMobileNumberConfirmed = false,
-                    IsUserConfirm = false,
+                    IsEmailConfirmed = request.IsEmailConfirmed,
+                    IsMobileNumberConfirmed = request.IsMobileNumberConfirmed,
+                    IsUserConfirm = request.IsUserConfirm,
                     ManagerConfirm = (byte)Constants.Status.InCheck,
                     MobileNumber = request.MobileNumber,
                     PasswordHash = UtilizeFunction.CreateMd5(request.Password),
                     UserCode = UtilizeFunction.GenerateStringAndNumberRandomCode(6),
                     UserName = request.UserName,
                 };
+                user.UserProfile = userProfile;
                 await _userRepo.Insert(user);
-                id = user.Id;
+                userProfile.Id = user.Id;
+                await _userProfileRepo.Insert(userProfile);
+                //await Task.Factory.StartNew(() =>_userRepo.Insert(user),cancellationToken)
+                //    .ContinueWith(t => { 
+                //        userProfile.Id= user.Id; 
+                //        _userProfileRepo.Insert(userProfile); 
+                //    });
+                request.Id=user.Id;
+
             }
             else
             {
                 userProfile.Id = user.Id;
                 await _userProfileRepo.Insert(userProfile);
-                id = userProfile.Id;
 
             }
-            return await Task.FromResult(new CommandResponse<int>(true, id));
+            return await Task.FromResult(new CommandResponse<UserProfileListDto>(true, _mappingProfile.Map<UserProfileListDto>(userProfile)));
         }
     }
 }

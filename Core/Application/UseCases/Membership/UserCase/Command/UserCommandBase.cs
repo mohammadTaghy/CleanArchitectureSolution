@@ -12,5 +12,8 @@ namespace Application.UseCases.UserCase.Command
         public string Password { get; set; }
         public string MobileNumber { get; set; }
         public string Email { get; set; }
+        public bool IsEmailConfirmed { get; set; }
+        public bool IsMobileNumberConfirmed { get; set; }
+        public bool IsUserConfirm { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using Domain;
+﻿using Application.Common.Model;
+using Application.UseCases;
+using Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +23,7 @@ namespace Application
         T Find(Expression<Func<T, bool>> predicate);
         Task<T> FindAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken);
         Task<IList<T>> ItemList(Expression<Func<T, bool>> predicate);
+        Task<Tuple<List<T>, int>> ItemListAdo(ItemListParameter baseGetApiParameter);
         Task<bool> AnyEntity(Expression<Func<T, bool>> predicate);
         #endregion
         #region Manipulate
@@ -31,7 +34,7 @@ namespace Application
         Task Insert(T entity);
         Task Update(T entity);
         Task<bool> DeleteItem(T entity);
-        Task DeleteItem(int id);
+        Task<bool> DeleteItem(int id);
         Task<bool> DeleteItems(IList<T> items);
         bool DeleteItems(IList<int> ids);
         Task Save();

@@ -1,30 +1,4 @@
-export enum CurrentState {
-  Insert,
-  Edit,
-  Delete,
-  Details,
-  List
-}
-
-export enum FeatureType {
-  Menu = 0,
-  Form,
-  Tab,
-  Command
-}
-
-export enum ComponentType {
-  Textbox = 0,
-  Checkbox,
-  RadioButton,
-  DropDown,
-  UploadFile,
-  Button,
-  List,
-  Tree,
-  HtmlEditor,
-  DatePicker
-}
+import { ComponentType, JoinCondition, SortType } from "./enum.common";
 
 export class ConstantNameString {
   public static Token: string = "Token";
@@ -44,17 +18,32 @@ export class ColumnProperties {
     public isGridVisible: boolean = true,
     public isPinned: boolean = false,
     public isPassword: boolean = false,
-    public dataSource: dropdownDataType[] = null
+    public dataSource: DropdownDataType[] = null,
+    public ApiName: string="",
+    public baseFilter: string="",
+    public EffectColumn: string=""
 
   ) { }
 
 }
-export class dropdownDataType {
+export class DropdownDataType {
   constructor(
   public title: string,
     public description: string,
     public value: string | number,
     public disabled: boolean,) { }
+}
+export interface IFilterData {
+  selectedColumn: string | number;
+  selectedFilterType: number;
+  value: string;
+  name: string;
+  joinCondition: JoinCondition
+}
+export interface ISortData {
+  selectedColumn: string | number;
+  sortType: SortType;
+  name: string;
 }
 
 

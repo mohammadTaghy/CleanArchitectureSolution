@@ -26,6 +26,7 @@ namespace Domain.Entities
         public string? DeviceId { get ; set ; }
         public Membership_UserProfile UserProfile { get ; set ; }
         public ICollection<Membership_UserRoles> UserRoles { get ; set ; }
+        public ICollection<Common_UserEducation> UserEducations { get; set; }
     }
     
 }

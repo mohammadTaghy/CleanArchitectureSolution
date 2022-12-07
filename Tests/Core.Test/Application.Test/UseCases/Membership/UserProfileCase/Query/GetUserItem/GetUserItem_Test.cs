@@ -18,12 +18,12 @@ namespace Application.Test.UseCases.UserProfileCase.Query.GetUserItem
     public class GetUserItem_Test : UnitTestBase<Membership_UserProfile, IUserProfileRepo, IValidationRuleBase<Membership_UserProfile>>
     {
         private readonly GetUserItemQueryHandler _handler;
-        private readonly GetUserItemQuery _userListQueryRequest;
+        private readonly UserItemQuery _userListQueryRequest;
 
         public GetUserItem_Test(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
             _handler = new GetUserItemQueryHandler(_repoMock.Object, _mapper.Object);
-            _userListQueryRequest = new GetUserItemQuery
+            _userListQueryRequest = new UserItemQuery
             {
                 UserName = "test",
                 Id = 1,

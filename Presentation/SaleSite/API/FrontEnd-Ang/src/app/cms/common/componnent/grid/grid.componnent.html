@@ -1,9 +1,9 @@
-<mat-table [dataSource]="dataSource"  #gridTable >
-  <ng-container *ngFor="let col of columns; let colIndex = index"  matColumnDef="{{col.header}}">
-    <mat-header-cell *matHeaderCellDef >
-      <p class="text-capitalize-first">{{col.header}}</p>
+<mat-table  [dataSource]="dataSource" class="mat-elevation-z8" #gridTable [fixedLayout]="false" >
+  <ng-container *ngFor="let col of columns; let colIndex = index"  matColumnDef="{{col.header}}" [cdkColumnDef]="header">
+    <mat-header-cell  *matHeaderCellDef >
+      <p class="header-value">{{col.header}}</p>
     </mat-header-cell>
-    <mat-cell *matCellDef="let element">
+    <mat-cell *matCellDef="let element" >
       <span>{{element[col.field]}}</span>
     </mat-cell>
   </ng-container>

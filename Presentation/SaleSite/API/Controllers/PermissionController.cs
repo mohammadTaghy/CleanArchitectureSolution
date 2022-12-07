@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-
     public class PermissionController : BaseController
     {
 
@@ -18,29 +17,40 @@ namespace API.Controllers
         {
         }
         #region GetAPI
+        
+
+        //[HttpGet]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status204NoContent)]
+        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        //[CMSAuthorize]
+        //public async Task<QueryResponse<List<PermissionTreeDto>>> Permissions(CancellationToken cancellationToken)
+        //{
+        //    var result = await _mediator.Send(new CurrentUserPermissionsAsTreeQuery { UserId = _currentUserService.UserId.Value },cancellationToken);
+        //    return result;
+        //}
+        
+
         [HttpGet]
+        [ApiVersion("1.0")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [CMSAuthorize]
-        public async Task<QueryResponse<List<PermissionTreeDto>>> GetCurrentUserPermissions(CancellationToken cancellationToken)
+        public async Task<QueryResponse<List<PermissionTreeDto>>> Permissions([FromQuery]PermissionsAsTreeQuery permissionsAsTreeQuery,CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new CurrentUserPermissionsAsTreeQuery(_currentUserService.UserId.Value),cancellationToken);
-            return result;
-        }
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [CMSAuthorize]
-        public async Task<QueryResponse<List<PermissionTreeDto>>> GetPermissions([FromQuery]PermissionsAsTreeQuery permissionsAsTreeQuery,CancellationToken cancellationToken)
-        {
-            var result = await _mediator.Send(permissionsAsTreeQuery,cancellationToken);
-            return result;
+            if(permissionsAsTreeQuery == null||permissionsAsTreeQuery.RoleId==null)
+            {
+                return await _mediator.Send(new CurrentUserPermissionsAsTreeQuery { UserId = _currentUserService.UserId.Value }, cancellationToken);
+            }
+            return await _mediator.Send(permissionsAsTreeQuery,cancellationToken);
         }
         #endregion
         #region ManipulateAPI
+        
+
         [HttpPost]
+        [ApiVersion("1.0")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

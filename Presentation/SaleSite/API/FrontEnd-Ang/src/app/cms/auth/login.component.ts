@@ -39,6 +39,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.storeSub = this.store.select('loginState').subscribe(state => {
       this.isLoading = state.loading;
+      console.log(this.isLoading);
+
       if (state.authError)
         this.showErrorAlert(state.authError);
     })

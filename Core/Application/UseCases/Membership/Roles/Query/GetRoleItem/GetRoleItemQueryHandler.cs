@@ -11,19 +11,12 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class GetRoleItemQueryHandler : BaseCommandHandler<GetRoleItemQuery, QueryResponse<RolesDto>, IRolesRepo>
+    public class GetRoleItemQueryHandler : 
+        BaseLoadItemQueryHandler<GetRoleItemQuery, IRolesRepo, Membership_Roles, RolesDto>
     {
         public GetRoleItemQueryHandler(IRolesRepo repo, IMapper mapper) : base(repo, mapper)
         {
         }
 
-        public async override Task<QueryResponse<RolesDto>> Handle(GetRoleItemQuery request, CancellationToken cancellationToken)
-        {
-            Membership_Roles role =await _repo.FindAsync(request.Id);
-            if (role is null)
-                throw new NotFoundException($"نقش با کد رایانه {request.Id}",nameof(Membership_Roles));
-
-            return QueryResponse<RolesDto>.CreateInstance(_mapper.Map<RolesDto>(role), "", 1);
-        }
     }
 }

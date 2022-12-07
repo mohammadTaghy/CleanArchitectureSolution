@@ -10,43 +10,35 @@ import * as LoginActions from "../../cms/auth/store/login.action";
 })
 export class CallAPIComponent {
   constructor(private http: HttpClient) { }
-  PostApi<TRequest, TResponse>(url: string, requestBody: TRequest): Observable<TResponse> {
-     let options_ = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        "Accept":"application/json"
-      },
-       
-      )
-    };
-    console.log(requestBody);
-    return this.http.post<TResponse>(url, requestBody, options_)
-      //.pipe(
-      //map(res => { return res; }),
-      //catchError(err => {
-      //  console.log(err);
-      //  return of(err);
-      //}))
-      ;
-  }
-  GetApi<TResponse>(url: string, queryParametter: string): Observable<TResponse> {
-    let options_ = {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
+  options = {
+    headers: new HttpHeaders({
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
 
-      )
-    };
-    url += queryParametter != "" ? "&" + queryParametter : "";
+    )
+  };
+  postApi<TRequest, TResponse>(url: string, requestBody: TRequest): Observable<TResponse> {
+    //console.log(url);
+    //console.log(this.options);
+    //console.log(requestBody);
+    return this.http.post<TResponse>(url, JSON.stringify(requestBody), this.options);
+    //return of();
+  }
+  putApi<TRequest, TResponse>(url: string, requestBody: TRequest): Observable<TResponse> {
+    console.log(url);
+    console.log(this.options);
+    console.log(requestBody);
+    
+    return this.http.put<TResponse>(url, requestBody, this.options);
+  }
+  deleteApi<TRequest, TResponse>(url: string): Observable<TResponse> {
+
+    return this.http.delete<TResponse>(url, this.options);
+  }
+  GetApi<TResponse>(url: string): Observable<TResponse> {
+    
     console.log("get api ?" + url);
-    return this.http.get<TResponse>(url, options_)
-      //.pipe(
-      //map(res => { return res; }),
-      //catchError(err => {
-      //  console.log(err);
-      //  return of(err);
-      //}))
-      ;
+    return this.http.get<TResponse>(url, this.options);
   }
 }

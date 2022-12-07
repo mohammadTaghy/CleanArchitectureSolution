@@ -14,7 +14,7 @@ namespace Persistence.Configuration
     {
         public abstract void BaseConfigure(EntityTypeBuilder<T> builder);
 
-        public void Configure(EntityTypeBuilder<T> builder)
+        public virtual void Configure(EntityTypeBuilder<T> builder)
         {
             builder.ToTable(typeof(T).Name);
             builder.HasKey(p => p.Id);

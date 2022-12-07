@@ -1,12 +1,19 @@
 ﻿using Application;
+using Application.Common.Exceptions;
+using Application.Common.Model;
+using Application.UseCases;
 using Common;
+using Common.Extention;
 using Domain;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,6 +48,10 @@ namespace Persistence.Repository
         }
         #endregion
         #region CustomMethod
+        private bool checkHasSpecificWord(string text)
+        {
+            return text.ToLower().ContainsAny(" drop ", " delete ", " insert ", " alter ", " update ", " exec");
+        }
         private void SetModify(EntityEntry entity)
         {
             if (entity.Entity is IChangeProperty)
@@ -58,7 +69,7 @@ namespace Persistence.Repository
             {
                 ICreateProperty changeProperty = (ICreateProperty)entity.Entity;
                 changeProperty.CreateDate = DateTimeHelper.CurrentMDateTime;
-                changeProperty.CreateBy = _currentUserSession.UserId??0;
+                changeProperty.CreateBy = _currentUserSession.UserId ?? 0;
 
             }
         }
@@ -80,7 +91,7 @@ namespace Persistence.Repository
             {
                 if (entity.State == EntityState.Added)
                 {
-                   // SetID(entity);
+                    // SetID(entity);
                     SetCreate(entity);
 
                 }
@@ -139,20 +150,63 @@ namespace Persistence.Repository
         {
             return await GetAllAsQueryable().AnyAsync(predicate);
         }
+        public async Task<Tuple<List<T>, int>> ItemListAdo(ItemListParameter baseGetApiParameter)
+        {
+            if (checkHasSpecificWord($"{baseGetApiParameter.Filter} {baseGetApiParameter.Orderby} {baseGetApiParameter.Columns}"))
+                throw new ValidationException();
+           
+            try
+            {
+                string sql = "EXEC dbo.sp_LoadEntityList @tableName, @filter, @orderby, @selectColumn, @top, @skip, @count output";
+                int count = 0;
+                var outParameter = new SqlParameter { ParameterName = "count", Direction = ParameterDirection.Output, SqlDbType = SqlDbType.Int };
+                List<T> result = await Context.Set<T>().FromSqlRaw<T>(sql,
+                    new SqlParameter { ParameterName = "tableName", Value = typeof(T).Name, SqlDbType = SqlDbType.NVarChar },
+                    new SqlParameter { ParameterName = "filter", Value = baseGetApiParameter.Filter ?? "", SqlDbType = SqlDbType.NVarChar },
+                    new SqlParameter { ParameterName = "orderby", Value = baseGetApiParameter.Orderby ?? "Id", SqlDbType = SqlDbType.NVarChar },
+                    new SqlParameter { ParameterName = "selectColumn", Value = baseGetApiParameter.Columns ?? "", SqlDbType = SqlDbType.NVarChar },
+                    new SqlParameter { ParameterName = "top", Value = baseGetApiParameter.Top, SqlDbType = SqlDbType.SmallInt },
+                    new SqlParameter { ParameterName = "skip", Value = baseGetApiParameter.Skip, SqlDbType = SqlDbType.SmallInt },
+                    outParameter).ToListAsync();
+                count = (int)outParameter.Value;
+                return new Tuple<List<T>, int>(result, count);
+            }
+            catch (Exception ex)
+            {
+                throw new BadRequestException(CommonMessage.ValidationMessage);
+            }
+            
+        }
+        public async Task<List<T>> ItemListAdo(string procudureName, SqlParameter[] sqlParameters)
+        {
+            if (sqlParameters.Any(p => checkHasSpecificWord(p.Value.ToString())))
+                throw new ValidationException();
+            string sqlQuery = $"EXEC {procudureName} ";
+            string sign = "";
+            foreach (SqlParameter param in sqlParameters)
+            {
+                sqlQuery += $" {sign}@{param.ParameterName}";
+                sign += ", ";
+            }
+
+            return await Context.Set<T>().FromSqlRaw<T>(sqlQuery, sqlParameters).ToListAsync();
+        }
+
         #endregion
         #region Manipulate
 
         public virtual async Task<bool> DeleteItem(T entity)
         {
             Context.Entry(entity).State = EntityState.Deleted;
-             await  Save();
+            await Save();
             return true;
         }
-        public virtual async Task DeleteItem(int id)
+        public virtual async Task<bool> DeleteItem(int id)
         {
             Task<T> entity = FindAsync(id);
             Context.Entry(entity).State = EntityState.Deleted;
             await Save();
+            return true;
         }
 
         public virtual async Task<bool> DeleteItems(IList<T> items)
@@ -211,13 +265,13 @@ namespace Persistence.Repository
         public async Task Save()
         {
             var entities = Context.ChangeTracker.Entries().Where(p => p.State != EntityState.Unchanged);
-           // await Task.Run(() =>
-           //{
-               Parallel.ForEach(entities, entity =>
-                {
-                    FillEntityProperty(entity);
-                });
-           //});
+            // await Task.Run(() =>
+            //{
+            Parallel.ForEach(entities, entity =>
+             {
+                 FillEntityProperty(entity);
+             });
+            //});
 
             try
             {

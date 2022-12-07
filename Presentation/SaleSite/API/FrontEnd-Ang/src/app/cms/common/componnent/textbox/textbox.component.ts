@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { ColumnProperties } from "../../constant/constant.common";
 import { BaseUIComponent } from "../baseUI.compnent";
 
@@ -8,7 +8,9 @@ import { BaseUIComponent } from "../baseUI.compnent";
 
   styleUrls: ['./textbox.component.css']
 })
-export class TextboxComponnent extends BaseUIComponent implements OnInit {
+export class TextboxComponnent extends BaseUIComponent implements OnInit, OnChanges {
+  ngOnChanges(changes: SimpleChanges): void {
+  }
   ngOnInit(): void {
 
   }

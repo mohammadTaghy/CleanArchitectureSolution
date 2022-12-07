@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Application.Common.Model;
+using Application.UseCases.UserProfileCase.Query.GetUserList;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.UserProfileCase.Query.GetUserItem
 {
-    public class GetUserItemQuery : IRequest<UserItemDto>
+    public class UserItemQuery : BaseLoadItemQuery<QueryResponse<UserItemDto>>
     {
-        public string UserName { get; set; }
-        public int Id { get; set; }
     }
 }

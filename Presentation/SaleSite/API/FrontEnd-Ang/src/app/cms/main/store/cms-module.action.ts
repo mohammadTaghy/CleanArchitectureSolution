@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { CurrentState } from "../../common/constant/constant.common";
+import { CurrentState, IFilterData, ISortData } from "../../common/constant/constant.common";
 import { FilterRequestBody, QueryRequestBody } from "../../common/filterRequestBody/filter-request-body.common";
 
 export const Add_Request_Start = '[Module] Add Request Start';
@@ -25,19 +25,19 @@ export class RequestSuccess<T> implements Action {
 export class AddRequestStart<T> implements Action {
   readonly type = Add_Request_Start;
 
-  constructor(public payload: T, public serviceUrl: string, public httpType: string) { }
+  constructor(public payload: T, public serviceUrl: string) { }
 }
 
 export class EditRequestStart<T> implements Action {
   readonly type = Edit_Request_Start;
 
-  constructor(public payload: T, public serviceUrl: string, public httpType: string) { }
+  constructor(public payload: T, public serviceUrl: string) { }
 }
 
 export class DeleteRequestStart<T> implements Action {
   readonly type = Delete_Request_Start;
 
-  constructor(public payload: number, public serviceUrl: string, public httpType: string) { }
+  constructor(public serviceUrl: string) { }
 }
 
 export class RequestFail implements Action {
@@ -49,9 +49,7 @@ export class RequestFail implements Action {
 export class FetchData implements Action {
   readonly type = Fetch_Data;
 
-  constructor(
-    public payload: string, public serviceUrl: string, public httpType: string
-  ) { }
+  constructor(public serviceUrl: string, public filter: IFilterData[], public sort: ISortData[]) { }
 }
 
 export class SetData<T> implements Action {

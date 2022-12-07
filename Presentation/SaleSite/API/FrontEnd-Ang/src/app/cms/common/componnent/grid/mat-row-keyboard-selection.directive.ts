@@ -46,93 +46,6 @@ export class MatRowKeyboardSelectionDirective implements OnInit, OnDestroy, Afte
     this.unsubscriber$.next(null);
     this.unsubscriber$.complete();
   }
-  //#endregion
-  //#region listener
-  @HostListener('focus', ['$event']) onFocus() {
-    if (this.selectOnFocus && !this.selection.isMultipleSelection()) {
-      this.selection.select(this.rowModel);
-    }
-
-    if (this.selectOnFocus && this.preventNewSelectionOnTab) {
-      //console.log('tabIndex');
-      this.rows.forEach(row => {
-        if (row !== this.el.nativeElement) {
-          row.tabIndex = -1;
-        }
-      });
-    }
-  }
-  @HostListener('blur', ['$event']) onBlur() {
-    if (this.deselectOnBlur && !this.selection.isMultipleSelection()) {
-      this.selection.deselect(this.rowModel);
-    }
-    if (this.selectOnFocus) {
-      this.el.nativeElement.tabIndex = 0;
-    }
-  }
-  @HostListener('click', ['$event']) onClick(event: MouseEvent) {
-    this.selectedRow(event);
-  }
-  @HostListener('keydown', ['$event']) onKeydown(event: KeyboardEvent) {
-    let newRow;
-    const currentIndex = this.renderedData.findIndex(row => row === this.rowModel);
-    console.log(event.key);
-    if (event.key === 'ArrowDown') {
-      newRow = this.rows[currentIndex + 1];
-    } else if (event.key === 'ArrowUp') {
-      newRow = this.rows[currentIndex - 1];
-    } else if (event.key === 'Enter' || event.key === ' ') {
-      this.selectedRow(event);
-    }
-    // this key for edit
-    else if (event.key === 'F2') {
-      if (this.rowModel != undefined || this.rowModel != null)
-        this.rowActionEvent.emit(new fromCmsAction.ChangedView(CurrentState.Edit, this.dataSource.data[currentIndex]["id"]));
-    }
-    else if (event.key === 'Insert') {
-      this.rowActionEvent.emit(new fromCmsAction.ChangedView(CurrentState.Insert, null));
-    }
-    else if (event.key === 'Delete') {
-      if (this.rowModel != undefined || this.rowModel != null)
-        this.rowActionEvent.emit(new fromCmsAction.ChangedView(CurrentState.Delete, this.dataSource.data[currentIndex]["id"]));
-    }
-    // this key for view
-    else if (event.key === 'F4') {
-      if (this.rowModel != undefined || this.rowModel != null)
-        this.rowActionEvent.emit(new fromCmsAction.ChangedView(CurrentState.Details, this.dataSource.data[currentIndex]["id"]));
-    }
-    else if (event.key === 'Escape') {
-      this.rowActionEvent.emit(new fromCmsAction.ChangedView(CurrentState.List, this.dataSource.data[currentIndex]["id"]));
-    }
-    else if (event.key === '+') {
-      console.log("+ clicked");
-      this.openFilterDialog.emit(this.selectedRow);
-    }
-    if (newRow) {
-      this.selectedRow(event);
-      newRow.focus();
-    }
-
-  }
-  //#endregion
-  //#region private Method
-  selectedRow(event) {
-    if (this.toggleOnEnter) {
-      this.selection.select(this.rowModel);
-    }
-    event.preventDefault();
-  }
-
-  getTableRows() {
-    let el = this.el.nativeElement;
-    while (el && el.parentNode) {
-      el = el.parentNode;
-      if (el.tagName && el.tagName.toLowerCase() === 'mat-table' || el.hasAttribute('mat-table')) {
-        return el.querySelectorAll('mat-row, tr[mat-row]');
-      }
-    }
-    return null;
-  }
   ngAfterViewInit() {
     // if (!this.selection) {
     //     throw new Error('Attribute \'selection\' is required');
@@ -154,6 +67,99 @@ export class MatRowKeyboardSelectionDirective implements OnInit, OnDestroy, Afte
       //console.log(this.rows);
     });
   }
+  //#endregion
+  //#region listener
+  @HostListener('focus', ['$event']) onFocus() {
+    if (this.selectOnFocus && !this.selection.isMultipleSelection()) {
+      this.selection.select(this.rowModel);
+    }
+
+    if (this.selectOnFocus && this.preventNewSelectionOnTab) {
+      this.rows.forEach(row => {
+        if (row !== this.el.nativeElement) {
+          row.tabIndex = -1;
+        }
+      });
+    }
+  }
+
+  @HostListener('blur', ['$event']) onBlur() {
+    if (this.deselectOnBlur && !this.selection.isMultipleSelection()) {
+      this.selection.deselect(this.rowModel);
+    }
+    if (this.selectOnFocus) {
+      this.el.nativeElement.tabIndex = 0;
+    }
+  }
+  @HostListener('click', ['$event']) onClick(event: MouseEvent) {
+    this.selectedRow(event);
+  }
+  @HostListener('keydown', ['$event']) onKeydown(event: KeyboardEvent) {
+    let newRow;
+    const currentIndex = this.renderedData.findIndex(row => row === this.rowModel);
+    console.log(event.key);
+    if (event.key === 'ArrowDown') {
+      newRow = this.rows[currentIndex + 1];
+    } else if (event.key === 'ArrowUp') {
+      newRow = this.rows[currentIndex - 1];
+    } else if (event.key === 'Enter' || event.key === ' ') {
+      this.selectedRow(event)
+    }
+    // this key for edit
+    else if (event.key === 'F2') {
+      if (this.rowModel != undefined || this.rowModel != null)
+        this.rowActionEvent.emit(new fromCmsAction.ChangedView(CurrentState.Edit, this.dataSource.data[currentIndex]["id"]));
+    }
+    //else if (event.key === 'Insert') {
+    //  this.rowActionEvent.emit(new fromCmsAction.ChangedView(CurrentState.Insert, null));
+    //}
+    else if (event.key === 'Delete') {
+      if (this.rowModel != undefined || this.rowModel != null)
+        this.rowActionEvent.emit(new fromCmsAction.ChangedView(CurrentState.Delete, this.dataSource.data[currentIndex]["id"]));
+    }
+    // this key for view
+    else if (event.key === 'F4') {
+      if (this.rowModel != undefined || this.rowModel != null)
+        this.rowActionEvent.emit(new fromCmsAction.ChangedView(CurrentState.Details, this.dataSource.data[currentIndex]["id"]));
+    }
+    else if (event.key === 'Escape') {
+      this.rowActionEvent.emit(new fromCmsAction.ChangedView(CurrentState.List, this.dataSource.data[currentIndex]["id"]));
+    }
+    //else if (event.key === '+') {
+    //  console.log("+ clicked");
+    //  this.openFilterDialog.emit(this.selectedRow);
+    //}
+    if (newRow) {
+      newRow.focus();
+
+    }
+
+  }
+  //#endregion
+  //#region private Method
+  selectedRow(event) {
+    this.unSelectRows();
+    if (this.toggleOnEnter) {
+      this.selection.toggle(this.rowModel);
+    }
+    event.preventDefault();
+  }
+  
+  unSelectRows() {
+    this.selection.clear();
+    
+  }
+  getTableRows() {
+    let el = this.el.nativeElement;
+    while (el && el.parentNode) {
+      el = el.parentNode;
+      if (el.tagName && el.tagName.toLowerCase() === 'mat-table' || el.hasAttribute('mat-table')) {
+        return el.querySelectorAll('mat-row, tr[mat-row]');
+      }
+    }
+    return null;
+  }
+
   //#endregion
 }
 

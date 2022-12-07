@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class PermissionsAsTreeQuery : IRequest<QueryResponse<List<PermissionTreeDto>>>
+    public class PermissionsAsTreeQuery : BaseLoadListQuery<QueryResponse<List<PermissionTreeDto>>>
     {
-        public int? RoleId { get; set; }
+        public int RoleId { get; set; }
     }
 }

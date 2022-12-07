@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace Application.Common.Model
 {
-    public sealed class QueryResponse<T> where T : class, new()
+    public interface IQueryResponse<T> where T : class, new()
     {
-        private QueryResponse() { }
+        int TotalCount { get; set; }
+        T Result { get; set; }
+        string Message { get; set; }
+        bool IsSuccess { get; set; }
+    }
+    public sealed class QueryResponse<T>: IQueryResponse<T> where T : class, new()
+    {
+        public QueryResponse() { }
         public int TotalCount { get; set; }
         public T Result { get; set; }
         public string Message { get; set; }

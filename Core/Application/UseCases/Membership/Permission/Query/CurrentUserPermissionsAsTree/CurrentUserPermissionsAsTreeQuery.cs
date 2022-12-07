@@ -10,14 +10,8 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class CurrentUserPermissionsAsTreeQuery : IRequest<QueryResponse<List<PermissionTreeDto>>>
+    public class CurrentUserPermissionsAsTreeQuery : BaseLoadListQuery<QueryResponse<List<PermissionTreeDto>>>
     {
-        public CurrentUserPermissionsAsTreeQuery() { }
-        public CurrentUserPermissionsAsTreeQuery(int userId)
-        {
-            UserId = userId;
-        }
-
         public int UserId { get; set; }
     }
 }

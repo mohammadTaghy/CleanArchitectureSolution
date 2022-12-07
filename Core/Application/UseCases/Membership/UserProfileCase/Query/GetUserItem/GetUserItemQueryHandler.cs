@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Application.UseCases.UserProfileCase.Query.GetUserList;
+using AutoMapper;
 using Common;
 using Domain.Entities;
 using MediatR;
@@ -10,24 +11,12 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases.UserProfileCase.Query.GetUserItem
 {
-    public class GetUserItemQueryHandler : IRequestHandler<GetUserItemQuery, UserItemDto>
+    public class GetUserItemQueryHandler : 
+        BaseLoadItemQueryHandler<UserItemQuery, IUserProfileRepo, Membership_UserProfile, UserItemDto>
     {
-        private readonly IUserProfileRepo _userProfileRepoRead;
-        public readonly IMapper _mappingProfile;
-
-
-        public GetUserItemQueryHandler(IUserProfileRepo userRepoRead, IMapper mappingProfile)
+        public GetUserItemQueryHandler(IUserProfileRepo userRepoRead, IMapper mappingProfile):base(userRepoRead,mappingProfile)
         {
-            _userProfileRepoRead = userRepoRead;
-            _mappingProfile = mappingProfile;
-        }
-
-        public async Task<UserItemDto> Handle(GetUserItemQuery request, CancellationToken cancellationToken)
-        {
-            if(request == null)
-                throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "Request"));
-            Membership_UserProfile userProfile = await _userProfileRepoRead.FindAsync(request.Id, request.UserName,cancellationToken);
-            return _mappingProfile.Map<UserItemDto>(userProfile);
+          
         }
     }
 }

@@ -24,11 +24,14 @@
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\dropdown\dropdown.component.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\generate.componnent\generate.component.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\grid\filter_dialog\filter_dialog.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\grid\mat-grid-keyboard-selection.directive.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\grid\mat-row-keyboard-selection.directive.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\sidenav\sidenav.componnent.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\textbox\textbox.component.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\tree\tree.component.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\constant\constant.common.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\constant\Constant_data.common.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\constant\enum.common.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\context\cms-context.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\filterRequestBody\filter-request-body.common.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\main\AdminPanel\store\adminPanel.action.ts" />
@@ -118,6 +121,9 @@
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\grid\filter_dialog\filter_dialog.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\grid\mat-grid-keyboard-selection.directive.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\grid\mat-row-keyboard-selection.directive.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\textbox\textbox.component.ts">
       <SubType>Code</SubType>
@@ -125,6 +131,8 @@
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\sidenav\sidenav.componnent.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\tree\tree.component.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\constant\constant.common.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\constant\Constant_data.common.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\constant\enum.common.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\context\cms-context.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\filterRequestBody\filter-request-body.common.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\AdminPanel\store\adminPanel.action.ts">

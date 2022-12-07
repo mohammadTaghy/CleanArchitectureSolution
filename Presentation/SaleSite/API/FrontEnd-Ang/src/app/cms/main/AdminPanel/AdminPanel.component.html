@@ -1,4 +1,4 @@
-<div class="mat-typography mat-app-background">
+<div class="mat-typography mat-app-background" ng-keypress="keyPressYes($event)">
 
   <mat-drawer-container class="container" autosize>
 
@@ -12,7 +12,7 @@
         <app-tree [inputData]="dataSource" ></app-tree>
       </section>
     </mat-drawer>
-    <mat-drawer-content>
+    <mat-drawer-content >
       <div class="content-container">
         <router-outlet></router-outlet>
       </div>

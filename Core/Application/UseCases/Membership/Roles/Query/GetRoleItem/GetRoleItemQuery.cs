@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class GetRoleItemQuery : IRequest<QueryResponse<RolesDto>>
+    public class GetRoleItemQuery : BaseLoadItemQuery<QueryResponse<RolesDto>>
     {
-        public int Id { get; set; }
     }
 }

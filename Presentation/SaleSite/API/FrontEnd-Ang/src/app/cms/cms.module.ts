@@ -43,6 +43,7 @@ import { MainCmsPage } from "./main/main-cms-page.component";
 import { GridComponnent } from "./common/componnent/grid/grid.componnent";
 import { UserGrid } from "../model/membership_userProfile.model";
 import { MatRowKeyboardSelectionDirective } from "./common/componnent/grid/mat-row-keyboard-selection.directive";
+import { MatGridKeyboardSelectionDirective } from "./common/componnent/grid/mat-grid-keyboard-selection.directive";
 import { TreeComponent } from "./common/componnent/tree/tree.component";
 import { TextboxComponnent } from "./common/componnent/textbox/textbox.component";
 import { GenerateComponnent } from "./common/componnent/generate.componnent/generate.component";
@@ -57,7 +58,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
   declarations: [
     BaseUIComponent,
     LoginComponent, AdminPanelComponent, UserCmsPage, MainCmsPage, GridComponnent,
-    MatRowKeyboardSelectionDirective, TreeComponent, TextboxComponnent, GenerateComponnent,
+    MatRowKeyboardSelectionDirective, MatGridKeyboardSelectionDirective,
+    TreeComponent, TextboxComponnent, GenerateComponnent,
     CheckboxComponnent, DropdownComponnent, DatePickerComponnent, FilterDialogComponnent
   ],
   providers: [LoginGuard, LoginEffects, CallAPIComponent, ApiAddresses, UserGrid],

@@ -14,8 +14,8 @@ export class DropdownComponnent extends BaseUIComponent implements OnInit, OnCha
     
   }
   ngOnInit(): void {
-    console.log("dropdown");
-    console.log(this.dataSource);
+   //console.log("dropdown");
+   //console.log(this.dataSource);
   }
   //#region input
   @Input() dataSource: constant.dropdownDataType[];

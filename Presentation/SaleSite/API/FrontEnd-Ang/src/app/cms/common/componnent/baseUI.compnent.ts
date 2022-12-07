@@ -1,9 +1,21 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, DoCheck, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 
 @Component({
   template:''
 })
-export class BaseUIComponent implements OnInit {
+export class BaseUIComponent implements IBaseUIComponent//, OnChanges, DoCheck
+{
+  constructor() {
+  }
+  //ngDoCheck(): void {
+  //  //this.outputValue.emit(this.inputValue);
+  //}
+  //ngOnChanges(changes: SimpleChanges): void {
+  //  //console.log(changes);
+  //}
+  //public getItem<IBaseUIComponent>(): IBaseUIComponent {
+  //  return this;
+  //}
   ngOnInit(): void {
       
   }
@@ -21,4 +33,24 @@ export class BaseUIComponent implements OnInit {
   @Input() color: string;
 
   //#endregion
+  //#region output
+  //@Output() outputValue= new EventEmitter<string>();
+  //#endregion
+
+
 }
+export interface IBaseUIComponent {
+  //getItem<T>(): T;
+  placeHolder: string;
+  title: string;
+  inputType: string;
+  inputValue: string;
+  data: string;
+  name: string;
+  isSecurity: boolean;
+  isDisabled: boolean;
+  isRequired: boolean;
+  width: string
+  color: string;
+}
+

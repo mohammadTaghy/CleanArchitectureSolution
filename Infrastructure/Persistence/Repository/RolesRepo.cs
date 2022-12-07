@@ -18,21 +18,21 @@ namespace Persistence.Repository
 
         }
 
-        public Task<List<RolesDto>> ItemsAsList(GetRolesQuery request, out int count)
-        {
-            int index = (request.PageIndex - 1);
-            index = index < 0 ? 0 : index;
-            var quesy = GetAllAsQueryable().Where(p => p.RoleName.Contains(request.SerchText));
-            count=quesy.Count();
-            List<RolesDto> resultList = new List<RolesDto>();
-            if (count > 0)
-                resultList =  quesy.Select(p => new RolesDto
-                {
-                    IsAdmin=p.IsAdmin,
-                    RoleName=p.RoleName
-                }).Skip(index*request.PageSize).Take(request.PageSize).ToList();
-            return Task.FromResult(resultList);
+        //public Task<List<RolesDto>> ItemsAsList(GetRolesQuery request, out int count)
+        //{
+        //    int index = (request.PageIndex - 1);
+        //    index = index < 0 ? 0 : index;
+        //    var quesy = GetAllAsQueryable().Where(p => p.RoleName.Contains(request.SerchText));
+        //    count=quesy.Count();
+        //    List<RolesDto> resultList = new List<RolesDto>();
+        //    if (count > 0)
+        //        resultList =  quesy.Select(p => new RolesDto
+        //        {
+        //            IsAdmin=p.IsAdmin,
+        //            RoleName=p.RoleName
+        //        }).Skip(index*request.PageSize).Take(request.PageSize).ToList();
+        //    return Task.FromResult(resultList);
 
-        }
+        //}
     }
 }

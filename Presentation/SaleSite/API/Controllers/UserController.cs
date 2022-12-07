@@ -9,9 +9,16 @@ using Common;
 using Common.JWT;
 using Infrastructure.Authentication;
 using MediatR;
+using Microsoft.AspNet.OData.Query;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OData.Edm;
+using Application.UseCases;
+using Domain.Entities;
+using Domain;
+using Application.UseCases.UserProfileCase.Command.Create;
 
 namespace API.Controllers
 {
@@ -19,35 +26,29 @@ namespace API.Controllers
     public class UserController : BaseController
     {
         private readonly IConfiguration _configuration;
-
-        public UserController(IMediator mediator, ICurrentUserService currentUserService, IConfiguration configuration) : base(mediator, currentUserService)
+        private readonly IEdmModel _edmModel;
+        private readonly IEdmType _edmType;
+        public UserController(IMediator mediator, ICurrentUserService currentUserService, IConfiguration configuration
+           ) : base(mediator, currentUserService)
         {
             _configuration = configuration;
         }
 
         [HttpPost]
+        [ApiVersion("1.0")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [CMSAuthorize]
-        public async Task<CommandResponse<string>> CreateUser([FromBody] CreateUserCommand createUserCommand, CancellationToken cancellationToken)
+        public async Task<CommandResponse<UserProfileListDto>> Users([FromBody] CreateUserProfileCommand createUserCommand, CancellationToken cancellationToken)
         {
             if (createUserCommand == null)
                 throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "اطلاعات کاربر"));
 
-            var result = await _mediator.Send(createUserCommand, cancellationToken);
-
-            return new CommandResponse<string>(true,
-                JWTToken<BaseJwtPayload>.CreateToken(new BaseJwtPayload
-                {
-                    CurrentVersionCode = 1,
-                    IsManagerConfirm = false,
-                    IsSecondRegister = false,
-                    IsUsrConfirm = true,
-                    UserId = result.Result
-                }, _configuration["Jwt:Key"])
-            );
+            return await _mediator.Send(createUserCommand, cancellationToken);
         }
+        
+
         [HttpPost]
         [ApiVersion("1.0")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -59,7 +60,7 @@ namespace API.Controllers
             if (result > 0)
             {
                 _currentUserService.SetUserId(result);
-                var userProfile = await _mediator.Send(new GetUserItemQuery() { Id = result });
+                QueryResponse<UserItemDto> userProfile = await _mediator.Send(new UserItemQuery() { Id = result });
 
                 //CurrentUserSession.UserInfo = new CurrentUserSessionDto(result, userProfile.IsUserConfirm ? Constants.YesNo.Yes : Constants.YesNo.No
                 //    , "", userProfile.Gender == 0 ? Constants.Gender.Male : Constants.Gender.Female,
@@ -73,22 +74,61 @@ namespace API.Controllers
                     IsUsrConfirm = true,
                     UserId = result
                 }, _configuration["Jwt:Key"]);
-                return new CommandResponse<UserItemDto>(true, userProfile ?? new() { Id = result });
+                return new CommandResponse<UserItemDto>(true, userProfile?.Result ?? new UserItemDto { Id = result });
             }
             else
                 throw new NotFoundException(signInQuery.UserName, "");
         }
+        
+
+        [HttpPut]
+        [ApiVersion("1.0")]
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [CMSAuthorize]
+        public async Task<CommandResponse<UserProfileListDto>> Users([FromBody] UpdateUserProfileCommand UpdateUserProfileCommand, CancellationToken cancellationToken)
+        {
+            if (UpdateUserProfileCommand == null)
+                throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "اطلاعات کاربر"));
+
+            return await _mediator.Send(UpdateUserProfileCommand, cancellationToken);
+        }
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [CMSAuthorize]
+        public async Task<CommandResponse<bool>> DeleteUser(int id, CancellationToken cancellationToken)
+        {
+
+            return await _mediator.Send(new DeleteUserProfileCommand { Id=id}, cancellationToken);
+        }
+        
+
         [HttpGet]
         [ApiVersion("1.0")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [CMSAuthorize]
-        public async Task<QueryResponse<List<UserProfileListDto>>> GetUsers([FromQuery]UserListQuery userListQuery, CancellationToken cancellationToken)
+        public async Task<QueryResponse<List<UserProfileListDto>>> Users([FromQuery] UserListQuery userListQuery, CancellationToken cancellationToken)
         {
+            //var context = new ODataQueryContext(_edmModel, _edmType, null);
+            //var queryOption = new ODataQueryOptions(context, Request);
             return await _mediator.Send(userListQuery, cancellationToken);
         }
-
+        [HttpGet("{id:int}")]
+        [ApiVersion("1.0")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [CMSAuthorize]
+        public async Task<QueryResponse<UserItemDto>> Users(int id, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(new UserItemQuery {Id=id }, cancellationToken);
+        }
 
     }
 }

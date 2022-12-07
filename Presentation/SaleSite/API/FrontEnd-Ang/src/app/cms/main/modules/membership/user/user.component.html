@@ -1,3 +1,12 @@
-<app-grid *ngIf="state==4" [dataSource]="users" [columns]="columns" [totalData]="totalData" (rowActionEvent)="actionEvent($event)"></app-grid>
-<app-generate *ngIf="state!=4" [columns]="dialogColumns" [state]="state" [selectedData]="selectedItem" ></app-generate>
+{{state}}
+<div [ngClass]="{'d-none':state===4}">
+  <app-generate *ngIf="state!=4"  [columns]="dialogColumns" [state]="state" [selectedData]="selectedItem"
+                (changeViewEvent)="actionEvent($event)"
+                (submitChangeEvent)="submitEvent($event)"></app-generate>
+</div>
+<app-grid  *ngIf="state==4" [dataSource]="users" [columns]="columns" [totalData]="totalData"
+          (rowActionEvent)="actionEvent($event)"
+          (setFilterAction)="setFilter($event)"></app-grid>
+
+
 

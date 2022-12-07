@@ -4,8 +4,8 @@ import { Config } from "../config/config"
 
 export enum ApiUrlPostfix {
   CmsLogin = "user/SignIn",
-  AdminPanelPermission = "permission/GetCurrentUserPermissions",
-  MembershipUsers="User/GetUsers"
+  AdminPanelPermission = "permission/Permissions",
+  MembershipUsers = "User/Users",
 };
 @Injectable({
   providedIn: 'root'

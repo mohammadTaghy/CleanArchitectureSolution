@@ -8,12 +8,8 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class GetRolesQuery : IRequest<QueryResponse<List<RolesDto>>>
+    public class GetRolesQuery : BaseLoadListQuery<QueryResponse<List<RolesDto>>>
     {
        
-
-        public string SerchText { get; set; }
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
     }
 }
