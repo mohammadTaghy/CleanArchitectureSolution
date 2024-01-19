@@ -14,31 +14,28 @@ using System.Threading.Tasks;
 namespace Application.UseCases.UserCase.Command.Update
 {
 
-    public class UpdateUserCommandHandler : IRequestHandler<UpdateUserCommand, CommandResponse<bool>>
+    public class UpdateUserCommandHandler : BaseCommandHandler<UpdateUserCommand, CommandResponse<bool>, IUserRepo>
     {
-        private readonly IUserValidation userValidation;
-        private readonly IUserRepo userRepo;
-        private readonly IMapper _mappingProfile;
 
-        public UpdateUserCommandHandler(IUserValidation userValidation, IUserRepo userRepo, IMapper mappingProfile)
+        public UpdateUserCommandHandler(IUserRepo userRepo, IMapper mapper, ICacheManager cacheManager)
+            : base(userRepo, mapper, cacheManager)
         {
-            this.userRepo = userRepo;
-            this.userValidation = userValidation;
-            _mappingProfile = mappingProfile;
         }
-        public async Task<CommandResponse<bool>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
+        public override  async Task<CommandResponse<bool>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
         {
-            userRepo.CancellationToken = cancellationToken;
+            _repo.CancellationToken = cancellationToken;
+
             if (command.UserName == null && command.Id == 0)
-                throw new ArgumentNullException("",string.Format(CommonMessage.NullException, $"{nameof(UpdateUserCommand.Id)} یا {nameof(UpdateUserCommand.UserName)}"));
-            Membership_User user = await userRepo.FindAsync(command.Id,command.UserName,cancellationToken);
+                throw new ArgumentNullException("", string.Format(CommonMessage.NullException, $"{nameof(UpdateUserCommand.Id)} یا {nameof(UpdateUserCommand.UserName)}"));
+
+            Membership_User user = await _repo.FindAsync(command.Id, command.UserName, cancellationToken);
 
             if (user == null)
             {
-                throw new NotFoundException("کاربر", new { command.Id,command.UserName });
+                throw new NotFoundException("کاربر", new { command.Id, command.UserName });
             }
-            user = _mappingProfile.Map<Membership_User>(command);
-            await userRepo.Update(user);
+
+            await _repo.Update(command);
 
             ///Call event for insert into read DB
             return await Task.FromResult(new CommandResponse<bool>(true));

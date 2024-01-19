@@ -1,28 +1,12 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Model;
-using Application.UseCases;
-using Application.UseCases.UserCase.Command.Create;
-using Application.Validation;
-using AutoMapper;
-using Common;
-using Domain.Entities;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
-using Xunit.Abstractions;
+﻿using Application.UseCases.Membership.Permission.Command.Create;
 
 namespace Application.Test.UseCases
 {
-    public class CreatePermissionCommand_Test : UnitTestBase<Membership_Permission,IPermissionRepo,IValidationRuleBase<Membership_Permission>>, IDisposable
+    public class CreatePermissionCommand_Test : UnitTestBase<Membership_Permission,IPermissionRepo>
     {
         private readonly CreatePermissionCommand _createCommand;
         private readonly CreatePermissionCommandHandler _handler;
+
 
         public CreatePermissionCommand_Test(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
@@ -35,27 +19,39 @@ namespace Application.Test.UseCases
                 Name = "Test",
                 Title="test"
             };
-            
 
-            _handler = new CreatePermissionCommandHandler(_repoMock.Object, _mapper.Object);
+            _handler = new CreatePermissionCommandHandler(_repoMock.Object, _mapper,_cacheManager.Object);
         }
         [Fact]
-        public void CreatePermissionCommand_NullExcption_ResultTest()
+        public async Task CreatePermissionCommand_NullExcption_ResultTest()
         {
-            var exception = Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(null, CancellationToken.None));
-            Assert.Equal(string.Format(CommonMessage.NullException, "Permission"), exception.Result.Message);
+            var exception = await Assert.ThrowsAsync<BadRequestException>(() => _handler.Handle(null, CancellationToken.None));
+
+            Assert.Equal(string.Format(CommonMessage.NullException, "Permission"), exception.Message);
         }
         [Fact]
-        public void CreatePermissionCommand_SuccessResult_ResultTest()
+        public async Task CreatePermissionCommand_ValidationExcption_ResultTest()
         {
-            Task<CommandResponse<Membership_Permission>> result = null;
-            result = _handler.Handle(_createCommand, CancellationToken.None);
+            var validation = new CreatePermissionCommandValidator();
+            CreatePermissionCommand command = new CreatePermissionCommand
+            {
+                CommandName = "CommandTest",
+                Name = "T",
+                Title = "test"
+            };
+            var failur = await validation.ValidateAsync(command);
+
+            Assert.False(failur.IsValid);
+            Assert.True(failur.Errors.Count>0);
+        }
+        [Fact]
+        public async Task CreatePermissionCommand_SuccessResult_ResultTest()
+        {
+            CommandResponse<Membership_Permission> result = await _handler.Handle(_createCommand, CancellationToken.None);
+
             _repoMock.Verify(p => p.Insert(It.IsAny<Membership_Permission>()), Times.Once);
-
-            Assert.True(result.Result.IsSuccess);
+            Assert.True(result.IsSuccess);
         }
-        public void Dispose()
-        {
-        }
+        
     }
 }

@@ -1,5 +1,7 @@
-﻿using Application.Common.Model;
+﻿using Application.Common.Exceptions;
+using Application.Common.Model;
 using AutoMapper;
+using Common;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
@@ -16,17 +18,19 @@ namespace Application.UseCases
         BaseCommandHandler<TRequest, QueryResponse<TResponseEntity>, TRepo>
         where TRequest: BaseLoadItemQuery<QueryResponse<TResponseEntity>>, new()
         where TEntity : class,IEntity, new()
-        where TRepo : IRepositoryBase<TEntity>
+        where TRepo : IRepositoryReadBase<TEntity>
         where TResponseEntity:class,new()
     {
-        public BaseLoadItemQueryHandler(TRepo tRepo, IMapper mapper) : base(tRepo, mapper)
+        public BaseLoadItemQueryHandler(TRepo tRepo, IMapper mapper, ICacheManager cacheManager) : base(tRepo, mapper, cacheManager)
         {
 
         }
         public override async Task<QueryResponse<TResponseEntity>> Handle(TRequest request, CancellationToken cancellationToken)
         {
-           
-            TEntity result= await _repo.FindAsync(request.Id);
+            if(request is null) throw new BadRequestException(string.Format(CommonMessage.NullException, nameof(request)));
+            TEntity result= await _repo.FindOne(request.Id);
+            if (result == null)
+                throw new NotFoundException(request.Id.ToString(), request.Id);
             TResponseEntity entityDto= _mapper.Map<TResponseEntity>(result);
             return QueryResponse<TResponseEntity>.CreateInstance(entityDto, "", 1);
         }

@@ -10,8 +10,6 @@ namespace Application
 {
     public interface IPermissionRepo : IRepositoryBase<Membership_Permission>
     {
-        Task<List<PermissionTreeDto>> GetPermissions(int? roleId);
-        Task<List<PermissionTreeDto>> GetCurrentRolePermissions(int userId);
 
     }
 }

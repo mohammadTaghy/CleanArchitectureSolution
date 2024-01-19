@@ -1,21 +1,8 @@
 ﻿using Application.Validation;
-using Common;
-using Domain;
-using Domain.Entities;
-using FluentValidation.TestHelper;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace Application.Test.Validation
 {
-    public class UserValidation_Test: UnitTestBase<Membership_User,IUserRepo,IUserValidation>
+    public class UserValidation_Test: UnitTestBase<Membership_User, IUserRepo>
     {
 
         public UserValidation_Test(ITestOutputHelper testOutputHelper):base(testOutputHelper)

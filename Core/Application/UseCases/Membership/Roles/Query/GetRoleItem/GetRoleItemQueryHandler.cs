@@ -1,6 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Model;
 using AutoMapper;
+using Common;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -12,9 +13,9 @@ using System.Threading.Tasks;
 namespace Application.UseCases
 {
     public class GetRoleItemQueryHandler : 
-        BaseLoadItemQueryHandler<GetRoleItemQuery, IRolesRepo, Membership_Roles, RolesDto>
+        BaseLoadItemQueryHandler<GetRoleItemQuery, IRolesRepoRead, Membership_Roles, RolesDto>
     {
-        public GetRoleItemQueryHandler(IRolesRepo repo, IMapper mapper) : base(repo, mapper)
+        public GetRoleItemQueryHandler(IRolesRepoRead repo, IMapper mapper, ICacheManager cacheManager) : base(repo, mapper, cacheManager)
         {
         }
 

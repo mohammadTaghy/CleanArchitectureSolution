@@ -14,7 +14,7 @@ namespace Application.UseCases
 {
     public class CreateRoleCommandHandler : BaseCommandHandler<CreateRoleCommand, CommandResponse<Membership_Roles>, IRolesRepo>
     {
-        public CreateRoleCommandHandler(IRolesRepo repo, IMapper mapper) : base(repo, mapper)
+        public CreateRoleCommandHandler(IRolesRepo repo, IMapper mapper, ICacheManager cacheManager) : base(repo, mapper, cacheManager)
         {
         }
 
@@ -23,12 +23,9 @@ namespace Application.UseCases
             if(request is null)
                 throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "Roles"));
             Membership_Roles role = _mapper.Map<Membership_Roles>(request);
-            if (await _repo.AnyEntity(p => p.RoleName == role.RoleName))
-                throw new ValidationException(new List<FluentValidation.Results.ValidationFailure>
-                {
-                    new FluentValidation.Results.ValidationFailure(nameof(Membership_Roles.RoleName),String.Format(CommonMessage.IsDuplicate,"نام نقش"))
-                });
-            await _repo.Insert(role);
+            if (await _repo.AnyEntity(p => p.Name == role.Name))
+                throw new BadRequestException(string.Format(CommonMessage.IsDuplicate, "RoleName"));
+            await _repo.Insert(request);
             return new CommandResponse<Membership_Roles>(true,role);
 
         }

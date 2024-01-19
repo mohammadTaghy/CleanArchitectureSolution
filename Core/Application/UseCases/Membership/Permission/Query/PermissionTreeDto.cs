@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class PermissionTreeDto: CommonTreeDto
+    public class PermissionTreeDto: CommonTreeDto<PermissionTreeDto>
     {
         public string Name { get; set; }
         public string Title { get; set; }

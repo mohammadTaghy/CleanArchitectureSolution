@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 namespace Application.UseCases
 {
     public class GetRolesQueryHandler : 
-        BaseLoadListQueryHandler<GetRolesQuery, IRolesRepo,Membership_Roles, RolesDto>
+        BaseLoadListQueryHandler<RolesQuery, IRolesRepoRead,Membership_Roles, RolesDto>
     {
-        public GetRolesQueryHandler(IRolesRepo repo, IMapper mapper) : base(repo, mapper)
+        public GetRolesQueryHandler(IRolesRepoRead repo, IMapper mapper, ICacheManager cacheManager) : base(repo, mapper, cacheManager)
         {
         }
 

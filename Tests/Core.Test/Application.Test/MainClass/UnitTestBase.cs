@@ -1,35 +1,34 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common;
 using Application.Mappings;
-using Application.Validation;
 using AutoMapper;
+using AutoMapper.Internal;
 using Domain;
-using Moq;
-using Xunit.Abstractions;
 
 namespace Application
 {
-    public class UnitTestBase<TEntity,TRepo,TValidation>
+    public class UnitTestBase<TEntity,TRepo>
         where TEntity : class,IEntity
         where TRepo : class, IRepositoryBase<TEntity>
-        where TValidation:class, IValidationRuleBase<TEntity>
     {
         protected readonly ITestOutputHelper _testOutputHelper;
-        protected readonly Mock<TValidation> _validationMock;
         protected readonly Mock<TRepo> _repoMock;
-        protected readonly Mock<IMapper> _mapper;
+        protected readonly IMapper _mapper;
+        protected readonly Mock<ICacheManager> _cacheManager;
+        protected readonly Mock<IRabbitMQUtility> _rabbitMQUtility;
+
         public UnitTestBase(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
             _repoMock = new Mock<TRepo>();
-            _validationMock = new Mock<TValidation>();
-            _mapper = new Mock<IMapper>();
-            var configurationProvider = new MapperConfiguration(cfg =>
+            var mapperConfig = new MapperConfiguration(mc =>
             {
-                cfg.AddProfile<MappingProfile>();
+                mc.Internal().MethodMappingEnabled = false;
+                mc.AddProfile(new MappingProfile());
             });
-            _mapper.SetReturnsDefault(configurationProvider);
-            _mapper.Setup(p => p.ConfigurationProvider.CreateMapper());
-            
+            _mapper = mapperConfig.CreateMapper();
+            _cacheManager =new Mock<ICacheManager>();
+            _rabbitMQUtility = new Mock<IRabbitMQUtility>();
+
         }
     }
 }

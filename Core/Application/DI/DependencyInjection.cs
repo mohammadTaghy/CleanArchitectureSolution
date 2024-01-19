@@ -1,17 +1,11 @@
 ﻿using Application.Common.Behaviours;
-using Application.Mappings;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
 using NetCore.AutoRegisterDi;
+using Domain.DI;
+using Microsoft.OData.Edm;
 
 namespace Application.DI
 {
@@ -20,7 +14,7 @@ namespace Application.DI
         public static IServiceCollection AddApplicationDependency(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
             
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestPerformanceBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
@@ -28,7 +22,13 @@ namespace Application.DI
             services.RegisterAssemblyPublicNonGenericClasses()
               .Where(c => c.Name.EndsWith("Validation"))  //optional
               .AsPublicImplementedInterfaces(ServiceLifetime.Scoped);
+            
             return services;
+        }
+        public static IEdmModel GetModel(this IServiceCollection services)
+        {
+            
+            return services.GetDomainModel();
         }
     }
 }

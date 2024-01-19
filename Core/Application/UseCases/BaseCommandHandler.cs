@@ -1,5 +1,6 @@
 ﻿using Application.Common.Model;
 using AutoMapper;
+using Common;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -15,10 +16,12 @@ namespace Application.UseCases
     {
         protected readonly TRepo _repo;
         protected readonly IMapper _mapper;
-        public BaseCommandHandler(TRepo repo, IMapper mapper)
+        protected readonly ICacheManager _cacheManager;
+        public BaseCommandHandler(TRepo repo, IMapper mapper, ICacheManager cacheManager)
         {
             _repo = repo;
             _mapper = mapper;   
+            _cacheManager = cacheManager;
         }
         public abstract Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
     }

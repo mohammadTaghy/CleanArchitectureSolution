@@ -1,4 +1,5 @@
 ﻿using Application.Common.Model;
+using Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class GetRolesQuery : BaseLoadListQuery<QueryResponse<List<RolesDto>>>
+    public class RolesQuery : BaseLoadListQuery<QueryResponse<List<RolesDto>>,Membership_Roles>
     {
        
     }

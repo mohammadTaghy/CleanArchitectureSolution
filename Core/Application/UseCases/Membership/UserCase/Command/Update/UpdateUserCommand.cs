@@ -18,6 +18,7 @@ namespace Application.UseCases.UserCase.Command.Update
     public class UpdateUserCommand :UserCommandBase, IRequest<CommandResponse<bool>>, IMapFrom<Membership_User>
     {
         public int Id { get; set; }
+        public List<int> RoleIds { get; set; }
         public void Mapping(MappingProfile profile)
         {
             profile.CreateMap<UpdateUserCommand, Membership_User>();

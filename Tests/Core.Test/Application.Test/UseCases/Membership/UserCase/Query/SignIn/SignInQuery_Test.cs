@@ -1,29 +1,15 @@
-﻿using Application.Common.Exceptions;
-using Application.UseCases.UserCase.Query.SignIn;
-using Application.UseCases.UserProfileCase.Query.GetUserItem;
+﻿using Application.UseCases.UserCase.Query.SignIn;
 using Application.Validation;
-using AutoMapper;
-using Common;
-using Domain.Entities;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
-using Xunit.Abstractions;
 
 namespace Application.Test.UseCases.UserCase.Query.SignIn
 {
-    public class SignInQuery_Test : UnitTestBase<Membership_User, IUserRepo, IUserValidation>
+    public class SignInQuery_Test : UnitTestBase<Membership_User, IUserRepo>
     {
         private readonly SignInQueryHandler _handler;
         private readonly SignInQuery _signInQuery;
         public SignInQuery_Test(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
         {
-            _handler = new SignInQueryHandler(_repoMock.Object, _mapper.Object);
+            _handler = new SignInQueryHandler(_repoMock.Object, _mapper);
             _signInQuery = new SignInQuery
             {
                 UserName = "test",

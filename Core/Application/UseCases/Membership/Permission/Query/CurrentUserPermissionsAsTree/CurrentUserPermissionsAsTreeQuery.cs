@@ -1,6 +1,6 @@
 ﻿using Application.Common.Model;
 using Application.Mappings;
-using Application.UseCases.UserProfileCase.Query.GetUserItem;
+using Domain.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class CurrentUserPermissionsAsTreeQuery : BaseLoadListQuery<QueryResponse<List<PermissionTreeDto>>>
+    public class CurrentUserPermissionsAsTreeQuery : BaseLoadListQuery<QueryResponse<List<PermissionTreeDto>>,Membership_Permission>
     {
         public int UserId { get; set; }
     }

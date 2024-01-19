@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,10 @@ namespace Application.Common.Model
         public bool IsSuccess { get; set; }
         public static QueryResponse<T> CreateInstance(T result, string message, int totalCount = 1, bool isSuccess = true)
         {
+            if (totalCount == 0 && string.IsNullOrEmpty(message))
+            {
+                message = CommonMessage.EmptyResponse;
+            }
             return new QueryResponse<T> { Result = result, Message = message, TotalCount = totalCount, IsSuccess = isSuccess };
         }
     }

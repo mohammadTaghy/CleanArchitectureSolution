@@ -10,6 +10,7 @@ namespace Application
 {
     public interface IRolesRepo : IRepositoryBase<Membership_Roles>
     {
-        //Task<List<RolesDto>> ItemsAsList(GetRolesQuery request,out int count);
+        Task Insert(CreateRoleCommand request);
+        Task Update(UpdateRoleCommand request);
     }
 }

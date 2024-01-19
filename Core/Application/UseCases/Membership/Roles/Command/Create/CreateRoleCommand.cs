@@ -11,10 +11,9 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class CreateRoleCommand : IRequest<CommandResponse<Membership_Roles>>, IMapFrom<Membership_Roles>
+    public class CreateRoleCommand : RoleCommandGlobalProperties, IRequest<CommandResponse<Membership_Roles>>, IMapFrom<Membership_Roles>
     {
-        public string RoleName { get; set; }
-        public bool IsAdmin { get; set; }
+        
         public void Mapping(MappingProfile profile)
         {
             profile.CreateMap<CreateRoleCommand, Membership_Roles>();

@@ -1,0 +1,16 @@
+﻿global using Application.Common.Exceptions;
+global using Application.Common.Interfaces;
+global using Application.Common.Model;
+global using Application.UseCases;
+global using Common;
+global using Domain.Entities;
+global using Microsoft.AspNetCore.OData.Query;
+global using Moq;
+global using System;
+global using System.Collections.Generic;
+global using System.Linq;
+global using System.Linq.Expressions;
+global using System.Threading;
+global using System.Threading.Tasks;
+global using Xunit;
+global using Xunit.Abstractions;

@@ -1,4 +1,5 @@
-﻿using Application.Common.Model;
+﻿using Application.Common.Exceptions;
+using Application.Common.Model;
 using AutoMapper;
 using Common;
 using Domain.Entities;
@@ -12,20 +13,21 @@ using System.Threading.Tasks;
 namespace Application.UseCases
 {
     public class PermissionsAsTreeQueryHandler : 
-        BaseLoadListQueryHandler<PermissionsAsTreeQuery, IPermissionRepo, Membership_Permission, PermissionTreeDto>
+        BaseLoadListQueryHandler<PermissionsAsTreeQuery, IPermissionRepoRead, Membership_Permission, PermissionTreeDto>
     {
-        public PermissionsAsTreeQueryHandler(IPermissionRepo repo, IMapper mapper) : base(repo, mapper)
+        public PermissionsAsTreeQueryHandler(IPermissionRepoRead repo, IMapper mapper, ICacheManager cacheManager) : base(repo, mapper,cacheManager)
         {
         }
 
-        public override async Task<QueryResponse<List<PermissionTreeDto>>> Handle(PermissionsAsTreeQuery request, CancellationToken cancellationToken)
+        public async Task<QueryResponse<List<PermissionTreeDto>>> Handle(PermissionsAsTreeQuery request, CancellationToken cancellationToken)
         {
             if (request is null)
-                throw new ArgumentNullException("", string.Format(CommonMessage.NullException, "Permission"));
+                throw new BadRequestException(string.Format(CommonMessage.NullException, "Permission"));
 
             List<PermissionTreeDto> permissionTreeDtos = await _repo.GetPermissions(request.RoleId);
-            if (permissionTreeDtos == null || permissionTreeDtos.Count == 0)
-                return QueryResponse<List<PermissionTreeDto>>.CreateInstance(new(), CommonMessage.EmptyResponse , 0, false);
+
+           
+
             return QueryResponse<List<PermissionTreeDto>>.CreateInstance(permissionTreeDtos, "", permissionTreeDtos.Count, true);
         }
     }

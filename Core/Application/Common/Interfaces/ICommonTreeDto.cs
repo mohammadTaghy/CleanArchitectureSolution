@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace Application.Common.Interfaces
 {
-    public interface ICommonTreeDto
+    public interface ICommonTreeDto<E>
+        where E : class, ICommonTreeDto<E>, new()
     {
         int Id { get; set; }
 
         int? ParentId { get; set; }
         bool HasChild { get; set; }
 
-        List<ICommonTreeDto> ChildList { get; set; }
+        List<E> ChildList { get; set; }
     }
 }

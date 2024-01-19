@@ -9,14 +9,16 @@ using System.Threading.Tasks;
 
 namespace Application.UseCases
 {
-    public class RolesDto: IMapFrom<Membership_Roles>
+    public record RolesDto(int Id, string Name, bool IsAdmin, List<int> permissionIds) : IMapFrom<Membership_Roles>
     {
-        public int Id { get; set; }
-        public string RoleName { get; set; }
-        public bool IsAdmin { get; set; }
+        public RolesDto():this(0,"",false,new List<int>())
+        {
+
+        }
         public void Mapping(MappingProfile profile)
         {
-            profile.CreateMap<Membership_Roles, RolesDto>();
+            profile.CreateMap<Membership_Roles, RolesDto>()
+                .ForMember(d=>d.permissionIds,source=>source.MapFrom(p=>p.RolesPermission.Select(q=>q.PermissionId)));
         }
     }
 }

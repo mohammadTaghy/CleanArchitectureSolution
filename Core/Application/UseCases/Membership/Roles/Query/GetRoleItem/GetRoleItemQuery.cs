@@ -10,5 +10,6 @@ namespace Application.UseCases
 {
     public class GetRoleItemQuery : BaseLoadItemQuery<QueryResponse<RolesDto>>
     {
+        
     }
 }

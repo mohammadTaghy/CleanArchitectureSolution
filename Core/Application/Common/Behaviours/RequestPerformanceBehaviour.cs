@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Common;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using System;
@@ -15,17 +16,17 @@ namespace Application.Common.Behaviours
     {
         private readonly Stopwatch _timer;
         private readonly ILogger<TRequest> _logger;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserSession _currentUserSession;
 
-        public RequestPerformanceBehaviour(ILogger<TRequest> logger, ICurrentUserService currentUserService)
+        public RequestPerformanceBehaviour(ILogger<TRequest> logger, ICurrentUserSession currentUserSession)
         {
             _timer = new Stopwatch();
 
             _logger = logger;
-            _currentUserService = currentUserService;
+            _currentUserSession = currentUserSession;
         }
 
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             _timer.Start();
 
@@ -38,10 +39,11 @@ namespace Application.Common.Behaviours
                 var name = typeof(TRequest).Name;
 
                 _logger.LogWarning("Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@UserId} {@Request}",
-                    name, _timer.ElapsedMilliseconds, _currentUserService.UserId, request);
+                    name, _timer.ElapsedMilliseconds, _currentUserSession.UserId, request);
             }
 
             return response;
         }
+
     }
 }
