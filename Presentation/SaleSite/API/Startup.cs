@@ -1,30 +1,28 @@
 ﻿using API.Common;
-using API.Services;
-using Application.Common.Interfaces;
 using Application.DI;
+using Asp.Versioning;
+using Common;
 using Common.DI;
-using Domain.Entities;
 using FluentValidation.AspNetCore;
 using Infrastructure.Authentication;
 using Infrastructure.DI;
-//using Microsoft.AspNet.OData.Builder;
 //using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
-using Persistence;
-using System.ComponentModel;
+using Persistence.DI;
+using System.Net;
 using System.Text;
 
 namespace API
 {
     public class Startup
     {
-        private IServiceCollection _services;
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
@@ -36,25 +34,21 @@ namespace API
         public IWebHostEnvironment Environment { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddInfrastructure(Configuration);
-            services.AddCommonDependency(Configuration);
-            services.AddApplicationDependency(Configuration);
-
-            //services.AddHealthChecks()
-            //   .AddDbContextCheck<PersistanceDBContext>();
-
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
+                options.HttpsPort = 44376;
+            });
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.AddScoped<ICurrentUserService, CurrentUserService>();
-
 
             services.AddHttpContextAccessor();
             services.AddHttpClient();
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
+
             });
             services.AddSpaStaticFiles(configuration =>
             {
@@ -62,8 +56,28 @@ namespace API
             });
             services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
+
+           
+            services.AddInfrastructure(Configuration);
+            services.AddPersistence(Configuration);
+            services.AddCommonDependency(Configuration);
+            services.AddApplicationDependency(Configuration);
+
             services.AddControllers()
+                .AddOData(option =>
+                {
+                    option.Select();
+                    option.Expand();
+                    option.Filter();
+                    option.Count();
+                    option.SetMaxTop(100);
+                    option.SkipToken();
+                    option.AddRouteComponents("Odata", services.GetModel());
+                    option.Count();
+                    option.OrderBy();
+                })
                 .AddNewtonsoftJson();
+
 
             services.Configure<ApiBehaviorOptions>(options =>
             {
@@ -71,7 +85,18 @@ namespace API
             });
 
             services.AddSession();
-            services.AddApiVersioning(p=>p.DefaultApiVersion=ApiVersion.Default);
+
+            services.AddApiVersioning(options =>
+            {
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ReportApiVersions = true;
+            })
+            .AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            });
             //services.AddOData().EnableApiVersioning();
             //services.AddODataApiExplorer();
 
@@ -82,10 +107,25 @@ namespace API
             services.AddMvc()
                 .AddSessionStateTempDataProvider();
 
+            services.Configure<FormOptions>(o =>
+            {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+
+
+            });
+
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = null;
+                options.MaxRequestBodyBufferSize = int.MaxValue;
+            });
 
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddMemoryCache();
+
             services.AddCors(c =>
             {
                 c.AddPolicy("AllowOrigin", options =>
@@ -95,6 +135,14 @@ namespace API
                     .AllowAnyHeader();
                 });
             });
+
+            services.Configure<IISServerOptions>(options =>
+            {
+                options.MaxRequestBodySize = int.MaxValue;
+                options.MaxRequestBodyBufferSize = int.MaxValue;
+                options.AllowSynchronousIO = true;
+            });
+
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -112,17 +160,12 @@ namespace API
                     (Configuration["Jwt:Key"]))
                 };
             });
-            _services = services;
         }
         public void Configure(IApplicationBuilder app)
         {
             app.UseCustomExceptionHandler();
             app.UseSession();
-            //app.UseMvc(builder =>
-            //{
-            //    builder.Select().Expand().Filter().OrderBy().Count().MaxTop(100);
-            //    //builder.MapVersionedODataRoute("odata", "odata", modelBuilder.GetEdmModels());
-            //});
+
             app.UseCors();
 
             if (Environment.IsDevelopment())
@@ -132,7 +175,19 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseStaticFiles();
+            app.UseHttpsRedirection();
+
+            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), @"Asset");
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(folderPath),
+                RequestPath = new PathString("/Asset")
+            });
+
+
+
             app.UseSpaStaticFiles();
             app.UseRouting();
 
@@ -144,12 +199,11 @@ namespace API
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllerRoute(
-                //    name: "default",
-                //    pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapControllers();
-
             });
+           
+
+
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "FrontEnd-Ang";
@@ -160,7 +214,8 @@ namespace API
                 }
             });
 
-            
+
+
             //app.Run();
         }
     }

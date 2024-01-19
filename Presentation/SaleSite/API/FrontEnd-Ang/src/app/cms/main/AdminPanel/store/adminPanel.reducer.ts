@@ -1,4 +1,4 @@
-import { Membership_Permission } from "../../../../model/membership_permission.model";
+import { Membership_Permission } from "../../../../model/membership/membership_permission.model";
 import * as fromAdminPanelActions from './adminPanel.action'
 
 

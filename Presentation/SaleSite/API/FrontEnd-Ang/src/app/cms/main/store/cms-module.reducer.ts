@@ -1,7 +1,8 @@
 import { Action } from "rxjs/internal/scheduler/Action";
 import { last } from "rxjs/operators";
-import { Membership_User } from "../../../model/membership_user.model";
-import { CurrentState, IFilterData, ISortData } from "../../common/constant/constant.common";
+import { Membership_User } from "../../../model/membership/membership_user.model";
+import { IFilterData, ISortData } from "../../common/constant/constant.common";
+import { CurrentState } from "../../common/constant/enum.common";
 import * as CmsActions from './cms-module.action'
 
 
@@ -12,6 +13,7 @@ export interface CmsModuleState<T> {
   currentSatate: CurrentState,
   error: string;
   loading: boolean;
+  totalCount: number;
   pageNumber: number,
   pageSize: number,
   currentFilter: IFilterData[],
@@ -24,6 +26,7 @@ const initialState: CmsModuleState<any> = {
   items: null,
   selectedId: null,
   currentSatate: CurrentState.List,
+  totalCount:0,
   pageNumber: 1,
   pageSize: 10,
   selectedData: null,
@@ -34,22 +37,18 @@ const initialState: CmsModuleState<any> = {
 export function CmsModuleReducer<T>(state = initialState, action: CmsActions.CmsActions) {
   switch (action.type) { 
     case CmsActions.Changed_View:
-      let selected: T = null, selectedId: number = action.selectedId;
-
-      if (action.viewType == CurrentState.Delete || action.viewType == CurrentState.Edit ||
-        action.viewType == CurrentState.Details)
-        selected = state.items.find(p => p["id"] == action.selectedId);
-      else {
-        selected = null;
-        selectedId = null;
-      }
+      console.log("changedView");
+      console.log(action.selected);
+      let selectedId: number = null;
+      if (action.selected != null)
+        selectedId = action.selected["id"];
       return {
         ...state,
         error: '',
         loading: false,
         currentSatate: action.viewType,
-        selectedData: selected,
-        selectedId: selectedId
+        selectedData: action.selected,
+        selectedId: selectedId,
       }
     case CmsActions.Add_Request_Start:
       return {
@@ -59,6 +58,7 @@ export function CmsModuleReducer<T>(state = initialState, action: CmsActions.Cms
         selectedData: null
       };
     case CmsActions.Edit_Request_Start:
+      console.log(action.payload);
       return {
         ...state,
         error: '',
@@ -74,14 +74,16 @@ export function CmsModuleReducer<T>(state = initialState, action: CmsActions.Cms
       };
     case CmsActions.Request_SUCCESS:
       console.log("Request_SUCCESS");
+      let pageNumber = state.pageNumber;
       if (state.currentSatate == CurrentState.Insert)
-        state.pageNumber = 1;
+        pageNumber = 1;
       return {
         ...state,
         error: "",
         loading: false,
         selectedData: null,
-        currentSatate: CurrentState.List
+        currentSatate: CurrentState.List,
+        pageNumber: pageNumber
       };   
     case CmsActions.Request_FAIL:
       return {
@@ -104,7 +106,8 @@ export function CmsModuleReducer<T>(state = initialState, action: CmsActions.Cms
         loading: false,
         items: action.payload,
         selectedId: null,
-        currentSatate: CurrentState.List
+        currentSatate: CurrentState.List,
+        totalCount: action.totalCount
       };
     case CmsActions.Fetch_Data:
       return {

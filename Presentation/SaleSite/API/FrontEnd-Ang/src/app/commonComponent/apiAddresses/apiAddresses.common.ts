@@ -1,20 +1,23 @@
 import { EnvironmentInjector, Injectable } from "@angular/core";
 
-import { Config } from "../config/config"
 
 export enum ApiUrlPostfix {
   CmsLogin = "user/SignIn",
-  AdminPanelPermission = "permission/Permissions",
   MembershipUsers = "User/Users",
+  Permissions ="Permission/Permissions",
+  CurrentUserPermissions ="Permission/CurrentUserPermissions",
+  LessonsCategoriesAsList = "LessonsCategories/LessonsCategoriesAsList",
+  LessonsCategories = "LessonsCategories/LessonsCategories",
+  FileUploadAddress = "/"
 };
 @Injectable({
   providedIn: 'root'
 })
 export class ApiAddresses {
   constructor() { }
-  baseUrl: string = "http://localhost:18023/api/";
+  public baseUrl: string = "https://localhost:44376/api/";
   GetServiceUrl(urlPostfix: string): string {
-    return this.baseUrl + urlPostfix + "?api-version=" + Config.version;
+    return (this.baseUrl + urlPostfix).trim();
     //return "";
   }
 }

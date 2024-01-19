@@ -18,13 +18,13 @@ export class DropdownComponnent extends BaseUIComponent implements OnInit, OnCha
    //console.log(this.dataSource);
   }
   //#region input
-  @Input() dataSource: constant.dropdownDataType[];
+  @Input() dataSource: constant.DropdownDataType[];
   //#endregion
   //#region output
   @Output() selectedActionEvent = new EventEmitter<any>();
   //#endregion
   //#region properties
-  dropdownControl = new FormControl<constant.dropdownDataType | null>(null, Validators.required);
+  dropdownControl = new FormControl<constant.DropdownDataType | null>(null, Validators.required);
   selectFormControl = new FormControl('', Validators.required);
   //#endregion
   //#region method

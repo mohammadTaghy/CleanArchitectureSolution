@@ -1,4 +1,4 @@
-import { Membership_User } from "../../../model/membership_user.model";
+import { Membership_User } from "../../../model/membership/membership_user.model";
 import * as LoginActions from './login.action'
 
 

@@ -28,6 +28,7 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSelectModule } from "@angular/material/select";
 import { MatDialogModule } from "@angular/material/dialog";
 import { NgPersianDatepickerModule } from "ng-persian-datepicker";
+import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 
 
 
@@ -41,9 +42,8 @@ import { AdminPanelComponent } from "./main/AdminPanel/AdminPanel.component";
 import { UserCmsPage } from "./main/modules/membership/user/user.component";
 import { MainCmsPage } from "./main/main-cms-page.component";
 import { GridComponnent } from "./common/componnent/grid/grid.componnent";
-import { UserGrid } from "../model/membership_userProfile.model";
-import { MatRowKeyboardSelectionDirective } from "./common/componnent/grid/mat-row-keyboard-selection.directive";
-import { MatGridKeyboardSelectionDirective } from "./common/componnent/grid/mat-grid-keyboard-selection.directive";
+import { UserGrid } from "../model/membership/membership_userProfile.model";
+import { MatRowKeyboardSelectionDirective } from "./common/componnent/mat-row-keyboard-selection.directive";
 import { TreeComponent } from "./common/componnent/tree/tree.component";
 import { TextboxComponnent } from "./common/componnent/textbox/textbox.component";
 import { GenerateComponnent } from "./common/componnent/generate.componnent/generate.component";
@@ -53,16 +53,21 @@ import { DatePickerComponnent } from "./common/componnent/datepicker/datepicker.
 import { FilterDialogComponnent } from "./common/componnent/grid/filter_dialog/filter_dialog.component";
 import { BaseUIComponent } from "./common/componnent/baseUI.compnent";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { PermissionsCmsPage } from "./main/modules/membership/permission/permission.component";
+import { PermissionGrid } from "../model/membership/membership_permission.model";
+import { FileUploadComponnent } from "./common/componnent/uploadfile/fileUpload.component";
 
 @NgModule({
   declarations: [
     BaseUIComponent,
-    LoginComponent, AdminPanelComponent, UserCmsPage, MainCmsPage, GridComponnent,
-    MatRowKeyboardSelectionDirective, MatGridKeyboardSelectionDirective,
+    LoginComponent, AdminPanelComponent,
+    UserCmsPage, MainCmsPage, PermissionsCmsPage,
+    GridComponnent,
+    MatRowKeyboardSelectionDirective,
     TreeComponent, TextboxComponnent, GenerateComponnent,
-    CheckboxComponnent, DropdownComponnent, DatePickerComponnent, FilterDialogComponnent
+    CheckboxComponnent, DropdownComponnent, DatePickerComponnent, FilterDialogComponnent, FileUploadComponnent
   ],
-  providers: [LoginGuard, LoginEffects, CallAPIComponent, ApiAddresses, UserGrid],
+  providers: [LoginGuard, LoginEffects, CallAPIComponent, ApiAddresses, UserGrid, PermissionGrid],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -74,8 +79,8 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     MatInputModule, MatFormFieldModule, MatIconModule, MatProgressSpinnerModule, MatButtonModule,
     MatCardModule, MatToolbarModule, MatDividerModule, MatSidenavModule, MatListModule, MatButtonToggleModule,
     MatTooltipModule, MatTreeModule, MatTableModule, MatPaginatorModule, MatSortModule, MatSelectModule,
-    MatCheckboxModule, MatDialogModule
-
+    MatCheckboxModule, MatDialogModule,
+    NgxMatSelectSearchModule
 
     
     

@@ -1,14 +1,13 @@
 import { Injectable } from "@angular/core";
-import { Actions, ofType, Effect, createEffect, EffectSources } from "@ngrx/effects";
+import { Actions, ofType, Effect, EffectSources } from "@ngrx/effects";
 import { Router } from '@angular/router';
-import { switchMap, catchError, map, tap } from 'rxjs/operators';
-import { observable, of } from "rxjs";
+import { switchMap, catchError, map } from 'rxjs/operators';
+import { of } from "rxjs";
 
 import * as adminPanelActions from "./adminPanel.action";
 import { CallAPIComponent } from "../../../../commonComponent/callAPI/callAPI.common";
 import { ApiAddresses, ApiUrlPostfix } from "../../../../commonComponent/apiAddresses/apiAddresses.common";
-import { Membership_Permission } from "../../../../model/membership_permission.model";
-import { HttpHeaderResponse } from "@angular/common/http";
+import { Membership_Permission } from "../../../../model/membership/membership_permission.model";
 import { QueryResponse } from "../../../../commonComponent/common_model/query_response";
 
 
@@ -21,7 +20,7 @@ export class AdminPanelEffects {
     switchMap((data: adminPanelActions.AdminPanelStartLoad) => {
       //console.log("get adminpanel");
       return this.callAPIComponent.GetApi<QueryResponse<Membership_Permission[]>>
-        (this.apiAddresses.GetServiceUrl(ApiUrlPostfix.AdminPanelPermission))
+        (this.apiAddresses.GetServiceUrl(ApiUrlPostfix.CurrentUserPermissions))
         .pipe(
           map(resData => {
             //console.log(resData);

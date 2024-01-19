@@ -1,13 +1,15 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { Action } from "@ngrx/store";
 
-import { ColumnProperties, CurrentState } from "../../constant/constant.common";
+import { ColumnProperties } from "../../constant/constant.common";
 import { BaseUIComponent, IBaseUIComponent } from "../baseUI.compnent";
 import * as fromCmsAction from "../../../main/store/cms-module.action"
 import { TextboxComponnent } from "../textbox/textbox.component";
 import { DropdownComponnent } from "../dropdown/dropdown.component";
 import { CheckboxComponnent } from "../checkbox/checkbox.component";
 import { DatePickerComponnent } from "../datepicker/datepicker.component";
+import { CurrentState } from "../../constant/enum.common";
+import { FileUploadComponnent } from "../uploadfile/fileUpload.component";
 
 @Component({
   selector: 'app-generate',
@@ -29,10 +31,11 @@ export class GenerateComponnent implements OnInit, OnChanges {
   }
   //#endregion
   //#region properties
-  @ViewChildren(TextboxComponnent) TextboxChildren: QueryList<IBaseUIComponent>;
-  @ViewChildren(DropdownComponnent) DropdownChildren: QueryList<IBaseUIComponent>;
-  @ViewChildren(CheckboxComponnent) CheckboxChildren: QueryList<IBaseUIComponent>;
-  @ViewChildren(DatePickerComponnent) DatePickerChildren: QueryList<IBaseUIComponent>;
+  @ViewChildren(TextboxComponnent) textboxChildren: QueryList<IBaseUIComponent>;
+  @ViewChildren(DropdownComponnent) dropdownChildren: QueryList<IBaseUIComponent>;
+  @ViewChildren(CheckboxComponnent) checkboxChildren: QueryList<IBaseUIComponent>;
+  @ViewChildren(DatePickerComponnent) datePickerChildren: QueryList<IBaseUIComponent>;
+  @ViewChildren(FileUploadComponnent) fileUploadChildren: QueryList<IBaseUIComponent>;
   //#endregion
   //#region input
   @Input() columns: ColumnProperties[];
@@ -52,23 +55,28 @@ export class GenerateComponnent implements OnInit, OnChanges {
     //console.log("submitchange");
     //console.log(this.children);
     //console.log(this.selectedData);
-    this.TextboxChildren.forEach(child => {
-      this.selectedData[child.name] = child.inputValue;
+    let submitEntity = { ...this.selectedData };
+    this.textboxChildren.forEach(child => {
+      submitEntity[child.name] = child.inputValue;
     })
-    this.DropdownChildren.forEach(child => {
-      this.selectedData[child.name] = child.inputValue;
+    this.dropdownChildren.forEach(child => {
+      submitEntity[child.name] = child.inputValue;
     })
-    this.DatePickerChildren.forEach(child => {
-      this.selectedData[child.name] = child.inputValue;
+    this.datePickerChildren.forEach(child => {
+      submitEntity[child.name] = child.inputValue;
     })
-    this.CheckboxChildren.forEach(child => {
-      this.selectedData[child.name] = child.inputValue;
+    this.checkboxChildren.forEach(child => {
+      submitEntity[child.name] = child.inputValue;
     })
-    console.log(this.selectedData);
-    this.submitChangeEvent.emit(this.selectedData);
+    this.fileUploadChildren.forEach(child => {
+      submitEntity[child.name] = child.inputValue;
+    })
+    submitEntity["id"] = null;
+    console.log(submitEntity);
+    this.submitChangeEvent.emit(submitEntity);
   }
   backToList() {
-    this.changeViewEvent.emit(new fromCmsAction.ChangedView(CurrentState.List, this.selectedData["Id"]));
+    this.changeViewEvent.emit(new fromCmsAction.ChangedView(CurrentState.List, this.selectedData));
   }
   //#endregion
 }

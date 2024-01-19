@@ -26,14 +26,15 @@ export enum ComponentType {
   DatePicker
 }
 export enum FilterType {
-  Like,
-  EndWith,
-  StartWith,
-  Equal,
-  GreaterThan,
-  LessThan,
-  GreaterOrEqual,
-  LessOrEqual
+    Like,
+    EndWith,
+    StartWith,
+    Equal,
+    GreaterThan,
+    LessThan,
+    GreaterOrEqual,
+    LessOrEqual,
+    NotEqual
 }
 export enum SortType {
   Ascending,
@@ -42,4 +43,11 @@ export enum SortType {
 export enum JoinCondition {
   And,
   Or
+}
+export enum LessonsCategoriesType {
+  Grade,
+  Course,
+  Book,
+  Section,
+  Lesson
 }

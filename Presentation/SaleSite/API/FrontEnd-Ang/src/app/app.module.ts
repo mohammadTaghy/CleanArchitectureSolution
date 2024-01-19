@@ -5,14 +5,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { EffectsModule, EffectsFeatureModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CommonComponentModule } from './commonComponent/common.module';
 import { environment } from '../environments/environment';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { EffectsModule, EffectsFeatureModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
+
 import { LoginEffects } from './cms/auth/store/login.effects';
 import * as fromCmsApp from "./cms/store/cms.reducer"
 import { AuthInterceptorService } from './cms/auth/login.interceptor';

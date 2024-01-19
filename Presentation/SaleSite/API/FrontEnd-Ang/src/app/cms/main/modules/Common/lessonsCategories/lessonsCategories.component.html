@@ -1,0 +1,11 @@
+{{state}}
+<div [ngClass]="{'d-none':state===4}">
+  <app-generate *ngIf="state!=4"  [columns]="dialogColumns" [state]="state" [selectedData]="selectedItem"
+                (changeViewEvent)="actionEvent($event)"
+                (submitChangeEvent)="submitEvent($event)"></app-generate>
+</div>
+<app-tree *ngIf="state==4" [inputData]="dataSource" (rowActionEvent)="actionEvent($event)"></app-tree>
+
+
+
+

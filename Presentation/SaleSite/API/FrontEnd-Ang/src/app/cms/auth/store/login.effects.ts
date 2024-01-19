@@ -7,7 +7,7 @@ import { observable, of } from "rxjs";
 import * as LoginActions from "./login.action";
 import { CallAPIComponent } from "../../../commonComponent/callAPI/callAPI.common";
 import { ApiAddresses, ApiUrlPostfix } from "../../../commonComponent/apiAddresses/apiAddresses.common";
-import { Membership_User } from "../../../model/membership_user.model";
+import { Membership_User } from "../../../model/membership/membership_user.model";
 import { HttpHeaderResponse } from "@angular/common/http";
 
 class LoginRequestClass {

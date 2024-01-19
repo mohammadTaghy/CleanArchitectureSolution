@@ -1,12 +1,13 @@
 import { SelectionModel } from "@angular/cdk/collections";
-import { ChangeDetectorRef, Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import { MatSort, Sort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
+import { MatTableDataSource, MatTable } from "@angular/material/table";
 import { Action } from "@ngrx/store";
-import { ColumnProperties, CurrentState, IFilterData } from "../../constant/constant.common";
+import { ColumnProperties, IFilterData } from "../../constant/constant.common";
 import { FilterDialogComponnent } from "./filter_dialog/filter_dialog.component";
 import * as fromCmsAction from "../../../main/store/cms-module.action"
+import { CurrentState } from "../../constant/enum.common";
 
 @Component({
   selector: 'app-grid',
@@ -32,27 +33,34 @@ export class GridComponnent implements OnInit {
   @Output() setFilterAction = new EventEmitter<IFilterData[]>();
 
   //#endregion
-  //#region listener
-  @HostListener('keydown', ['$event']) onKeydown(event: KeyboardEvent) {
-    let newRow;
-    console.log(event.key);
-    // this key for edit
-    if (event.key === 'Insert') {
-      this.actionEvent(new fromCmsAction.ChangedView(CurrentState.Insert, null));
-    }
-    else if (event.key === '+') {
-      console.log("+ clicked");
-      this.onFilter("");
-    }
-  }
-  //#endregion
   //#region property
   displayedColumns: string[];
   height = "400px";
   isPagerHidden = false;
   selectOptions = [10, 15, 20, 50];
-  public selection: SelectionModel<ColumnProperties>;
+  selection: SelectionModel<ColumnProperties>;
   filterData: IFilterData[] = [];
+  selected :any;
+
+  //#endregion
+  //#region method
+  addNewItem() {
+    console.log("add new Item");
+    this.actionEvent(new fromCmsAction.ChangedView(CurrentState.Insert, null));
+  }
+  deleteItem() {
+    //console.log(this.dataSource.data[this.selectedId]);
+    this.actionEvent(new fromCmsAction.ChangedView(CurrentState.Delete, this.selected));
+  }
+  editItem() {
+    //console.log(this.dataSource.data);
+    //console.log(this.selectedId);
+    //console.log(this.dataSource.data.find(p => p.id == this.selectedId));
+    this.actionEvent(new fromCmsAction.ChangedView(CurrentState.Edit,  this.selected));
+  }
+  openFilterDialog() {
+    this.onFilter("");
+  }
   //#endregion
   //#region event
   onFilter(event: any) {
@@ -66,6 +74,10 @@ export class GridComponnent implements OnInit {
       this.setFilterAction.emit(data)
     });
 
+  }
+  selectedRowId(selected: any) {
+    //console.log("recive id" + id);
+    this.selected = selected;
   }
   actionEvent(action: Action) {
     //console.log(action);

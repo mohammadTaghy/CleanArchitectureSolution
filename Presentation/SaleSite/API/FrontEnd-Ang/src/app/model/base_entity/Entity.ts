@@ -1,3 +1,3 @@
 export class Entity {
-  public Id: number;
+  public id: number;
 }

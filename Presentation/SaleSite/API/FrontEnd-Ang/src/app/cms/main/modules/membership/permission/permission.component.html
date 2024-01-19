@@ -1,0 +1,15 @@
+<div [ngClass]="{'d-none':state===4}">
+  <app-generate *ngIf="state!=4"  [columns]="dialogColumns" [state]="state" [selectedData]="selectedItem"
+                (changeViewEvent)="actionEvent($event)"
+                (submitChangeEvent)="submitEvent($event)"></app-generate>
+</div>
+<app-tree id="permission_app_tree" *ngIf="state==4"
+          [treeName]="'permission_tree'"
+          [inputData]="dataSource" [hasCheckBox]="false"
+          [hasHref]="false" [hasManipilateButton]="true"
+          (rowActionEvent)="actionEvent($event)"
+          (selectedItemEvent)="setSelectedItem($event)"></app-tree>
+
+
+
+

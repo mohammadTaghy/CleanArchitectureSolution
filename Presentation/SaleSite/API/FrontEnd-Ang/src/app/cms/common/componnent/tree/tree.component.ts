@@ -1,8 +1,10 @@
+import { SelectionModel } from "@angular/cdk/collections";
 import { FlatTreeControl } from "@angular/cdk/tree";
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { MatTreeFlatDataSource, MatTreeFlattener } from "@angular/material/tree";
-import { FeatureType } from "../../constant/constant.common";
-
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { MatTree, MatTreeFlatDataSource, MatTreeFlattener, MatTreeNode, MatTreeNodeDef } from "@angular/material/tree";
+import { Action } from "@ngrx/store";
+import { CurrentState, FeatureType } from "../../constant/enum.common";
+import * as fromCmsAction from "../../../main/store/cms-module.action"
 
 @Component({
   selector: 'app-tree',
@@ -10,34 +12,56 @@ import { FeatureType } from "../../constant/constant.common";
   styleUrls: ['./tree.component.css']
 })
 export class TreeComponent implements OnInit, OnChanges {
+  //#region implement
   ngOnInit(): void {
     //this.dataSource.data = this.inputData;
   }
-  constructor() {
-
+  constructor(private el: ElementRef) {
+    this.selection = new SelectionModel<any>(false);
+   //console.log("tree Constructor");
+   //console.log(this);
+   //console.log(this.inputData);
   }
   ngOnChanges(changes: SimpleChanges): void {
-    //console.log(changes);
-    //console.log(this.inputData);
-
-    this.dataSource.data = this.inputData;
+   //console.log("changes");
+   //console.log(changes);
+    if (changes['inputData'] != undefined) {
+     //console.log("inputData");
+     //console.log(this.inputData);
+      this.dataSource.data = this.inputData;
+     //console.log(this.dataSource.data);
+    }
   }
+  //#endregion
   //#region input
   @Input() inputData: any;
+  @Input() hasCheckBox: boolean;
+  @Input() hasRadio: boolean;
+  @Input() hasHref: boolean;
+  @Input() treeName: boolean;
+  @Input() hasManipilateButton: boolean;
   //#endregion
+  //#region output
+  @Output() rowActionEvent = new EventEmitter<Action>();
+  @Output() selectedItemEvent = new EventEmitter<any>();
 
-  private _transformer = (node: any, level: number) => {
-    //console.log("node");
-    //console.log(node);
+  //#endregion
+  //#region properties
+  oldSelectedNode: any;
+  selectedNode: any;
+  selection: SelectionModel<any>;
+  _transformer = (node: any, level: number) => {
+  //console.log("node");
+  //console.log(node);
     return {
-      expandable: node.featureType == FeatureType.Menu,
+      ...node,
+      expandable: node.childList != null && node.childList.length>0,
       name: node.name,
       level: level,
-      title: node.title
+      title: node.title,
     };
   }
-
-  treeControl = new FlatTreeControl<IFlatNode>(
+  treeControl = new FlatTreeControl<any>(
     node => node.level, node => node.expandable);
 
   treeFlattener = new MatTreeFlattener(
@@ -45,11 +69,36 @@ export class TreeComponent implements OnInit, OnChanges {
 
   dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
 
-  hasChild = (_: number, node: IFlatNode) => node.expandable;
+  hasChild = (_: number, node: any) => node.expandable;
+  //#endregion
+  
+  //#region private Method
+  addNewItem() {
+   //console.log("add new Item");
+    this.actionEvent(new fromCmsAction.ChangedView(CurrentState.Insert, this.selectedNode));
+  }
+  deleteItem() {
+    //console.log(this.dataSource.data[this.selectedId]);
+    this.actionEvent(new fromCmsAction.ChangedView(CurrentState.Delete, this.selectedNode));
+  }
+  editItem() {
+    //console.log(this.dataSource.data);
+    //console.log(this.selectedId);
+    //console.log(this.dataSource.data.find(p => p.id == this.selectedId));
+    console.log(this.selectedNode);
+    this.actionEvent(new fromCmsAction.ChangedView(CurrentState.Edit, this.selectedNode));
+  }
+  nodeClicked(node) {
 
-}
-interface IFlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
+    this.selectedNode = node;
+    this.selectedItemEvent.emit(this.selectedNode);
+   console.log(this.selectedNode);
+  }
+  //#endregion
+  //#region event
+  actionEvent(action: Action) {
+    //console.log(action);
+    this.rowActionEvent.emit(action);
+  }
+  //#endregion
 }

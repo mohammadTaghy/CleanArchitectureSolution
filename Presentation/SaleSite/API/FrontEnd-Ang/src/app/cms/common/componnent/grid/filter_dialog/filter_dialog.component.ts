@@ -1,8 +1,8 @@
-import { Dialog } from "@angular/cdk/dialog";
 import { Component, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import * as constant from "../../../constant/constant.common";
-import { BaseUIComponent } from "../../baseUI.compnent";
+import { ConstantData } from "../../../constant/Constant_data.common";
+import * as enumConstant from "../../../constant/enum.common";
 import { DropdownComponnent } from "../../dropdown/dropdown.component";
 import { TextboxComponnent } from "../../textbox/textbox.component";
 
@@ -26,7 +26,7 @@ export class FilterDialogComponnent implements OnInit, OnChanges {
 
   }
   ngOnInit(): void {
-    this.filterColumns = this.columns.map(p => new constant.dropdownDataType(p.header, "", p.field, false));
+    this.filterColumns = this.columns.map(p => new constant.DropdownDataType(p.header, "", p.field, false));
     this.dialogRef.disableClose = true;
 
     this.addFilterRow();
@@ -46,20 +46,11 @@ export class FilterDialogComponnent implements OnInit, OnChanges {
   joinConditionName = "joinName";
   joinConditionTitle = "";
   joinConditionWidth = "col s1 m1";
-  filterTypes: constant.dropdownDataType[] = [
-    { title: "شامل", value: constant.FilterType.Like, description: "like '%__%'", disabled: false },
-    { title: "شروع شود با", value: constant.FilterType.StartWith, description: "like '__%'", disabled: false },
-    { title: "خاتمه یابد با", value: constant.FilterType.EndWith, description: "like '%__'", disabled: false },
-    { title: "برابر", value: constant.FilterType.Equal, description: "==", disabled: false },
-    { title: "بزرگتر از", value: constant.FilterType.GreaterThan, description: ">", disabled: false },
-    { title: "کوچکتر از", value: constant.FilterType.LessThan, description: "<", disabled: false },
-    { title: "بزرگتر و مساوی از", value: constant.FilterType.GreaterOrEqual, description: ">=", disabled: false },
-    { title: "کوچکتر و مساوی از", value: constant.FilterType.LessOrEqual, description: "<=", disabled: false },
-  ];
-  filterColumns: constant.dropdownDataType[];
-  joinType: constant.dropdownDataType[] = [
-    { title: "و", value: constant.JoinCondition.And, description: "and", disabled: false },
-    { title: "یا", value: constant.JoinCondition.Or, description: "or", disabled: false },
+  filterTypes: constant.DropdownDataType[] = ConstantData.FilterType;
+  filterColumns: constant.DropdownDataType[];
+  joinType: constant.DropdownDataType[] = [
+    { title: "و", value: enumConstant.JoinCondition.And, description: "and", disabled: false },
+    { title: "یا", value: enumConstant.JoinCondition.Or, description: "or", disabled: false },
   ];
   tempValue: string="test";
   //#endregion
@@ -86,7 +77,7 @@ export class FilterDialogComponnent implements OnInit, OnChanges {
       selectedFilterType: this.filterTypes[0].value as number,
       value: "",
       name: "filterBox" + this.filters.length,
-      joinCondition: constant.JoinCondition.And,
+      joinCondition: enumConstant.JoinCondition.And,
     }];
   }
   removeFilterRow(filterItem: constant.IFilterData) {

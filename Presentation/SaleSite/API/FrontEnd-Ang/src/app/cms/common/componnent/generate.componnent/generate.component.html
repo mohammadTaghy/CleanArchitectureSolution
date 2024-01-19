@@ -16,10 +16,14 @@
                   [value]="selectedData[element.field]"
                   [dataSource]="element.dataSource"
                   (selectedActionEvent)="changeDropDown($event)"></app-dropdown>
+    <app-fileUpload *ngIf="element.componentType==4" [placeHolder]="element.header" [title]="element.header"
+                 [name]="element.field" [disabled]="element.isReadonly"
+                 [width]="element.width" [inputValue]="selectedData[element.field]"
+                 [isMultiFile]="element.isMultiFile" [fileTypeCanChoose]="element.fileTypeCanChoose" [uploadUrl]="element.uploadUrl"></app-fileUpload>
     <!--<app-datepicker *ngIf="element.componentType==9" [placeHolder]="element.header" [inputType]="element.type"
-                 [name]="element.field"
-                 [disabled]="element.isReadonly"
-                 [width]="element.width" [inputValue]="selectedData[element.field]"></app-datepicker>-->
+               [name]="element.field"
+               [disabled]="element.isReadonly"
+               [width]="element.width" [inputValue]="selectedData[element.field]"></app-datepicker>-->
   </span>
 </span>
 <div id="ManipulateButton" *ngIf="state!=4">

@@ -4,6 +4,7 @@ import { LoginComponent } from "./auth/login.component";
 import { LoginGuard } from "./auth/login.guard";
 import { AdminPanelComponent } from "./main/AdminPanel/AdminPanel.component";
 import { MainCmsPage } from "./main/main-cms-page.component";
+import { PermissionsCmsPage } from "./main/modules/membership/permission/permission.component";
 import { UserCmsPage } from "./main/modules/membership/user/user.component";
 
 const routes: Routes = [
@@ -11,7 +12,8 @@ const routes: Routes = [
     path: '', component: AdminPanelComponent,
     //canActivate: [LoginGuard],
     children: [
-      { path: 'membership_user', component: UserCmsPage }
+      { path: 'UserProfile', component: UserCmsPage },
+      { path: 'Permissions', component: PermissionsCmsPage }
     ]
   },
   {

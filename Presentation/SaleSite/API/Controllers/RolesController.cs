@@ -1,7 +1,8 @@
-﻿using API.Services;
-using Application.Common.Interfaces;
+﻿using Application.Common.Interfaces;
 using Application.Common.Model;
 using Application.UseCases;
+using Asp.Versioning;
+using Common;
 using Domain.Entities;
 using Infrastructure.Authentication;
 using MediatR;
@@ -13,7 +14,7 @@ namespace API.Controllers
 
     public class RolesController : BaseController
     {
-        public RolesController(IMediator mediator, ICurrentUserService currentUserService) : base(mediator,currentUserService)
+        public RolesController(IMediator mediator, ICurrentUserSession currentUserSession) : base(mediator,currentUserSession)
         {
         }
         #region GetAPI
@@ -25,7 +26,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [CMSAuthorize]
-        public async Task<QueryResponse<List<RolesDto>>> Roles([FromQuery]GetRolesQuery getRolesQuery,CancellationToken cancellationToken)
+        public async Task<QueryResponse<List<RolesDto>>> Roles([FromQuery]RolesQuery getRolesQuery,CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(getRolesQuery, cancellationToken);
             return result;
@@ -41,7 +42,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [CMSAuthorize]
-        public async Task<CommandResponse<Membership_Roles>> Roles(CreateRoleCommand createRoleCommand, CancellationToken cancellationToken)
+        public async Task<CommandResponse<Membership_Roles>> Roles(UpdateRoleCommand createRoleCommand, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(createRoleCommand, cancellationToken);
             return result;

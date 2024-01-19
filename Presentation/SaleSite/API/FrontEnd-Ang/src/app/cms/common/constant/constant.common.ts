@@ -21,8 +21,10 @@ export class ColumnProperties {
     public dataSource: DropdownDataType[] = null,
     public ApiName: string="",
     public baseFilter: string="",
-    public EffectColumn: string=""
-
+    public effectColumn: string = "",
+    public uploadUrl: string = "",
+    public isMultiFile: boolean = false,
+    public fileTypeCanChoose: string=""
   ) { }
 
 }

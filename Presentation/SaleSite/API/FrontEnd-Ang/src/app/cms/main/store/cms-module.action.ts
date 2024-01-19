@@ -1,5 +1,6 @@
 import { Action } from "@ngrx/store";
-import { CurrentState, IFilterData, ISortData } from "../../common/constant/constant.common";
+import { IFilterData, ISortData } from "../../common/constant/constant.common";
+import { CurrentState } from "../../common/constant/enum.common";
 import { FilterRequestBody, QueryRequestBody } from "../../common/filterRequestBody/filter-request-body.common";
 
 export const Add_Request_Start = '[Module] Add Request Start';
@@ -56,16 +57,16 @@ export class SetData<T> implements Action {
   readonly type = Set_Data;
 
   constructor(
-    public payload: T[]
+    public payload: T[], public totalCount: number
   ) { }
 }
 
 export class ClearError implements Action {
   readonly type = CLEAR_ERROR;
 }
-export class ChangedView implements Action {
+export class ChangedView<T> implements Action {
   readonly type = Changed_View;
-  constructor(public viewType: CurrentState, public selectedId:number) { }
+  constructor(public viewType: CurrentState, public selected:T) { }
 }
 
 
@@ -78,5 +79,5 @@ export type CmsActions =
   | ClearError
   | FetchData
   | SetData<any>
-  | ChangedView
+  | ChangedView<any>
   ;

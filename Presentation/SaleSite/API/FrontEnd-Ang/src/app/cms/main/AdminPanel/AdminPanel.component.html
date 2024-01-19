@@ -1,4 +1,4 @@
-<div class="mat-typography mat-app-background" ng-keypress="keyPressYes($event)">
+<div class="mat-typography mat-app-background" >
 
   <mat-drawer-container class="container" autosize>
 
@@ -9,7 +9,10 @@
             {{ isExpanded ? "keyboard_backspace" : "dehaze" }}
           </mat-icon>
         </div>
-        <app-tree [inputData]="dataSource" ></app-tree>
+        <app-tree id="user_permission_app_tree"
+                  [treeName]="'user_permission_tree'"
+                  [hasManipilateButton]="false"
+                  [inputData]="dataSource" [hasCheckBox]="false" [hasHref]="true" ></app-tree>
       </section>
     </mat-drawer>
     <mat-drawer-content >
@@ -19,27 +22,5 @@
     </mat-drawer-content>
 
   </mat-drawer-container>
-  <!--<mat-sidenav-container class="example-container" (backdropClick)="close()">
-    <mat-sidenav #sidenav (keydown.escape)="close()" disableClose>
-      <mat-icon (click)="close()">
-        close
-      </mat-icon>
-    </mat-sidenav>
-
-    <mat-sidenav-content>
-      <mat-icon (click)="sidenav.open()">
-        dehaze
-      </mat-icon>-->
-  <!--<app-tree (inputData)="dataSource"></app-tree>-->
-  <!--</mat-sidenav-content>
-  </mat-sidenav-container>-->
-  <!--<mat-sidenav-container class="example-container"
-                         (backdropClick)="sidenav.close()">
-    <mat-sidenav #sidenav mode="side">
-    </mat-sidenav>
-
-    <mat-sidenav-content>
-      <p><button mat-button (click)="sidenav.toggle()">Open</button></p>
-    </mat-sidenav-content>
-  </mat-sidenav-container>-->
+  
 </div>

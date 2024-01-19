@@ -1,15 +1,5 @@
-﻿using API.Controllers;
-using Application.Common.Model;
+﻿using Application.UseCases.Membership.UserCase;
 using Application.UseCases.UserCase.Query.SignIn;
-using Application.UseCases.UserProfileCase.Query.GetUserItem;
-using Common.JWT;
-using MediatR;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace API.Test.Controllers.User
 {
@@ -23,8 +13,8 @@ namespace API.Test.Controllers.User
         [Fact]
         public async Task SignIn_ReturnSuccess_ResultTest()
         {
-            var result = new CommandResponse<UserItemDto>(true,
-                  new UserItemDto
+            var result = new CommandResponse<UserDto>(true,
+                  new UserDto
                   {
                       
                   });

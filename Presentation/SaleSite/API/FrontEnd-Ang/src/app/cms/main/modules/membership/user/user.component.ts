@@ -3,20 +3,17 @@ import { MatTableDataSource } from "@angular/material/table";
 import { Router } from "@angular/router";
 import { Action, Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
-import { map } from "rxjs/operators";
 import { ApiAddresses, ApiUrlPostfix } from "../../../../../commonComponent/apiAddresses/apiAddresses.common";
-
-import { Membership_User } from "../../../../../model/membership_user.model";
-import { Membership_UserProfile, UserGrid } from "../../../../../model/membership_userProfile.model";
-import { ColumnProperties, CurrentState, IFilterData, ISortData } from "../../../../common/constant/constant.common";
-import { CmsContext } from "../../../../common/context/cms-context";
-import { FilterRequestBody, QueryRequestBody } from "../../../../common/filterRequestBody/filter-request-body.common";
+import { Membership_UserProfile, UserGrid } from "../../../../../model/membership/membership_userProfile.model";
+import { ColumnProperties, IFilterData, ISortData } from "../../../../common/constant/constant.common";
+import { CurrentState } from "../../../../common/constant/enum.common";
 import * as fromCmsApp from "../../../../store/cms.reducer"
 import * as fromCmsAction from "../../../store/cms-module.action"
 
 @Component({
   selector: 'membership-user-cms',
-  templateUrl: './user.component.html'
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.css']
 })
 export class UserCmsPage implements OnInit, OnDestroy {
 
@@ -26,8 +23,8 @@ export class UserCmsPage implements OnInit, OnDestroy {
   error: string = "";
   selectedItem: Membership_UserProfile;
   users: MatTableDataSource<Membership_UserProfile>;
-  columns: ColumnProperties[] = this.userGrid.gridColumns;
-  dialogColumns: ColumnProperties[] = this.userGrid.gridColumns.filter(p => p.isDialogVisible);
+  columns: ColumnProperties[] = this.userGrid.gridColumns.filter(p => p.isGridVisible == true);
+  dialogColumns: ColumnProperties[] = this.userGrid.gridColumns.filter(p => p.isDialogVisible==true);
   totalData: number = 0;
   pageNumber: number = 1;
   pageSize: number=10;
@@ -37,7 +34,7 @@ export class UserCmsPage implements OnInit, OnDestroy {
   //#region implement
   ngOnInit(): void {
     //console.log("user");
-    this.bundData();
+    this.bindData();
   }
   ngOnDestroy(): void {
     this.subscribe.unsubscribe();
@@ -45,6 +42,7 @@ export class UserCmsPage implements OnInit, OnDestroy {
   //#endregion
   constructor(private store: Store<fromCmsApp.CmsState<Membership_UserProfile>>, private router: Router, private apiAddresses: ApiAddresses, private userGrid: UserGrid) {
     this.loadData();
+    console.log(this.dialogColumns);
   }
   //#region method
   actionEvent(action: Action) {
@@ -54,8 +52,8 @@ export class UserCmsPage implements OnInit, OnDestroy {
   submitEvent(data: Membership_UserProfile) {
     switch (this.state) {
       case CurrentState.Insert:
-        console.log("insert");
-        console.log(data);
+       //console.log("insert");
+       //console.log(data);
         this.store.dispatch(
           new fromCmsAction.AddRequestStart(
             data,
@@ -65,32 +63,32 @@ export class UserCmsPage implements OnInit, OnDestroy {
         this.store.dispatch(
           new fromCmsAction.EditRequestStart(
             data,
-            this.apiAddresses.GetServiceUrl(ApiUrlPostfix.MembershipUsers) + "/" + data.Id));
+            this.apiAddresses.GetServiceUrl(ApiUrlPostfix.MembershipUsers) + "/" + data.id));
         break;
       case CurrentState.Delete:
         this.store.dispatch(
           new fromCmsAction.DeleteRequestStart(
-            this.apiAddresses.GetServiceUrl(ApiUrlPostfix.MembershipUsers) + "/" + data.Id));
+            this.apiAddresses.GetServiceUrl(ApiUrlPostfix.MembershipUsers) + "/" + data.id));
         break;
       default:
         this.loadData();
         break;
     }
   }
-  bundData() {
+  bindData() {
     this.subscribe = this.store.select("moduleState")
       .subscribe((data) => {
-        console.log("user subscribe");
+       //console.log("user subscribe");
         //console.log(data);
         this.users = new MatTableDataSource<Membership_UserProfile>(data.items);
         this.totalData = this.users?.data?.length ?? 0;
         this.state = data.currentSatate;
         this.error = data.error;
-        console.log(data.selectedData);
+       //console.log(data.selectedData);
         this.selectedItem = data.selectedData != null ? data.selectedData : new Membership_UserProfile(
           null, "مرد", "1", "", "", "", "", "", "", "", "", "", "", "", "", true, true, true,1,""
         );
-        console.log(this.selectedItem);
+       //console.log(this.selectedItem);
         this.pageNumber = data.pageNumber;
         this.pageSize = data.pageSize;
         this.filter = data.currentFilter;

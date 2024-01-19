@@ -34,7 +34,7 @@ namespace API.Common
             switch (exception)
             {
                 case ValidationException validationException:
-                    code = HttpStatusCode.BadRequest;
+                    code = HttpStatusCode.InternalServerError;
                     result = JsonConvert.SerializeObject(validationException.Failures);
                     break;
                 case BadRequestException badRequestException:

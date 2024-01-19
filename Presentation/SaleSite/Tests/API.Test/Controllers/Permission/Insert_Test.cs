@@ -1,29 +1,14 @@
-﻿using API.Controllers;
-using Application.Common.Model;
-using Application.UseCases.UserCase.Command.Create;
-using Common.JWT;
-using Common;
-using MediatR;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.UseCases;
-using Domain.Entities;
-using Application.Common.Interfaces;
-using Xunit.Abstractions;
+﻿using Domain.Entities;
 
 namespace API.Test.Controllers
 {
     public class Insert_Test : BaseController_Test, IDisposable
     {
-        private readonly Mock<ICurrentUserService> _currentUserService;
+        private readonly Mock<ICurrentUserSession> _currentUserService;
         private readonly PermissionController _controller;
         public Insert_Test()
         {
-            _currentUserService = new Mock<ICurrentUserService>();
+            _currentUserService = new Mock<ICurrentUserSession>();
             _controller = new PermissionController(_mediator.Object, _currentUserService.Object);
         }
         
@@ -60,7 +45,7 @@ namespace API.Test.Controllers
                .Returns(Task.FromResult(new CommandResponse<Membership_Permission>(true, permission)));
 
 
-            var response = await _controller.Insert(command, CancellationToken.None);
+            var response = await _controller.Permissions(command, CancellationToken.None);
 
             Assert.True(response.IsSuccess);
             Assert.Equal(permission, response.Result);
