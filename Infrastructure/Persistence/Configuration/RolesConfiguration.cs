@@ -13,7 +13,7 @@ namespace Persistence.Configuration
     {
         public override void BaseConfigure(EntityTypeBuilder<Membership_Roles> builder)
         {
-            builder.Property(p => p.RoleName).HasMaxLength(512).IsRequired();
+            builder.Property(p => p.Name).HasMaxLength(512).IsRequired();
         }
     }
 }

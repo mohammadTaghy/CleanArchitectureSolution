@@ -12,6 +12,7 @@ namespace Persistence.Configuration
     {
         public override void BaseConfigure(EntityTypeBuilder<Membership_Locations> builder)
         {
+            
             builder.Property(p => p.Name).HasMaxLength(512).IsRequired();
             builder.Property(p => p.Title).HasMaxLength(512).IsRequired();
             builder.Property(p => p.IConPath).HasMaxLength(2048);

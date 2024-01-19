@@ -17,35 +17,30 @@ namespace Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Membership_Permission", b =>
+            modelBuilder.Entity("Domain.Entities.Common_LessonsCategories", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("AutoCode")
                         .HasColumnType("int");
 
-                    b.Property<string>("CommandName")
-                        .IsRequired()
-                        .HasMaxLength(1024)
-                        .HasColumnType("nvarchar(1024)");
+                    b.Property<byte>("CategoryType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Coefficient")
+                        .HasColumnType("tinyint");
 
                     b.Property<int>("CreateBy")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<byte>("FeatureType")
-                        .HasColumnType("tinyint");
 
                     b.Property<string>("FullKeyCode")
                         .IsRequired()
@@ -79,10 +74,163 @@ namespace Persistence.Migrations
                     b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<long>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bigint");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Common_LessonsCategories", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Common_UserEducation", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreateBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LessonsCategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ModifyBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LessonsCategoriesId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Common_UserEducation", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_Locations", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AutoCode")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreateBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FullKeyCode")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("IConPath")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LevelChar")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<int?>("ModifyBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("NumberCode")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Membership_Locations", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AutoCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CommandName")
+                        .IsRequired()
+                        .HasMaxLength(1024)
+                        .HasColumnType("nvarchar(1024)");
+
+                    b.Property<int>("CreateBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte>("FeatureType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("FullKeyCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IConPath")
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LevelChar")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<int?>("ModifyBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -99,10 +247,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Membership_Roles", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CreateBy")
                         .HasColumnType("int");
@@ -119,15 +264,10 @@ namespace Persistence.Migrations
                     b.Property<DateTime?>("ModifyDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RoleName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
-
-                    b.Property<long>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -137,10 +277,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Membership_RolesPermission", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CreateBy")
                         .HasColumnType("int");
@@ -160,11 +297,6 @@ namespace Persistence.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<long>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PermissionId");
@@ -177,10 +309,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Membership_User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CreateBy")
                         .HasColumnType("int");
@@ -224,11 +353,6 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
-
-                    b.Property<long>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bigint");
 
                     b.Property<string>("UserCode")
                         .IsRequired()
@@ -297,11 +421,6 @@ namespace Persistence.Migrations
                         .HasMaxLength(11)
                         .HasColumnType("nvarchar(11)");
 
-                    b.Property<long>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bigint");
-
                     b.Property<string>("UserDescription")
                         .HasMaxLength(2048)
                         .HasColumnType("nvarchar(2048)");
@@ -314,10 +433,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Membership_UserRoles", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CreateBy")
                         .HasColumnType("int");
@@ -334,11 +450,6 @@ namespace Persistence.Migrations
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<long>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bigint");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -349,6 +460,45 @@ namespace Persistence.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Membership_UserRoles", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Common_LessonsCategories", b =>
+                {
+                    b.HasOne("Domain.Entities.Common_LessonsCategories", "ParentEntity")
+                        .WithMany("ChildList")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("ParentEntity");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Common_UserEducation", b =>
+                {
+                    b.HasOne("Domain.Entities.Common_LessonsCategories", "LessonsCategories")
+                        .WithMany("UserEducations")
+                        .HasForeignKey("LessonsCategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Membership_User", "User")
+                        .WithMany("UserEducations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LessonsCategories");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_Locations", b =>
+                {
+                    b.HasOne("Domain.Entities.Membership_Locations", "ParentEntity")
+                        .WithMany("ChildList")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("ParentEntity");
                 });
 
             modelBuilder.Entity("Domain.Entities.Membership_Permission", b =>
@@ -409,6 +559,18 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Common_LessonsCategories", b =>
+                {
+                    b.Navigation("ChildList");
+
+                    b.Navigation("UserEducations");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_Locations", b =>
+                {
+                    b.Navigation("ChildList");
+                });
+
             modelBuilder.Entity("Domain.Entities.Membership_Permission", b =>
                 {
                     b.Navigation("ChildList");
@@ -425,8 +587,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Membership_User", b =>
                 {
-                    b.Navigation("UserProfile")
-                        .IsRequired();
+                    b.Navigation("UserEducations");
+
+                    b.Navigation("UserProfile");
 
                     b.Navigation("UserRoles");
                 });

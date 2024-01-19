@@ -3,6 +3,7 @@ using Application.Common.Model;
 using Application.UseCases;
 using Common;
 using Domain;
+using Domain.Entities;
 using Persistence.Repository;
 using System;
 using System.Collections.Generic;
@@ -13,30 +14,12 @@ using System.Threading.Tasks;
 namespace Persistence
 {
     public class HierarchyEntityRepo<T> : RepositoryBase<T>
-        where T : class, IHierarchyEntity
+        where T : class, IHierarchyEntity<T>
     {
         public HierarchyEntityRepo(PersistanceDBContext context, ICurrentUserSession currentUserSession) : base(context,currentUserSession)
         {
         }
         #region HierarchyMethod
-        protected void ChangeToHierarchy<E>(List<E> parents, List<E> childs) where E : class, ICommonTreeDto
-        {
-            List<int> parentIds = new List<int>();
-            List<E> nextLevel = new List<E>();
-            parents.ForEach(p =>
-            {
-                if (p.ChildList == null)
-                    p.ChildList = new();
-                p.HasChild = childs.Count > 0;
-                p.ChildList.AddRange(childs.Where(q => q.ParentId == p.Id));
-                parentIds.Add(p.Id);
-                nextLevel.AddRange(childs.Where(q => q.ParentId == p.Id));
-            });
-            var othersChild = childs.Except(nextLevel).ToList();
-            if (othersChild.Any())
-                ChangeToHierarchy(nextLevel, othersChild);
-
-        }
         protected int GetMaxAutoCode(int? parentId, char level)
         {
             int maxAutoCode = 0;
@@ -50,6 +33,26 @@ namespace Persistence
                 100;
             return maxAutoCode;
 
+        }
+        #endregion
+        #region Manipulate
+        public override Task Insert(T entity)
+        {
+            if (entity.ParentId != null && entity.ParentId != 0)
+            {
+                T parentPermission = base.Find(entity.ParentId.Value);
+                entity.LevelChar = (char)((int)parentPermission.LevelChar + 1);
+                entity.AutoCode = GetMaxAutoCode(entity.ParentId, entity.LevelChar);
+                entity.FullKeyCode = parentPermission.FullKeyCode + entity.LevelChar + entity.AutoCode;
+            }
+            else
+            {
+                entity.ParentId = null;
+                entity.LevelChar = 'a';
+                entity.AutoCode = GetMaxAutoCode(entity.ParentId, 'a');
+                entity.FullKeyCode = entity.LevelChar + entity.AutoCode.ToString();
+            }
+            return base.Insert(entity);
         }
         #endregion
     }
