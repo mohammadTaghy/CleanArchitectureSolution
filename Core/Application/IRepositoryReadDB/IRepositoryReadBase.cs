@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Microsoft.AspNetCore.OData.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,13 @@ namespace Application
         #endregion
         #region Get
         IQueryable<T> Queryable { get; }
-        T FindOne(int id);
+        Task<T> FindOne(int id);
         bool TryFindOne(int id, ref T? entity);
         T FindOne(Expression<Func<T, bool>> predicate);
         bool TryFindOne(Expression<Func<T, bool>> predicate, ref T? entity);
         IList<T> FindAll();
         IList<T> FindAll(Expression<Func<T, bool>> predicate);
+        Task<Tuple<List<T>, int>> ItemList(ODataQueryOptions<T> options);
         bool Exists(Expression<Func<T, bool>> predicate);
         #endregion
 

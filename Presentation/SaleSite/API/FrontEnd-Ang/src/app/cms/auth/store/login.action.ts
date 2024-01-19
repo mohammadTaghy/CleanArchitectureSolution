@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Action } from "@ngrx/store";
-import { User } from "../../../model/user.model";
+import { Membership_User } from "../../../model/membership/membership_user.model";
 
 export const LOGIN_START = '[User] Login Start';
 export const Login_SUCCESS = '[User] Login';
@@ -14,7 +14,7 @@ export class LoginSuccess implements Action {
   readonly type = Login_SUCCESS;
 
   constructor(
-    public payload: User
+    public payload: Membership_User
   ) { }
 }
 
@@ -24,7 +24,7 @@ export class Logout implements Action {
 export class LoginStart implements Action {
   readonly type = LOGIN_START;
 
-  constructor(public payload: { userName: string; password: string }) { console.log("start constructor"); }
+  constructor(public payload: { userName: string; password: string }) {  }
 }
 
 export class LoginFail implements Action {

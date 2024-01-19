@@ -1,4 +1,5 @@
-﻿using Application.UseCases.UserProfileCase.Query.GetUserList;
+﻿using Application.UseCases.UserCase.Command.Create;
+using Application.UseCases.UserCase.Command.Update;
 using Domain;
 using Domain.Entities;
 using System;
@@ -9,10 +10,12 @@ using System.Threading.Tasks;
 
 namespace Application
 {
-    public interface IUserRepo : IRepositoryBase<User>
+    public interface IUserRepo : IRepositoryBase<Membership_User>
     {
-        Task<bool> AnyEntity(User user);
-        Task<User> FindAsync(int? id, string userName,CancellationToken cancellationToken);
-        
+        Task<bool> AnyEntity(Membership_User user);
+        Task<Membership_User> FindAsync(int? id, string userName,CancellationToken cancellationToken);
+        Task Update(UpdateUserCommand command);
+        Task Insert(CreateUserCommand command);
+        Task<List<int>> GetRolesId(int userId);
     }
 }

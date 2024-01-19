@@ -10,7 +10,7 @@ namespace Common.Test
 {
     public class MemoryCacheManager_Test
     {
-        private readonly IMemoryCacheManager _memoryCacheManager;
+        private readonly ICacheManager _memoryCacheManager;
 
         public MemoryCacheManager_Test()
         {

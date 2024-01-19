@@ -10,12 +10,10 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configuration
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class UserConfiguration : BaseConfiguration<Membership_User>
     {
-        public void Configure(EntityTypeBuilder<User> builder)
+        public override void BaseConfigure(EntityTypeBuilder<Membership_User> builder)
         {
-            builder.ToTable(nameof(User));
-            builder.HasKey(p => p.Id);
             builder.HasIndex(x => x.UserName).IsUnique()
                 //.IncludeProperties<IUser>(p=>
                 //new {

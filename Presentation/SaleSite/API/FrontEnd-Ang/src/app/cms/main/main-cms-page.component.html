@@ -1,0 +1,8 @@
+<!--<p>main cms page</p>
+<p *ngIf="1==1">{{isLogin}}</p>-->
+<div *ngIf="isLogin">
+  <app-admin-panel  ></app-admin-panel>
+</div>
+<div >
+  <app-login *ngIf="!isLogin"></app-login>
+</div>

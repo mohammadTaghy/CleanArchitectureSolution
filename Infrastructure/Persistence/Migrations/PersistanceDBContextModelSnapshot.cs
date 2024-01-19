@@ -17,18 +17,177 @@ namespace Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.Permission", b =>
+            modelBuilder.Entity("Domain.Entities.Common_LessonsCategories", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<int>("AutoCode")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("CategoryType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<byte>("Coefficient")
+                        .HasColumnType("tinyint");
+
+                    b.Property<int>("CreateBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FullKeyCode")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("IConPath")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LevelChar")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<int?>("ModifyBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Common_LessonsCategories", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Common_UserEducation", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreateBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LessonsCategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ModifyBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LessonsCategoriesId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Common_UserEducation", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_Locations", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AutoCode")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreateBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FullKeyCode")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("IConPath")
+                        .IsRequired()
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LevelChar")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<int?>("ModifyBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("NumberCode")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Membership_Locations", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AutoCode")
+                        .HasColumnType("int");
 
                     b.Property<string>("CommandName")
                         .IsRequired()
@@ -44,7 +203,59 @@ namespace Persistence.Migrations
                     b.Property<byte>("FeatureType")
                         .HasColumnType("tinyint");
 
+                    b.Property<string>("FullKeyCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IConPath")
+                        .HasMaxLength(2048)
+                        .HasColumnType("nvarchar(2048)");
+
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LevelChar")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<int?>("ModifyBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifyDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Membership_Permission", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_Roles", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreateBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
 
                     b.Property<int?>("ModifyBy")
@@ -58,53 +269,15 @@ namespace Persistence.Migrations
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Permission", (string)null);
+                    b.ToTable("Membership_Roles", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.Roles", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_RolesPermission", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CreateBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ModifyBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ModifyDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RoleName")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.RolesPermission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CreateBy")
                         .HasColumnType("int");
@@ -121,25 +294,22 @@ namespace Persistence.Migrations
                     b.Property<int>("PermissionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RolesId")
+                    b.Property<int>("RoleId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PermissionId");
 
-                    b.HasIndex("RolesId");
+                    b.HasIndex("RoleId");
 
-                    b.ToTable("RolesPermission", (string)null);
+                    b.ToTable("Membership_RolesPermission", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.User", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_User", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CreateBy")
                         .HasColumnType("int");
@@ -199,10 +369,10 @@ namespace Persistence.Migrations
                     b.HasIndex("UserName")
                         .IsUnique();
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("Membership_User", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserProfile", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_UserProfile", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -257,16 +427,13 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserProfile", (string)null);
+                    b.ToTable("Membership_UserProfile", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserRoles", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_UserRoles", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CreateBy")
                         .HasColumnType("int");
@@ -292,20 +459,68 @@ namespace Persistence.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoles", (string)null);
+                    b.ToTable("Membership_UserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Entities.RolesPermission", b =>
+            modelBuilder.Entity("Domain.Entities.Common_LessonsCategories", b =>
                 {
-                    b.HasOne("Domain.Entities.Permission", "Permission")
+                    b.HasOne("Domain.Entities.Common_LessonsCategories", "ParentEntity")
+                        .WithMany("ChildList")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("ParentEntity");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Common_UserEducation", b =>
+                {
+                    b.HasOne("Domain.Entities.Common_LessonsCategories", "LessonsCategories")
+                        .WithMany("UserEducations")
+                        .HasForeignKey("LessonsCategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Membership_User", "User")
+                        .WithMany("UserEducations")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LessonsCategories");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_Locations", b =>
+                {
+                    b.HasOne("Domain.Entities.Membership_Locations", "ParentEntity")
+                        .WithMany("ChildList")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("ParentEntity");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_Permission", b =>
+                {
+                    b.HasOne("Domain.Entities.Membership_Permission", "ParentEntity")
+                        .WithMany("ChildList")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("ParentEntity");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_RolesPermission", b =>
+                {
+                    b.HasOne("Domain.Entities.Membership_Permission", "Permission")
                         .WithMany("RolesPermissions")
                         .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Roles", "Role")
+                    b.HasOne("Domain.Entities.Membership_Roles", "Role")
                         .WithMany("RolesPermission")
-                        .HasForeignKey("RolesId")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -314,26 +529,26 @@ namespace Persistence.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserProfile", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_UserProfile", b =>
                 {
-                    b.HasOne("Domain.Entities.User", "User")
+                    b.HasOne("Domain.Entities.Membership_User", "User")
                         .WithOne("UserProfile")
-                        .HasForeignKey("Domain.Entities.UserProfile", "Id")
+                        .HasForeignKey("Domain.Entities.Membership_UserProfile", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.UserRoles", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_UserRoles", b =>
                 {
-                    b.HasOne("Domain.Entities.Roles", "Role")
+                    b.HasOne("Domain.Entities.Membership_Roles", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.User", "User")
+                    b.HasOne("Domain.Entities.Membership_User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -344,22 +559,37 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Permission", b =>
+            modelBuilder.Entity("Domain.Entities.Common_LessonsCategories", b =>
                 {
+                    b.Navigation("ChildList");
+
+                    b.Navigation("UserEducations");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_Locations", b =>
+                {
+                    b.Navigation("ChildList");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Membership_Permission", b =>
+                {
+                    b.Navigation("ChildList");
+
                     b.Navigation("RolesPermissions");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Roles", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_Roles", b =>
                 {
                     b.Navigation("RolesPermission");
 
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("Domain.Entities.User", b =>
+            modelBuilder.Entity("Domain.Entities.Membership_User", b =>
                 {
-                    b.Navigation("UserProfile")
-                        .IsRequired();
+                    b.Navigation("UserEducations");
+
+                    b.Navigation("UserProfile");
 
                     b.Navigation("UserRoles");
                 });

@@ -13,5 +13,6 @@ namespace Application.Common.Exceptions
             : base(String.Format(CommonMessage.NotFound,name))
         {
         }
+        public override string? StackTrace => base.StackTrace;
     }
 }

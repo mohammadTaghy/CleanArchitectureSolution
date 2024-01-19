@@ -1,0 +1,36 @@
+<div>
+  <button mat-raised-button color="primary" (click)="addNewItem()">
+    <mat-icon>add_circle</mat-icon>جدید
+  </button>
+  <button mat-raised-button color="primary" (click)="editItem()">
+    <mat-icon>edit</mat-icon>ویرایش
+  </button>
+  <button mat-raised-button color="warn" (click)="deleteItem()">
+    <mat-icon>delete</mat-icon>حذف
+  </button>
+  <button mat-raised-button color="warn" (click)="openFilterDialog()">
+    <mat-icon>filter_list</mat-icon>فیلتر
+  </button>
+</div>
+<mat-table [dataSource]="dataSource" class="mat-elevation-z8" #gridTable [fixedLayout]="false">
+  <ng-container *ngFor="let col of columns; let colIndex = index" matColumnDef="{{col.header}}" [cdkColumnDef]="header">
+    <mat-header-cell *matHeaderCellDef>
+      <p class="header-value">{{col.header}}</p>
+    </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      <span>{{element[col.field]}}</span>
+    </mat-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row #gridRow *matRowDef="let row; columns: displayedColumns;"
+           [matRowKeyboardSelection]="this.selection"
+           [rowModel]="row"
+           [row]="gridRow"
+           [matTable]="gridTable"
+           [ngClass]="{selected: selection.isSelected(row)}"
+           (rowActionEvent)="actionEvent($event)"
+           (openFilterDialog)="onFilter($event)"
+           (selectedRowIdEvent)="selectedRowId($event)"></mat-row>
+</mat-table>
+<mat-paginator *ngIf="isPagerHidden" [pageSize]="10" [pageSizeOptions]="selectOptions">
+</mat-paginator>

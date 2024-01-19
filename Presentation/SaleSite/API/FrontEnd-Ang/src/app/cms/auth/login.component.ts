@@ -1,5 +1,5 @@
-import { Component, ComponentFactoryResolver, Injectable, OnInit, TemplateRef, ViewChild } from "@angular/core";
-import { NgForm, ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { Component, ComponentFactoryResolver, Injectable, NgModule, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from "@angular/core";
+import { NgForm } from "@angular/forms";
 
 import { Store } from "@ngrx/store";
 import { Subscription } from "rxjs";
@@ -7,38 +7,60 @@ import { Subscription } from "rxjs";
 
 import { AlertComponent } from "../../commonComponent/alert/alert.component";
 import { PlaceholderDirective } from "../../commonComponent/placeholder/placeholder.directive";
+import { TextboxComponnent } from "../common/componnent/textbox/textbox.component";
 import * as fromCmsApp from "../store/cms.reducer"
 import * as fromLoginAction from "./store/login.action"
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: ['/login.component.css'],
 })
-@Injectable()
-export class LoginComponent implements OnInit {
+
+
+export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild(PlaceholderDirective, { static: false }) alertHost: PlaceholderDirective;
-  private closeSub: Subscription;
-  public isLoading: boolean;
-  public hide: boolean;
-  public loginForm;
+  @ViewChildren(TextboxComponnent) children: QueryList<TextboxComponnent>;
+  //#region private property
+  closeSub: Subscription;
+  storeSub: Subscription;
+  isLoading: boolean;
+  hide: boolean;
+  loginForm;
+  //#endregion
   constructor(
-    private store: Store<fromCmsApp.CmsState>,
+    private store: Store<fromCmsApp.CmsState<any>>,
     private componentFactoryResolver: ComponentFactoryResolver) {
-    console.log("LoginComponent");
+    console.log("login");
     this.isLoading = false;
-    this.hide = false;
+    this.hide = true;
   }
+  //#region implement
   ngOnInit(): void {
-    console.log("LoginComponent")
-    }
-  onSubmit(loginForm: NgForm) {
-    console.log("submit");
-    console.log(loginForm.valid);
-    if (!loginForm.valid) return;
-    console.log("start");
-     this.store.dispatch(new fromLoginAction.LoginStart({ userName: loginForm.value.userName, password: loginForm.value.password }))
+    this.storeSub = this.store.select('loginState').subscribe(state => {
+      this.isLoading = state.loading;
+      console.log(this.isLoading);
+
+      if (state.authError)
+        this.showErrorAlert(state.authError);
+    })
+
   }
-  private showErrorAlert(message: string) {
+  ngOnDestroy(): void {
+    this.storeSub.unsubscribe();
+    if (this.closeSub)
+      this.closeSub.unsubscribe();
+  }
+  //#endregion
+  //#region method
+  onSubmit(loginForm: NgForm) {
+    if (!loginForm.valid) return;
+    this.store.dispatch(new fromLoginAction.LoginStart({
+      userName: this.children.find(p => p.name == "userName").inputValue,
+      password: this.children.find(p => p.name == "password").inputValue
+    }))
+  }
+  showErrorAlert(message: string) {
     // const alertCmp = new AlertComponent();
     const alertCmpFactory = this.componentFactoryResolver.resolveComponentFactory(
       AlertComponent
@@ -54,4 +76,5 @@ export class LoginComponent implements OnInit {
       hostViewContainerRef.clear();
     });
   }
+  //#endregion
 }

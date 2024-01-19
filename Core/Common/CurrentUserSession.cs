@@ -5,16 +5,62 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace Common
 {
-    public class CurrentUserSession
+    public interface ICurrentUserSession
     {
-        public static CurrentUserSessionDto UserInfo
+        int? UserId { get; }
+
+        bool IsAuthenticated { get; }
+        List<string> Permissions { get; }
+        void SetRolesName(List<string> roleNames);
+        void SetUserId(int userId);
+    }
+    public class CurrentUserSession: ICurrentUserSession
+    {
+        #region private prop
+        private  readonly IHttpContextAccessor _context;
+        
+        #endregion
+        public CurrentUserSession(IHttpContextAccessor httpContext)
         {
-            get;
-            set;
+            UserId = httpContext.HttpContext.Session.GetInt32("UserId");
+            IsAuthenticated = UserId != null;
+            _context = httpContext;
         }
+        #region public prop
+
+        public int? UserId { get; }
+
+        public bool IsAuthenticated { get; }
+
+        public List<string> Permissions
+        {
+            get
+            {
+                string rolesName = _context.HttpContext.Session.GetString("UserRolesName");
+                if (rolesName != null)
+                {
+                    return JsonConvert.DeserializeObject<List<string>>(rolesName);
+                }
+                return new List<string>();
+            }
+        }
+        #endregion
+
+        #region method
+        public void SetUserId(int userId) => _context.HttpContext.Session.SetInt32("UserId", userId);
+        public void SetRolesName(List<string> roleNames)
+        {
+            _context.HttpContext.Session.SetString("UserRolesName", JsonConvert.SerializeObject(roleNames));
+        }
+        #endregion
+
     }
     public class CurrentUserSessionDto
     {

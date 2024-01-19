@@ -17,6 +17,7 @@ namespace Common.DI
         {
             //services.AddSingleton<IMemoryCache>();
             //services.AddSingleton<IMemoryCacheManager, MemoryCacheManager>();
+            services.AddScoped<ICurrentUserSession, CurrentUserSession>();
             return services;
         }
     }

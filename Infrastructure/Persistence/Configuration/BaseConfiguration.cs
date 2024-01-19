@@ -1,4 +1,6 @@
 ﻿using Domain;
+using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
@@ -8,11 +10,16 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configuration
 {
-    internal class BaseConfiguration<T> where T : class,IEntity
+    public abstract class BaseConfiguration<T> : IEntityTypeConfiguration<T> where T : class,IEntity
     {
-        public BaseConfiguration(EntityTypeBuilder<T> builder)
+        public abstract void BaseConfigure(EntityTypeBuilder<T> builder);
+
+        public virtual void Configure(EntityTypeBuilder<T> builder)
         {
+            builder.ToTable(typeof(T).Name);
             builder.HasKey(p => p.Id);
+            builder.Property(p => p.Id).ValueGeneratedNever();
+            BaseConfigure(builder);
         }
     }
 }

@@ -1,0 +1,40 @@
+<div *ngIf="hasManipilateButton">
+  <button mat-raised-button color="primary" (click)="addNewItem()">
+    <mat-icon>add_circle</mat-icon>جدید
+  </button>
+  <button mat-raised-button color="primary" (click)="editItem()">
+    <mat-icon>edit</mat-icon>ویرایش
+  </button>
+  <button mat-raised-button color="warn" (click)="deleteItem()">
+    <mat-icon>delete</mat-icon>حذف
+  </button>
+  
+</div>
+<mat-tree id="{{treeName}}" [dataSource]="dataSource" [treeControl]="treeControl" >
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding (click)="nodeClicked(node)"
+                 [ngClass]="{'selectedNode': selectedNode && node.id==selectedNode.id}">
+    <button mat-icon-button disabled></button>
+    <span *ngIf="hasHref">
+      <a href="./admin/{{node.name}}">{{node.title}} </a>
+    </span>
+    <span *ngIf="!hasHref">
+      <app-checkbox *ngIf="hasCheckBox" [title]="node.title" [name]="node.name" [checked]="node.value"></app-checkbox>
+      <span *ngIf="!hasCheckBox">{{node.title}}</span>
+    </span>
+  </mat-tree-node>
+  <mat-tree-node *matTreeNodeDef="let node;when: hasChild" matTreeNodePadding (click)="nodeClicked(node)"
+                 [ngClass]="{'selectedNode': selectedNode && node.id==selectedNode.id}">
+    <!--{{nodeHtml}}-->
+    <button mat-icon-button matTreeNodeToggle
+            [attr.aria-label]="'Toggle ' + node.name">
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+      </mat-icon>
+    </button>
+    <app-checkbox *ngIf="hasCheckBox" [title]="node.title" [name]="node.name" [checked]="node.value"></app-checkbox>
+    <span *ngIf="!hasCheckBox">{{node.title}}</span>
+    <mat-progress-bar *ngIf="node.isLoading"
+                      mode="indeterminate"
+                      class="example-tree-progress-bar"></mat-progress-bar>
+  </mat-tree-node>
+</mat-tree>

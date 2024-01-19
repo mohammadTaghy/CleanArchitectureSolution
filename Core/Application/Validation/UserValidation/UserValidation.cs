@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Validation
 {
-    public sealed class UserValidation : ValidationRuleBase<User>, IUserValidation
+    public sealed class UserValidation : ValidationRuleBase<Membership_User>, IUserValidation
     {
         public IUserRepo UserRepo { get; set; }
         public UserValidation(IUserRepo repo)
@@ -22,8 +22,8 @@ namespace Application.Validation
         {
             base.AddCheckValidation();
             //RuleFor(p => p.UserName).Must(
-            //    (rootObject, list, context) => 
-            //    UserRepo.CheckUniqUserName(rootObject.UserName, rootObject.Id))
+            //    (rootObject, list, context) =>
+            //    UserRepo.AnyEntity(p => p.UserName == rootObject.UserName || p.Id == rootObject.Id).Result)
             //    .WithMessage(string.Format(CommonMessage.IsDuplicateUserName, nameof(User.UserName)));
         }
 

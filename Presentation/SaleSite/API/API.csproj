@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <BaseOutputPath>../MainDll/bin</BaseOutputPath>
@@ -18,8 +18,29 @@
     <None Remove="FrontEnd-Ang\src\app\cms\auth\store\login.reducer.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\cms.module.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\cms.routing.module.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\baseUI.compnent.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\checkbox\checkbox.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\datepicker\datepicker.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\dropdown\dropdown.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\generate.componnent\generate.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\grid\filter_dialog\filter_dialog.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\grid\mat-row-keyboard-selection.directive.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\sidenav\sidenav.componnent.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\textbox\textbox.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\tree\tree.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\uploadfile\fileUpload.component.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\constant\constant.common.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\constant\Constant_data.common.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\constant\enum.common.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\context\cms-context.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\common\filterRequestBody\filter-request-body.common.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\main\AdminPanel\store\adminPanel.action.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\main\AdminPanel\store\adminPanel.effects.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\main\AdminPanel\store\adminPanel.reducer.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\main\main-cms-page.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\main\modules\Common\lessonsCategories\lessonsCategories.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\main\modules\membership\permission\permission.component.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\main\modules\membership\user\user.component.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\main\store\cms-module.action.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\main\store\cms-module.effects.ts" />
     <None Remove="FrontEnd-Ang\src\app\cms\main\store\cms-module.reducer.ts" />
@@ -27,30 +48,50 @@
     <None Remove="FrontEnd-Ang\src\app\commonComponent\apiAddresses.common.ts" />
     <None Remove="FrontEnd-Ang\src\app\commonComponent\callAPI.common.ts" />
     <None Remove="FrontEnd-Ang\src\app\commonComponent\common.module.ts" />
+    <None Remove="FrontEnd-Ang\src\app\commonComponent\common_model\query_response.ts" />
+    <None Remove="FrontEnd-Ang\src\app\cms\common\componnent\grid\grid.componnent.ts" />
+    <None Remove="FrontEnd-Ang\src\app\commonComponent\componnent\material_flatTree.ts" />
+    <None Remove="FrontEnd-Ang\src\app\commonComponent\config\config.ts" />
     <None Remove="FrontEnd-Ang\src\app\commonComponent\placeholder\placeholder.directive.ts" />
-    <None Remove="FrontEnd-Ang\src\app\model\Permission.model.ts" />
-    <None Remove="FrontEnd-Ang\src\app\model\roles.model.ts" />
-    <None Remove="FrontEnd-Ang\src\app\model\user.model.ts" />
-    <None Remove="FrontEnd-Ang\src\app\model\userProfile.model.ts" />
+    <None Remove="FrontEnd-Ang\src\app\model\base_entity\Entity.ts" />
+    <None Remove="FrontEnd-Ang\src\app\model\base_entity\HierarchyEntity.ts" />
+    <None Remove="FrontEnd-Ang\src\app\model\common\common_lessonsCategories.ts" />
+    <None Remove="FrontEnd-Ang\src\app\model\membership_permission.model.ts" />
+    <None Remove="FrontEnd-Ang\src\app\model\membership_roles.model.ts" />
+    <None Remove="FrontEnd-Ang\src\app\model\membership_user.model.ts" />
+    <None Remove="FrontEnd-Ang\src\app\model\membership_userProfile.model.ts" />
     <None Remove="FrontEnd-Ang\src\app\site\sites.module.ts" />
     <None Remove="FrontEnd-Ang\src\app\site\sites.routing.module.ts" />
     <None Remove="FrontEnd-Ang\src\app\store\app.reducer.ts" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.AspNetCore" Version="11.1.2" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.2.4" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Infrastructure\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\Infrastructure\Persistence\Persistence.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="FrontEnd-Ang\src\app\cms\main\Modules\" />
+    <Folder Include="FrontEnd-Ang\src\app\cms\common\componnent\button\" />
+    <Folder Include="FrontEnd-Ang\src\app\cms\common\componnent\list\" />
+    <Folder Include="FrontEnd-Ang\src\app\cms\common\componnent\htmleditor\" />
+    <Folder Include="FrontEnd-Ang\src\app\cms\common\componnent\radiobutton\" />
     <Folder Include="FrontEnd-Ang\src\app\site\auth\" />
     <Folder Include="FrontEnd-Ang\src\app\site\commen\" />
     <Folder Include="FrontEnd-Ang\src\app\site\main\" />
@@ -72,8 +113,51 @@
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\cms.routing.module.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\baseUI.compnent.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\checkbox\checkbox.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\datepicker\datepicker.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\dropdown\dropdown.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\generate.componnent\generate.component.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\grid\filter_dialog\filter_dialog.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\mat-row-keyboard-selection.directive.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\textbox\textbox.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\sidenav\sidenav.componnent.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\tree\tree.component.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\uploadfile\fileUpload.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\constant\constant.common.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\constant\Constant_data.common.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\constant\enum.common.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\context\cms-context.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\filterRequestBody\filter-request-body.common.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\AdminPanel\store\adminPanel.action.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\AdminPanel\store\adminPanel.effects.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\AdminPanel\store\adminPanel.reducer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\main-cms-page.component.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\modules\Common\lessonsCategories\lessonsCategories.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\modules\membership\permission\permission.component.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\modules\membership\user\user.component.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\main\store\cms-module.action.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -87,17 +171,26 @@
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\commonComponent\apiAddresses\apiAddresses.common.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\commonComponent\callAPI\callAPI.common.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\commonComponent\common.module.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\commonComponent\common_model\query_response.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\cms\common\componnent\grid\grid.componnent.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\commonComponent\componnent\material_flatTree.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\commonComponent\config\config.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\commonComponent\placeholder\placeholder.directive.ts" />
-    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\permission.model.ts">
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\base_entity\Entity.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\roles.model.ts">
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\base_entity\HierarchyEntity.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\common\common_lessonsCategories.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\membership\membership_permission.model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\userProfile.model.ts">
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\membership\membership_roles.model.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\user.model.ts" />
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\membership\membership_userProfile.model.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="FrontEnd-Ang\src\app\model\membership\membership_user.model.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\site\sites.module.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\site\sites.routing.module.ts" />
     <TypeScriptCompile Include="FrontEnd-Ang\src\app\store\app.reducer.ts" />
@@ -111,10 +204,10 @@
     </Exec>
     <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
     <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
-    <Exec WorkingDirectory="$(FrontendRoot)" Command="npm install" />
+    <Exec WorkingDirectory="$(FrontendRoot)" Command="npm install --legacy-peer-deps" />
   </Target>
   <Target Name="PublishAngular" AfterTargets="ComputeFilesToPublish">
-    <Exec Command="npm install" WorkingDirectory="$(FrontendRoot)" />
+    <Exec Command="npm install --legacy-peer-deps" WorkingDirectory="$(FrontendRoot)" />
     <Exec Command="npm run build -- --prod" WorkingDirectory="$(FrontendRoot)" />
     <ItemGroup>
       <DistFiles Include="$(FrontendRoot)dist\**" />

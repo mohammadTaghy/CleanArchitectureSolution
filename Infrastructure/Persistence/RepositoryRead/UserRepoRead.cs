@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Persistence
 {
-    public class UserRepoRead: RepositoryReadBase<User>, IUserRepoRead
+    public class UserRepoRead: RepositoryReadBase<Membership_User>, IUserRepoRead
     {
         public UserRepoRead(IConfiguration config):base(config)
         {

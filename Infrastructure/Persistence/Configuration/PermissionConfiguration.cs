@@ -9,16 +9,21 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configuration
 {
-    public class PermissionConfiguration : IEntityTypeConfiguration<Permission>
+    public class PermissionConfiguration : BaseConfiguration<Membership_Permission>
     {
-        
-        public void Configure(EntityTypeBuilder<Permission> builder)
+       
+        public override void BaseConfigure(EntityTypeBuilder<Membership_Permission> builder)
         {
-            builder.ToTable(nameof(Permission));
-            builder.HasKey(p => p.Id);
+
+            builder.HasMany(p => p.ChildList)
+                .WithOne(p => p.ParentEntity)
+                .HasForeignKey(p => p.ParentId);
+
+           
             builder.Property(p => p.Name).HasMaxLength(512).IsRequired();
             builder.Property(p => p.Title).HasMaxLength(512).IsRequired();
             builder.Property(p => p.CommandName).HasMaxLength(1024).IsRequired();
+            builder.Property(p => p.IConPath).HasMaxLength(2048);
 
         }
     }

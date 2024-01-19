@@ -35,7 +35,7 @@ namespace API.Test.Common
                         options.UseInternalServiceProvider(serviceProvider);
                     });
 
-                    services.AddScoped<IPersistanceDBContext>(provider => provider.GetService<PersistanceDBContext>());
+                    services.AddScoped<PersistanceDBContext>(provider => provider.GetService<PersistanceDBContext>());
 
                     var sp = services.BuildServiceProvider();
 

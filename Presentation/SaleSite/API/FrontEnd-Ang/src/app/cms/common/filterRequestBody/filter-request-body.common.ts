@@ -1,4 +1,6 @@
 export class FilterRequestBody {
-  constructor(public columnName: string, public comparison: string, public value: string) { }
+  constructor(public ColumnName: string, public Comparison: string, public Value: string) { }
 }
-
+export class QueryRequestBody {
+  constructor(public Index: number, public PageSize: number, public FilterData: FilterRequestBody[] = null) { }
+}

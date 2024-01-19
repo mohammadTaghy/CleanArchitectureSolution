@@ -1,0 +1,12 @@
+<span>
+  <mat-form-field class="{{width}}" appearance="fill">
+    <mat-select [formControl]="dropdownControl" [disabled]="isDisabled" 
+                [(ngModel)]="inputValue" #dropDown>
+      <mat-option *ngFor="let data of dataSource" [value]="data.value" [disabled]="data.disabled">
+        {{data.title}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="isRequired && selectFormControl.hasError('required')">لطفا یک آیتم را انتخاب کنید</mat-error>
+    <mat-hint>{{dropdownControl.value?.description}}</mat-hint>
+  </mat-form-field>
+</span> 

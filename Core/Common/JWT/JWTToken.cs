@@ -1,11 +1,15 @@
 ﻿using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Common.JWT
@@ -53,16 +57,22 @@ namespace Common.JWT
                 };
             }
         }
-        public static string CreateToken(T payload)
+        public static string CreateToken(T payload,string key)
         {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
+            //var tokenDescriptor = new JwtSecurityToken(issuer, issuer, claims,
+            //    expires: DateTime.Now.AddMinutes(EXPIRY_DURATION_MINUTES), signingCredentials: credentials);
             string payloadStr = JsonConvert.SerializeObject(payload);
-            return _JsonWebTokenHandler.CreateToken(payloadStr,
-                new SigningCredentials(JsonWebKeyRsa_2048, SecurityAlgorithms.RsaSha256, SecurityAlgorithms.Sha256));
+            return _JsonWebTokenHandler.CreateToken(payloadStr
+                , credentials
+                 );
         }
-        public static T DecodeJson(string token)
+        public static IEnumerable<Claim> DecodeJson(string token)
         {
-            JsonWebToken jsonWebToken = _JsonWebTokenHandler.ReadJsonWebToken(token);
-            return JsonConvert.DeserializeObject<T>(jsonWebToken.EncodedPayload);
+            var jsonWebToken = _JsonWebTokenHandler.ReadJsonWebToken(token);
+           
+            return jsonWebToken.Claims;
         }
     }
 }

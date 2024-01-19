@@ -1,14 +1,15 @@
 ﻿using Application;
 using Domain;
+using Microsoft.AspNetCore.OData.Query;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
+using System.Data.Entity;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Data.SqlTypes;
+using Application.Common.Exceptions;
+using Domain.Entities;
 
 namespace Persistence
 {
@@ -37,7 +38,20 @@ namespace Persistence
 
         public IList<T> FindAll(Expression<Func<T, bool>> predicate) => Queryable.Where(predicate).ToList();
 
-        public T FindOne(int id) => Queryable.Where(p => p.Id == id).First();
+        public async Task<Tuple<List<T>, int>> ItemList(ODataQueryOptions<T> options)
+        {
+            ODataQuerySettings settings = new ODataQuerySettings()
+            {
+                PageSize = 10,
+            };
+
+            IQueryable results = options.ApplyTo(Queryable, settings);
+            return new Tuple<List<T>, int>(
+                await results.ToListAsync() as List<T> ?? new List<T>(), 
+                int.Parse(options.Count.RawValue ?? "0")
+                );
+        }
+        public async Task<T> FindOne(int id) => await Queryable.Where(p => p.Id == id).FirstOrDefaultAsync();
         public bool TryFindOne(int id, ref T? entity)
         {
             entity = Queryable.Where(p => p.Id == id).FirstOrDefault();
@@ -50,6 +64,7 @@ namespace Persistence
             entity = Queryable.Where(predicate).FirstOrDefault();
             return entity != null;
         }
+
         #endregion
         #region Manipulate
 
@@ -67,8 +82,8 @@ namespace Persistence
                 {
                     InsertManyOptions insertManyOptions = new InsertManyOptions();
                     insertManyOptions.IsOrdered = true;
-                    Task task= this.collection.InsertManyAsync(session, entities,insertManyOptions,CancellationToken);
-                    await task.ContinueWith(p=> session.CommitTransactionAsync());
+                    Task task = this.collection.InsertManyAsync(session, entities, insertManyOptions, CancellationToken);
+                    await task.ContinueWith(p => session.CommitTransactionAsync());
                 }
                 catch (Exception ex)
                 {
@@ -108,8 +123,8 @@ namespace Persistence
                 try
                 {
 
-                    Task task= Delete(entities.Select(p => p.Id).ToList());
-                    await task.ContinueWith(p=> session.CommitTransactionAsync());
+                    Task task = Delete(entities.Select(p => p.Id).ToList());
+                    await task.ContinueWith(p => session.CommitTransactionAsync());
                 }
                 catch (Exception)
                 {
@@ -143,7 +158,7 @@ namespace Persistence
             {
                 ReplaceOptions replaceOptions = new ReplaceOptions();
                 replaceOptions.IsUpsert = true;
-                await this.collection.ReplaceOneAsync<T>(p => p.Id == entity.Id, entity,replaceOptions,CancellationToken);
+                await this.collection.ReplaceOneAsync<T>(p => p.Id == entity.Id, entity, replaceOptions, CancellationToken);
             }
             catch (Exception ex)
             {
@@ -159,15 +174,15 @@ namespace Persistence
                 session.StartTransaction();
                 try
                 {
-                    Task task= Task.Run(() =>
+                    Task task = Task.Run(() =>
                     {
                         Parallel.ForEach(entities, p =>
                         {
                             Update(p);
                         });
                     });
-                    
-                    await task.ContinueWith(p=> session.CommitTransactionAsync());
+
+                    await task.ContinueWith(p => session.CommitTransactionAsync());
                 }
                 catch (Exception)
                 {
@@ -176,6 +191,7 @@ namespace Persistence
                 }
             }
         }
+
         #endregion
 
 

@@ -1,0 +1,46 @@
+<input type="file" accept="fileTypeCanChoose" multiple="{{isMultiFile}}" (change)="onFileBrowse($event)" />
+<div class="media-upload-table-container" *ngIf="uploadedMedia.length > 0">
+  <table class="media-upload-table table table-borderless">
+    <thead>
+      <tr>
+        <th style="width: 246px"></th>
+        <th class="media-progress-bar"></th>
+        <th style="width: 100px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let media of uploadedMedia; let i = index">
+        <td>
+          <div class="d-flex flex-row align-items-center">
+            <div style="margin-right: 8px;">
+              <img width="100" height="100" class="add-media-img" src="{{media.FileUrl}}">
+              {{ media.FileName }}
+            </div> 
+          </div>
+        </td>
+        <td style="vertical-align:middle;">
+          <div class="d-flex flex-column" style="margin-top: 18px;">
+            <div>
+              <div class="first-progress">
+                <div [ngStyle]="{ 'width.%': media.FileProgress }"
+                     class="second-progress"></div>
+              </div>
+            </div>
+            <div class="text-center">
+              {{ media.FileProgessSize }} of {{ media.FileSize }}
+            </div>
+          </div>
+        </td>
+        <td style="vertical-align:middle;text-align: right;">
+          <div class="media-upload-check">
+            <span *ngIf="media.FileProgress === 100"> کامل شد</span>
+            <div *ngIf="media.HasError">{{media.ErrorText}}</div>
+          </div>
+        </td>
+        <td style="vertical-align:middle;">
+          <a class="remove-media-txt" (click)="removeImage(i)"> حذف شده </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

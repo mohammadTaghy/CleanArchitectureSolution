@@ -9,8 +9,8 @@ namespace Application.Common.Exceptions
 {
     public sealed class DeleteFailureException : Exception
     {
-        public DeleteFailureException(string name, object key, string message)
-            : base(string.Format(CommonMessage.DeleteFailure,name,key,message))
+        public DeleteFailureException(string name, object key)
+            : base(string.Format(CommonMessage.DeleteFailure,name,key))
         {
         }
     }

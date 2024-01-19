@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Common;
 using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,12 +13,12 @@ namespace Application.Common.Behaviours
     public class RequestLogger<TRequest> : IRequestPreProcessor<TRequest>
     {
         private readonly ILogger _logger;
-        private readonly ICurrentUserService _currentUserService;
+        private readonly ICurrentUserSession _currentUserSession;
 
-        public RequestLogger(ILogger<TRequest> logger, ICurrentUserService currentUserService)
+        public RequestLogger(ILogger<TRequest> logger, ICurrentUserSession currentUserSession)
         {
             _logger = logger;
-            _currentUserService = currentUserService;
+            _currentUserSession = currentUserSession;
         }
 
         public Task Process(TRequest request, CancellationToken cancellationToken)
@@ -25,7 +26,7 @@ namespace Application.Common.Behaviours
             var name = typeof(TRequest).Name;
 
             _logger.LogInformation("PreRequest Log: {Name} {@UserId} {@Request}",
-                name, _currentUserService.UserId, request);
+                name, _currentUserSession.UserId, request);
 
             return Task.CompletedTask;
         }

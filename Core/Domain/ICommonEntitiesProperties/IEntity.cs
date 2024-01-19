@@ -10,5 +10,6 @@ namespace Domain
     {
         [Column(Title ="کد رایانه",IsReadOnly =true,Tooltip ="کد رایانه توسط سیستم تعیین می شود")]
         int Id { get; set; }
+        
     }
 }

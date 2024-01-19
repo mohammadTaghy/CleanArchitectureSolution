@@ -1,31 +1,48 @@
 ﻿using Application;
+using Application.Common.Exceptions;
+using Application.Common.Model;
+using Application.UseCases;
 using Common;
+using Common.Extention;
 using Domain;
+using Domain.Common;
+using Domain.Entities;
+using Infrastructure.RabbitMQ;
+using Microsoft.AspNetCore.OData.Query;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Persistence.Repository
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T>
         where T : class, IEntity
     {
+        protected readonly ICurrentUserSession _currentUserSession;
 
 
-        public RepositoryBase(PersistanceDBContext context)
+        public RepositoryBase(PersistanceDBContext context, ICurrentUserSession currentUserSession)
         {
             Context = context;
+            _currentUserSession = currentUserSession;
+            ReciveMessage();
         }
 
         #region Properties
         public CancellationToken CancellationToken { get; set; }
         public PersistanceDBContext Context;
-
         bool isNoTracking = true;
         int maxId = 0;
         int MaxId
@@ -40,60 +57,47 @@ namespace Persistence.Repository
         }
         #endregion
         #region CustomMethod
+        private bool checkHasSpecificWord(string text)
+        {
+            return text.ToLower().ContainsAny(" drop ", " delete ", " insert ", " alter ", " update ", " exec");
+        }
         private void SetModify(EntityEntry entity)
         {
-            if (entity is IChangeProperty)
+            if (entity.Entity is IChangeProperty)
             {
-                IChangeProperty changeProperty = (IChangeProperty)entity;
+                IChangeProperty changeProperty = (IChangeProperty)entity.Entity;
                 changeProperty.ModifyDate = DateTimeHelper.CurrentMDateTime;
-                changeProperty.ModifyBy = CurrentUserSession.UserInfo.UserId;
+                changeProperty.ModifyBy = _currentUserSession.UserId;
 
             }
         }
 
         private void SetCreate(EntityEntry entity)
         {
-            if (entity is ICreateProperty)
+            if (entity.Entity is ICreateProperty)
             {
-                ICreateProperty changeProperty = (ICreateProperty)entity;
+                ICreateProperty changeProperty = (ICreateProperty)entity.Entity;
                 changeProperty.CreateDate = DateTimeHelper.CurrentMDateTime;
-                changeProperty.CreateBy = CurrentUserSession.UserInfo.UserId;
+                changeProperty.CreateBy = _currentUserSession.UserId ?? 0;
 
             }
         }
-        private int SetID(EntityEntry entity)
+        private void SetID(EntityEntry entity)
         {
-            int id = 0;
-            if (entity is IEntity)
+            if (entity.Entity is IEntity)
             {
-                IEntity item = (IEntity)entity;
-                MaxId++;
-                id = MaxId;
+                IEntity item = (IEntity)entity.Entity;
+                item.Id= ++MaxId;
             }
-            return id;
         }
         protected void SetNoTracking(bool noTraking) => isNoTracking = noTraking;
-        private void FillEntityProperty(EntityEntry entity)
+        protected string GetTableName()
         {
-            try
-            {
-                if (entity.State == EntityState.Added)
-                {
-                   // SetID(entity);
-                    SetCreate(entity);
-
-                }
-                else if (entity.State == EntityState.Modified)
-                {
-                    SetModify(entity);
-                }
-
-            }
-
-            catch (Exception ex)
-            {
-                throw;
-            }
+            Type entity = typeof(T);
+            var loadTableAttribute = entity.GetCustomAttributes().OfType<LoadTableAttribute>().FirstOrDefault();
+            if (loadTableAttribute!=null)
+                return loadTableAttribute.TableName;
+            return entity.Name;
         }
         #endregion
         #region Get
@@ -120,15 +124,15 @@ namespace Persistence.Repository
         }
         public async Task<T> FindAsync(int id)
         {
-            return await GetAllAsQueryable().FirstAsync(x => x.Id == id, CancellationToken);
+            return await GetAllAsQueryable().FirstOrDefaultAsync(x => x.Id == id, CancellationToken);
         }
         public T Find(Expression<Func<T, bool>> predicate)
         {
-            return GetAllAsQueryable().First(predicate);
+            return GetAllAsQueryable().FirstOrDefault(predicate);
         }
         public async Task<T> FindAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
         {
-            return await GetAllAsQueryable().FirstAsync(predicate, cancellationToken);
+            return await GetAllAsQueryable().FirstOrDefaultAsync(predicate, cancellationToken);
         }
         public async Task<IList<T>> ItemList(Expression<Func<T, bool>> predicate)
         {
@@ -138,21 +142,92 @@ namespace Persistence.Repository
         {
             return await GetAllAsQueryable().AnyAsync(predicate);
         }
+        public async Task<Tuple<List<T>, int>> ItemListAdo(ItemListParameter baseGetApiParameter)
+        {
+            if (checkHasSpecificWord($"{baseGetApiParameter.Filter} {baseGetApiParameter.Orderby} {baseGetApiParameter.Columns}"))
+                throw new ValidationException();
+           
+            try
+            {
+                string sql = "EXEC dbo.sp_LoadEntityList @tableName, @filter, @orderby, @selectColumn, @top, @skip, @count output";
+                int count = 0;
+                var outParameter = new SqlParameter { ParameterName = "count", Direction = ParameterDirection.Output, SqlDbType = SqlDbType.Int };
+                List<T> result = await Context.Set<T>().FromSqlRaw<T>(sql,
+                    new SqlParameter { ParameterName = "tableName", Value = GetTableName(), SqlDbType = SqlDbType.NVarChar },
+                    new SqlParameter { ParameterName = "filter", Value = baseGetApiParameter.Filter ?? "", SqlDbType = SqlDbType.NVarChar },
+                    new SqlParameter { ParameterName = "orderby", Value = baseGetApiParameter.Orderby ?? "Id", SqlDbType = SqlDbType.NVarChar },
+                    new SqlParameter { ParameterName = "selectColumn", Value = baseGetApiParameter.Columns ?? "", SqlDbType = SqlDbType.NVarChar },
+                    new SqlParameter { ParameterName = "top", Value = baseGetApiParameter.Top, SqlDbType = SqlDbType.SmallInt },
+                    new SqlParameter { ParameterName = "skip", Value = baseGetApiParameter.Skip, SqlDbType = SqlDbType.SmallInt },
+                    outParameter).ToListAsync();
+                count = (int)outParameter.Value;
+                return new Tuple<List<T>, int>(result, count);
+            }
+            catch (Exception ex)
+            {
+                throw new BadRequestException(CommonMessage.ValidationMessage);
+            }
+            
+        }
+        public async Task<List<T>> ItemListAdo(string procudureName, SqlParameter[] sqlParameters)
+        {
+            if (sqlParameters.Any(p =>p.Value!=null && checkHasSpecificWord(p.Value.ToString())))
+                throw new ValidationException();
+            string sqlQuery = $"EXEC {procudureName} ";
+            string sign = "";
+            foreach (SqlParameter param in sqlParameters)
+            {
+                sqlQuery += $" {sign}@{param.ParameterName}";
+                sign += ", ";
+            }
+
+            return await Context.Set<T>().FromSqlRaw<T>(sqlQuery, sqlParameters).ToListAsync();
+        }
+        public async Task<Tuple<DataTable, int>> ExecuteProcedure(string procudureName, Dictionary<string, string> dic = null)
+        {
+            DataTable dataTable= new DataTable();
+            using (SqlConnection connection = new SqlConnection(IOCManager.GetService<IConfiguration>().GetConnectionString("MainConnectionString")))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand(procudureName, connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    if (dic != null)
+                        foreach (var injectParam in dic)
+                        {
+                            command.Parameters.AddWithValue(injectParam.Key, injectParam.Value);
+                        }
+                    command.Parameters.Add("@count", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    SqlDataAdapter da = new SqlDataAdapter(command);
+                    await connection.OpenAsync();
+                    da.Fill(dataTable);
+                    return  new Tuple<DataTable, int>(dataTable, Convert.ToInt32(command.Parameters["@count"].Value));
+                }
+                catch (Exception ex)
+                {
+                    return new Tuple<DataTable, int>(dataTable, 0);
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
         #endregion
         #region Manipulate
 
-        public virtual async Task<T> DeleteItem(T entity)
+        public virtual async Task<bool> DeleteItem(T entity)
         {
-            Context.Entry(entity).State = EntityState.Deleted;
-             await  Save();
-            return entity;
-        }
-        public virtual async Task<T> DeleteItem(int id)
-        {
-            Task<T> entity = FindAsync(id);
             Context.Entry(entity).State = EntityState.Deleted;
             await Save();
-            return entity.Result;
+            return true;
+        }
+        public virtual async Task<bool> DeleteItem(int id)
+        {
+            T entity = await FindAsync(id);
+            Context.Entry(entity).State = EntityState.Deleted;
+            await Save();
+            return true;
         }
 
         public virtual async Task<bool> DeleteItems(IList<T> items)
@@ -170,24 +245,27 @@ namespace Persistence.Repository
             IList<T> items = ItemList(p => ids.Contains(p.Id)).Result;
             return DeleteItems(items).Result;
         }
-
-        public virtual async Task<T> Insert(T entity)
+         public void Delete(T entity)
+        {
+            Detach();
+            Context.Entry(entity).State = EntityState.Deleted;
+        }
+        public virtual async Task Insert(T entity)
         {
             Context.Entry(entity).State = EntityState.Added;
             await Save();
-            return entity;
         }
-        public virtual async Task<T> Update(T entity)
+        public virtual async Task Update(T entity)
         {
             Context.Entry(entity).State = EntityState.Modified;
             await Save();
-            return entity;
         }
         public void Add(T entity)
         {
             Detach();
             Context.Entry(entity).State = EntityState.Added;
         }
+       
         public void Attach(T entity)
         {
             Detach();
@@ -208,13 +286,11 @@ namespace Persistence.Repository
         public async Task Save()
         {
             var entities = Context.ChangeTracker.Entries().Where(p => p.State != EntityState.Unchanged);
-           // await Task.Run(() =>
-           //{
-               Parallel.ForEach(entities, entity =>
-                {
-                    FillEntityProperty(entity);
-                });
-           //});
+            
+            Parallel.ForEach(entities, entity =>
+             {
+                 FillEntityProperty(entity);
+             });
 
             try
             {
@@ -228,6 +304,38 @@ namespace Persistence.Repository
                 throw;
             }
 
+        }
+        private void FillEntityProperty(EntityEntry entity)
+        {
+            try
+            {
+                if (entity.State == EntityState.Added)
+                {
+                    SetID(entity);
+                    SetCreate(entity);
+
+                }
+                else if (entity.State == EntityState.Modified)
+                {
+                    SetModify(entity);
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public void ReciveMessage()
+        {
+            new RabbitMQUtility().RecieveMessage("CQRS", (model, ea) =>
+            {
+                var body = ea.Body.ToArray();
+                var message = Encoding.UTF8.GetString(body);
+                Console.WriteLine($" [x] Received {message}");
+            });
         }
         #endregion
 

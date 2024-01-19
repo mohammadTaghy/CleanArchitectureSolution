@@ -1,0 +1,25 @@
+﻿<div class="dialog-error">
+    <h2>@Heading</h2>
+    <div class="col-12 ">
+        @BodyText @ChildContent
+    </div>
+</div>
+
+<div>
+    <button class="btn btn-warning m-2" @onclick="OnOK">OK</button>
+    @if (HasCancelButton==true)
+    {
+        <button class="btn btn-warning m-2" @onclick="OnCancel">Cancel</button>
+    }
+</div>
+
+@code {
+
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+    [Parameter] public string? Heading { get; set; }
+    [Parameter] public string? BodyText { get; set; }
+    [Parameter] public bool? HasCancelButton { get; set; }
+
+    [Parameter] public EventCallback OnOK { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+}

@@ -15,7 +15,11 @@ namespace Application.Common.Exceptions
         {
             Failures = new Dictionary<string, string[]>();
         }
-
+        public ValidationException(ValidationFailure failure)
+            : this()
+        {
+            Failures.Add(failure.PropertyName, new string[] { failure.ErrorMessage });
+        }
         public ValidationException(List<ValidationFailure> failures)
             : this()
         {

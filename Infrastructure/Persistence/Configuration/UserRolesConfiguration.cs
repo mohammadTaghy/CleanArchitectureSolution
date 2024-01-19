@@ -9,16 +9,14 @@ using System.Threading.Tasks;
 
 namespace Persistence.Configuration
 {
-    internal class UserRolesConfiguration : IEntityTypeConfiguration<UserRoles>
+    internal class UserRolesConfiguration : BaseConfiguration<Membership_UserRoles>
     {
-        public void Configure(EntityTypeBuilder<UserRoles> builder)
+        public override void BaseConfigure(EntityTypeBuilder<Membership_UserRoles> builder)
         {
-            builder.ToTable(nameof(UserRoles));
-            builder.HasKey(p => p.Id);
-            builder.HasOne<Roles>(p=>p.Role)
+            builder.HasOne<Membership_Roles>(p=>p.Role)
                 .WithMany(p=>p.UserRoles)
                 .HasForeignKey(p=>p.RoleId);
-            builder.HasOne<User>(p => p.User)
+            builder.HasOne<Membership_User>(p => p.User)
                 .WithMany(p => p.UserRoles)
                 .HasForeignKey(p => p.UserId);
 

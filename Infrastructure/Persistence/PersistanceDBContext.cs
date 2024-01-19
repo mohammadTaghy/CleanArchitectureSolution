@@ -1,27 +1,24 @@
-﻿using Domain;
+﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.IdentityModel.Protocols;
-using Microsoft.Extensions.Configuration;
-using Domain.Entities;
-using Application.Common.Interfaces;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace Persistence
 {
-    public class PersistanceDBContext : DbContext, IPersistanceDBContext
+    public class PersistanceDBContext : DbContext//, IPersistanceDBContext
     {
         public PersistanceDBContext(DbContextOptions<PersistanceDBContext> options) : base(options)
         {
 
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserProfile> Profiles { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
-        public DbSet<Roles> Roles { get; set; }
-        public DbSet<RolesPermission> RolesPermissions { get; set; }
-        public DbSet<UserRoles> UserRoles { get; set; }
-        DbSet<User> IPersistanceDBContext.Users { get; set; }
+        public DbSet<Membership_User> Users { get; set; }
+        public DbSet<Membership_UserProfile> Profiles { get; set; }
+        public DbSet<Membership_Permission> Permissions { get; set; }
+        public DbSet<Membership_Roles> Roles { get; set; }
+        public DbSet<Membership_RolesPermission> RolesPermissions { get; set; }
+        public DbSet<Membership_UserRoles> UserRoles { get; set; }
+        public DbSet<Common_LessonsCategories> LessonsCategories { get; set; }
+        public DbSet<Common_UserEducation> UserEducations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
