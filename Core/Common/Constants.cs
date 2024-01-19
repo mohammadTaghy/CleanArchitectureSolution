@@ -31,12 +31,12 @@ namespace Common
         }
         public enum Gender
         {
-            [EnumDisplayName(DisplayName ="آقا")]
+            [EnumDisplayName(DisplayName = "آقا")]
             Male,
             [EnumDisplayName(DisplayName = "خانم")]
             Female
         }
-        public enum Status:byte
+        public enum Status : byte
         {
             [EnumDisplayName(DisplayName = "در حال بررسی")]
             InCheck,
@@ -51,6 +51,45 @@ namespace Common
             Form,
             Tab,
             Command
+        }
+        public enum LessonsCategoriesType
+        {
+            [EnumDisplayName(DisplayName = "مقطع تحصیلی")]
+            Grade,
+            [EnumDisplayName(DisplayName = "پایه تحصیلی")]
+            Course,
+            [EnumDisplayName(DisplayName = "کتاب درسی")]
+            Book,
+            [EnumDisplayName(DisplayName = "بخش")]
+            Section,
+            [EnumDisplayName(DisplayName = "درس")]
+            Lesson
+        }
+        public enum FileType
+        {
+            PDF = 1,
+            DOCX ,
+            Image,
+            Movie,
+            Sound
+        }
+        public enum ChangedType : byte
+        {
+            Create,
+            Update,
+            Delete
+        }
+        public static string GetGenderString(byte gender)
+        {
+            switch (gender)
+            {
+                case (byte)Constants.Gender.Male:
+                    return Constants.Gender.Male.DisplayName();
+                case (byte)Constants.Gender.Female:
+                    return Constants.Gender.Female.DisplayName();
+                default:
+                    return Constants.Gender.Male.DisplayName();
+            }
         }
     }
 }
