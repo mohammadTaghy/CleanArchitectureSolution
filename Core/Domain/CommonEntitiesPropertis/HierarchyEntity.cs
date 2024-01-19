@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public abstract class HierarchyEntity<T>: Entity, IHierarchyEntity
+    public abstract class HierarchyEntity<T>: Entity, IHierarchyEntity<T>
         where T : class, IEntity
     {
-        [Column(IsRequired = true, Title = "کد رایانه پدر")]
+        [Column(IsRequired = false, Title = "کد رایانه پدر")]
         public int? ParentId { get; set; }
         [Column(IsRequired = true, Title = "مشخص کننده سطح")]
         public char LevelChar { get; set; }

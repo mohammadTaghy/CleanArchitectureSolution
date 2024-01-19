@@ -21,6 +21,6 @@ namespace Domain.Entities
         [Column(IsRequired = true, Title = "فعال")]
         public bool IsActive { get; set; }
         [Column(IsRequired = false, Title = "کد پیش شماره")]
-        public bool NumberCode { get; set; }
+        public string NumberCode { get; set; }
     }
 }

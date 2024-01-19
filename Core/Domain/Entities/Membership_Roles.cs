@@ -9,7 +9,7 @@ namespace Domain.Entities
     public class Membership_Roles:Entity
     {
         [Column(IsRequired = true, Title = "نام نقش")]
-        public string RoleName { get; set; }
+        public string Name { get; set; }
         [Column(IsRequired = true, Title = "دارای دسترسی مدیریتی")]
         public bool IsAdmin { get; set; }
         public ICollection<Membership_RolesPermission> RolesPermission { get; set; }

@@ -24,7 +24,7 @@ namespace Domain.Entities
         public byte ManagerConfirm { get ; set ; }
         [Column( Title = "شناسه دستگاه")]
         public string? DeviceId { get ; set ; }
-        public Membership_UserProfile UserProfile { get ; set ; }
+        public Membership_UserProfile? UserProfile { get ; set ; }
         public ICollection<Membership_UserRoles> UserRoles { get ; set ; }
         public ICollection<Common_UserEducation> UserEducations { get; set; }
     }

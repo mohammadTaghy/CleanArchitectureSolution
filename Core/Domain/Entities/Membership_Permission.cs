@@ -19,7 +19,7 @@ namespace Domain.Entities
         [Column(Title = "نام دستور")]
         public string CommandName { get; set; }
         [Column(Title = "آدرس آیکن")]
-        public string IConPath { get; set; }
+        public string? IConPath { get; set; }
         [Column(Title = "نوع ویژگی")]
         public byte FeatureType { get; set; }
         [Column(IsRequired = true, Title = "فعال")]

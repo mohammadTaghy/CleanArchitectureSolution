@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Common_LessonsCategories : HierarchyEntity<Common_LessonsCategories>
+    public class Common_LessonsCategories : HierarchyEntity<Common_LessonsCategories>,IEntity
     {
         public Common_LessonsCategories()
         {
@@ -21,7 +21,7 @@ namespace Domain.Entities
         [Column(IsRequired = true, Title = "فعال")]
         public bool IsActive { get; set; }
         [Column(IsRequired = false, Title = "ضریب")]
-        public bool Coefficient { get; set; }
+        public byte Coefficient { get; set; }
         [Column(IsRequired = false, Title = "نوع دسته بندی")]
         public byte CategoryType { get; set; }
         public ICollection<Common_UserEducation> UserEducations { get; set; }

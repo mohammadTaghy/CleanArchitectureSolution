@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Common_UserEducation
+    public class Common_UserEducation:Entity
     {
         public int Id { get; set; }
         public int LessonsCategoriesId { get; set; }
