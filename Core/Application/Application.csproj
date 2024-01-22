@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UseCases\Common\LessonsCategories\Command\Update\**" />
+    <EmbeddedResource Remove="UseCases\Common\LessonsCategories\Command\Update\**" />
+    <None Remove="UseCases\Common\LessonsCategories\Command\Update\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
@@ -29,7 +35,6 @@
 
   <ItemGroup>
     <Folder Include="Notifications\Models\" />
-    <Folder Include="UseCases\Common\LessonsCategories\Command\Update\" />
   </ItemGroup>
 
 </Project>
