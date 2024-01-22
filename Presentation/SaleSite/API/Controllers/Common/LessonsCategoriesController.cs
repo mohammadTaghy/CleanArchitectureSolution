@@ -1,13 +1,12 @@
-﻿using Application.Common.Interfaces;
-using Application.Common.Model;
+﻿using Application.Common.Model;
 using Application.UseCases;
 using Application.UseCases.Common.LessonsCategories.Command.Create;
+using Application.UseCases.Common.LessonsCategories.Command.Update;
 using Asp.Versioning;
 using Common;
 using Domain.Entities;
 using Infrastructure.Authentication;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -54,7 +53,17 @@ namespace API.Controllers
         }
         #endregion
         #region HttpPut
-
+        [HttpPut]
+        [ApiVersion("1.0")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [CMSAuthorize]
+        public async Task<CommandResponse<Common_LessonsCategories>> PutLessonsCategories(
+            UpdateLessonsCategoriesCommand UpdateEntityCommand, CancellationToken cancellationToken)
+        {
+            return await _mediator.Send(UpdateEntityCommand,cancellationToken);
+        }
         #endregion
         #region HttpDelete
 
