@@ -1,4 +1,5 @@
-﻿using RabbitMQ.Client.Events;
+﻿using Application.Common.Model;
+using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Application.Common
 {
     public interface IRabbitMQUtility
     {
-        void RecieveMessage(string queueName, EventHandler<BasicDeliverEventArgs> eventHandler);
-        bool SendMessage(string queueName, string message);
+        void RecieveMessage(RabbitMQRecieveRequest rabbitMQRecieveRequest);
+        bool SendMessage(RabbitMQSendRequest rabbitMQSendRequest);
     }
 }

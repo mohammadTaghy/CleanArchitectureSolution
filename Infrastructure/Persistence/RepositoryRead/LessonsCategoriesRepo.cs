@@ -1,4 +1,5 @@
 ﻿using Application;
+using Application.Common;
 using Application.Common.Model;
 using Application.UseCases;
 using Common;
@@ -6,6 +7,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Persistence.BaseClass;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ namespace Persistence.Repository
 {
     public class LessonsCategoriesRepoRead : HierarchyEntityRepoRead<Common_LessonsCategories>, ILessonsCategoriesRepoRead
     {
-        public LessonsCategoriesRepoRead(IConfiguration config) : base(config)
+        public LessonsCategoriesRepoRead(IOptions<MongoDatabaseOption> config, IDirectExchangeRabbitMQ directExchangeRabbitMQ) : base(config, directExchangeRabbitMQ)
         {
         }
         #region CustomGet

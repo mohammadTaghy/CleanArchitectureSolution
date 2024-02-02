@@ -1,36 +1,37 @@
 ﻿using Application;
 using Domain;
 using Microsoft.AspNetCore.OData.Query;
-using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using System.Data.Entity;
 using System.Linq.Expressions;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Data.SqlTypes;
-using Application.Common.Exceptions;
-using Domain.Entities;
+using Microsoft.Extensions.Options;
+using Common;
+using Application.Common;
+using System.Text;
+using Newtonsoft.Json;
+using Application.Common.Model;
 
 namespace Persistence
 {
     public abstract class RepositoryReadBase<T> : IRepositoryReadBase<T> where T : class, IEntity
     {
         #region Property
-        private string connectionName = "MongoDBConnectionString";
-        private string connectionString;
         private readonly IMongoDatabase _dB;
+        private readonly IDirectExchangeRabbitMQ directExchangeRabbitMQ;
         private IMongoCollection<T> collection;
         private MongoClient mongoClient;
         public IQueryable<T> Queryable => collection.AsQueryable();
         public CancellationToken CancellationToken { get; set; }
         #endregion
 
-        public RepositoryReadBase(IConfiguration config)
+        public RepositoryReadBase(IOptions<MongoDatabaseOption> mongoDatabaseOption, IDirectExchangeRabbitMQ directExchangeRabbitMQ)
         {
-            connectionString = config.GetConnectionString(connectionName);
+            string connectionString = mongoDatabaseOption.Value.ConnectionString;
             mongoClient = new MongoClient(connectionString);
-            this._dB = mongoClient.GetDatabase(connectionString.Split('/').Last());
+            this._dB = mongoClient.GetDatabase(mongoDatabaseOption.Value.DatabaseName);
             collection = _dB.GetCollection<T>(typeof(T).FullName);
+            SetReciveMessageEvent();
+            this.directExchangeRabbitMQ = directExchangeRabbitMQ;
         }
         #region Get
 
@@ -47,7 +48,7 @@ namespace Persistence
 
             IQueryable results = options.ApplyTo(Queryable, settings);
             return new Tuple<List<T>, int>(
-                await results.ToListAsync() as List<T> ?? new List<T>(), 
+                await results.ToListAsync() as List<T> ?? new List<T>(),
                 int.Parse(options.Count.RawValue ?? "0")
                 );
         }
@@ -68,7 +69,7 @@ namespace Persistence
         #endregion
         #region Manipulate
 
-        public async void Add(T entity)
+        public async Task Add(T entity)
         {
             await AddMeny(Enumerable.Repeat(entity, 1));
         }
@@ -93,12 +94,12 @@ namespace Persistence
             }
         }
 
-        public void Delete(T entity)
+        public async Task Delete(T entity)
         {
-            Delete(entity.Id);
+            await Delete(entity.Id);
         }
 
-        public async void Delete(int id)
+        public async Task Delete(int id)
         {
 
             try
@@ -193,7 +194,41 @@ namespace Persistence
         }
 
         #endregion
-
+        #region abstract
+        protected virtual void SetReciveMessageEvent()
+        {
+            directExchangeRabbitMQ.RecieveMessage(new Application.Common.Model.RabbitMQRecieveRequest
+            {
+                RoutingKey = nameof(T),
+                QueueName = nameof(T),
+                EventHandler = async (model, ea) =>
+               {
+                   var body = ea.Body.ToArray();
+                   var message = Encoding.UTF8.GetString(body);
+                   RabbitMQMessageModel rabbitMQMessageModel = JsonConvert.DeserializeObject<RabbitMQMessageModel>(message);
+                   if (rabbitMQMessageModel != null)
+                   {
+                       T entity = JsonConvert.DeserializeObject<T>(rabbitMQMessageModel.Body);
+                       switch (rabbitMQMessageModel.ChangedType)
+                       {
+                           case (byte)Constants.ChangedType.Create:
+                               await this.Add(entity);
+                               break;
+                           case (byte)Constants.ChangedType.Update:
+                               await this.Update(entity);
+                               break;
+                           case (byte)Constants.ChangedType.Delete:
+                               await this.Delete(entity);
+                               break;
+                           default:
+                               break;
+                       }
+                   }
+                   Console.WriteLine($" [x] Received {message}");
+               }
+            });
+        }
+        #endregion
 
 
 

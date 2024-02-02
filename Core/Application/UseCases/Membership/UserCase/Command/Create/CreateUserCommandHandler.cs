@@ -6,7 +6,6 @@ using AutoMapper;
 using Common;
 using Domain;
 using Domain.Entities;
-using Domain.Model;
 using MediatR;
 using Newtonsoft.Json;
 
