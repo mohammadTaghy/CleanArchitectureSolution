@@ -27,11 +27,11 @@ namespace Application
         #endregion
 
         #region Manipulate
-        void Delete(T entity);
-        void Delete(int id);
+        Task Delete(T entity);
+        Task Delete(int id);
         Task Delete(IList<T> entity);
         Task Delete(IList<int> ids);
-        void Add(T entity);
+        Task Add(T entity);
         Task AddMeny(IEnumerable<T> entities);
         Task Update(T entity);
         Task Update(IList<T> entities);

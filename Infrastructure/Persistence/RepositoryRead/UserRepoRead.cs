@@ -1,7 +1,10 @@
 ﻿using Application;
+using Application.Common;
+using Common;
 using Domain;
 using Domain.Entities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +15,7 @@ namespace Persistence
 {
     public class UserRepoRead: RepositoryReadBase<Membership_User>, IUserRepoRead
     {
-        public UserRepoRead(IConfiguration config):base(config)
+        public UserRepoRead(IOptions<MongoDatabaseOption> config, IDirectExchangeRabbitMQ directExchangeRabbitMQ):base(config, directExchangeRabbitMQ)
         {
 
         }

@@ -16,7 +16,7 @@ namespace Infrastructure.DI
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             //services.AddHandlers();
-            services.AddSingleton<IRabbitMQUtility, RabbitMQUtility>();
+            services.AddSingleton<IRabbitMQUtility, DirectExchangeRabbitMQ>();
         }
         
     }

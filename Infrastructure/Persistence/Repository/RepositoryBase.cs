@@ -37,7 +37,6 @@ namespace Persistence.Repository
         {
             Context = context;
             _currentUserSession = currentUserSession;
-            ReciveMessage();
         }
 
         #region Properties
@@ -328,15 +327,7 @@ namespace Persistence.Repository
             }
         }
 
-        public void ReciveMessage()
-        {
-            new RabbitMQUtility().RecieveMessage("CQRS", (model, ea) =>
-            {
-                var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                Console.WriteLine($" [x] Received {message}");
-            });
-        }
+       
         #endregion
 
     }

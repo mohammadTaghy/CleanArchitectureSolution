@@ -1,7 +1,9 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common;
+using Application.Common.Interfaces;
 using Common;
 using Domain;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Persistence.Repository;
 using System;
 using System.Collections.Generic;
@@ -14,7 +16,7 @@ namespace Persistence.BaseClass
     public class HierarchyEntityRepoRead<T> : RepositoryReadBase<T>
          where T : class, IHierarchyEntity<T>
     {
-        public HierarchyEntityRepoRead(IConfiguration config) : base(config)
+        public HierarchyEntityRepoRead(IOptions<MongoDatabaseOption> config, IDirectExchangeRabbitMQ directExchangeRabbitMQ) : base(config, directExchangeRabbitMQ)
         {
         }
         protected void ChangeToHierarchy<E>(List<E> parents, List<E> childs)
