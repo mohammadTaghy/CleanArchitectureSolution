@@ -3,7 +3,9 @@ using Application.Common.Model;
 using Application.UseCases;
 using Asp.Versioning;
 using Common;
+using Common.JWT;
 using Infrastructure;
+using Infrastructure.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,13 +19,15 @@ namespace API.Controllers
         protected readonly IMediator _mediator;
         protected readonly ICurrentUserSession _currentUserSession;
 
-        public BaseController() { }
-        public BaseController(IMediator mediator, ICurrentUserSession currentUserSession)
+        public BaseController(
+            IMediator mediator, 
+            ICurrentUserSession currentUserSession)
         {
             _mediator = mediator;
             _currentUserSession = currentUserSession;
         }
         [HttpPost]
+        [Authorize]
         //[RequestFormLimits(Order = 1000 * 1024 * 1024)]
         //[RequestFormLimits(ValueLengthLimit = int.MaxValue, MultipartBodyLengthLimit = int.MaxValue,
         //    Order = int.MaxValue,MultipartHeadersLengthLimit =int.MaxValue, BufferBody =true,

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Common.JWT;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,7 @@ namespace Common.DI
             //services.AddSingleton<IMemoryCache>();
             //services.AddSingleton<IMemoryCacheManager, MemoryCacheManager>();
             services.AddScoped<ICurrentUserSession, CurrentUserSession>();
+            services.AddSingleton<IJWTTokenHelper, JWTTokenHelper>();
             return services;
         }
     }

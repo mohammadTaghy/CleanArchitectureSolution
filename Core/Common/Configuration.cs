@@ -29,4 +29,10 @@ namespace Common
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
     }
+    public class JwtSettings
+    {
+        public string Key { get; set; }
+        public string Issuer { get; set; }
+        public string Audience { get; set; }
+    }
 }

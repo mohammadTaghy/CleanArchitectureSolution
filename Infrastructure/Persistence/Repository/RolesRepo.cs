@@ -25,20 +25,22 @@ namespace Persistence.Repository
                 Name = request.Name
             };
 
-            request.PermissionIds.ForEach(p =>
+            request.PermissionIds?.ForEach(p =>
             {
+                roles.RolesPermission ??= new List<Membership_RolesPermission>();
                 roles.RolesPermission.Add(new Membership_RolesPermission
                 {
                     PermissionId = p,
                 });
             });
-            await base.Save();
+            await base.Insert(roles);
 
         }
 
         public async Task Update(UpdateRoleCommand request)
         {
-            Membership_Roles roles = await GetAllAsQueryable(new string[] { nameof(Membership_RolesPermission) })
+            SetNoTracking(false);
+            Membership_Roles roles = await GetAllAsQueryable(new string[] { nameof(Membership_Roles.RolesPermission) })
                 .Where(p => p.Id == request.Id)
                 .FirstAsync();
             roles.Name = request.Name;

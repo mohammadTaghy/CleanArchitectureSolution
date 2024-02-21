@@ -53,7 +53,8 @@ namespace Persistence.Repository
             };
             if (!command.FirstName.IsNullOrEmpty())
                 user.UserProfile = createUserProfile(command);
-            await base.Save();
+            
+            await base.Insert(user);
         }
 
         private Membership_UserProfile createUserProfile(CreateUserCommand command)
@@ -72,8 +73,10 @@ namespace Persistence.Repository
 
         public async Task Update(UpdateUserCommand command)
         {
-            Membership_User user = await GetAllAsQueryable(new string[] { nameof(Membership_UserProfile), nameof(Membership_UserRoles) })
-                .FirstAsync(p => p.Id == command.Id || p.UserName == command.UserName);
+            SetNoTracking(false);
+            Membership_User user = GetAllAsQueryable(new string[] { nameof(Membership_User.UserProfile), nameof(Membership_User.UserRoles) })
+                .Where(p => p.Id == command.Id || p.UserName == command.UserName)
+                .First();
             user.UserName = command.UserName;
             user.MobileNumber = command.MobileNumber;
             user.Email = command.Email;

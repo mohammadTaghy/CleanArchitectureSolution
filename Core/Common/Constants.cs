@@ -91,5 +91,9 @@ namespace Common
                     return Constants.Gender.Male.DisplayName();
             }
         }
+        public enum TokenClaimType
+        {
+            UserId
+        }
     }
 }

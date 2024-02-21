@@ -6,6 +6,8 @@ using Common.DI;
 using FluentValidation.AspNetCore;
 using Infrastructure.Authentication;
 using Infrastructure.DI;
+using Microsoft.AspNetCore.Authentication;
+
 //using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
@@ -57,7 +59,7 @@ namespace API
             services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
 
-           
+
             services.AddInfrastructure(Configuration);
             services.AddPersistence(Configuration);
             services.AddCommonDependency(Configuration);
@@ -84,7 +86,7 @@ namespace API
                 options.SuppressModelStateInvalidFilter = true;
             });
 
-            services.AddSession();
+
 
             services.AddApiVersioning(options =>
             {
@@ -116,12 +118,7 @@ namespace API
 
             });
 
-            services.Configure<IISServerOptions>(options =>
-            {
-                options.MaxRequestBodySize = null;
-                options.MaxRequestBodyBufferSize = int.MaxValue;
-            });
-
+           
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddMemoryCache();
@@ -143,8 +140,23 @@ namespace API
                 options.AllowSynchronousIO = true;
             });
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
+            });
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            authentication(services);
+
+            configuration(services);
+        }
+
+        private void authentication(IServiceCollection services)
+        {
+            services.AddAuthentication(auth =>
+            {
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer("Bearer", options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -152,19 +164,33 @@ namespace API
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+                    RequireExpirationTime = true,
                     ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidAudience = Configuration["Jwt:Issuer"],
-                    IssuerSigningKey = new
-                    SymmetricSecurityKey
-                    (Encoding.UTF8.GetBytes
-                    (Configuration["Jwt:Key"]))
+                    ValidAudience = Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
+            services.AddTransient<IClaimsTransformation, ClaimsTransformerHelper>();
+            services.AddAuthorization(o =>
+            {
+                o.AddPolicy("CmsClaim", p => p.RequireClaim("CmsClaim", "CmsClaim"));
+            });
         }
+
+        private void configuration(IServiceCollection services)
+        {
+            services.Configure<JwtSettings>(
+                Configuration.GetSection("Jwt"));
+            services.Configure<MongoDatabaseOption>(
+               Configuration.GetSection("MongoDatabaseSettings"));
+            services.Configure<AppSettings>(
+               Configuration.GetSection("AppSettings"));
+           
+        }
+
         public void Configure(IApplicationBuilder app)
         {
             app.UseCustomExceptionHandler();
-            app.UseSession();
 
             app.UseCors();
 
@@ -175,6 +201,11 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
             app.UseHttpsRedirection();
 
             string folderPath = Path.Combine(Directory.GetCurrentDirectory(), @"Asset");
@@ -186,16 +217,28 @@ namespace API
                 RequestPath = new PathString("/Asset")
             });
 
-
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseSpaStaticFiles();
+            app.UseCookiePolicy();
             app.UseRouting();
 
-            //app.UseMiddleware<JwtMiddleware>();//.ServerFeatures.Get<IEndpointFeature>().Endpoint.Metadata.Any(p=>p is AuthorizeAttribute);
+            app.UseSession();
 
-            //app.UseAuthentication();
-            //app.UseIdentityServer();
-            //app.UseAuthorization();
+            app.Use(async (context, next) =>
+            {
+                var JWToken = context.Session.GetString("JWToken");
+                if (!string.IsNullOrEmpty(JWToken))
+                {
+                    if (context.Request.Headers.ContainsKey("Authorization"))
+                        context.Request.Headers.Remove("Authorization");
+                    context.Request.Headers.TryAdd("Authorization", "Bearer " + JWToken);
+                }
+                await next();
+            });
+            app.UseAuthorization();
+
+           
 
             app.UseEndpoints(endpoints =>
             {

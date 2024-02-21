@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-
+    [Authorize]
     public class LessonsCategoriesController : BaseController
     {
         public LessonsCategoriesController(IMediator mediator, ICurrentUserSession currentUserSession) : base(mediator, currentUserSession)
@@ -24,7 +24,6 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [CMSAuthorize]
         public async Task<QueryResponse<List<LessonsCategoriesTreeDto>>> LessonsCategories([FromQuery] LessonsCategoriesAsTreeQuery lessonsCategoriesAsTreeQuery, CancellationToken cancellationToken)
         {
             return await _mediator.Send(lessonsCategoriesAsTreeQuery, cancellationToken);
@@ -34,7 +33,6 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [CMSAuthorize]
         public async Task<QueryResponse<List<LessonsCategoriesTreeDto>>> LessonsCategoriesAsList([FromQuery] LessonsCategoriesAsListQuery lessonsCategoriesAsTreeQuery, CancellationToken cancellationToken)
         {
             return await _mediator.Send(lessonsCategoriesAsTreeQuery, cancellationToken);
@@ -46,7 +44,6 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [CMSAuthorize]
         public async Task<CommandResponse<Common_LessonsCategories>> LessonsCategories(CreateLessonsCategoriesCommand createLessonsCategoriesCommand, CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(createLessonsCategoriesCommand, cancellationToken);

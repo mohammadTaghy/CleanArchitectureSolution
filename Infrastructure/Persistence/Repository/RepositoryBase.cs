@@ -102,8 +102,7 @@ namespace Persistence.Repository
         #region Get
         public IQueryable<T> GetAllAsQueryable()
         {
-            IQueryable<T> query = from p in Context.Set<T>()
-                                  select p;
+            IQueryable<T> query = Context.Set<T>();
             if (isNoTracking)
                 query = query.AsNoTracking();
             return query;

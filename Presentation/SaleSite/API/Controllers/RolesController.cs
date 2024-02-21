@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-
+    [Authorize]
     public class RolesController : BaseController
     {
         public RolesController(IMediator mediator, ICurrentUserSession currentUserSession) : base(mediator,currentUserSession)
@@ -25,7 +25,6 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [CMSAuthorize]
         public async Task<QueryResponse<List<RolesDto>>> Roles([FromQuery]RolesQuery getRolesQuery,CancellationToken cancellationToken)
         {
             var result = await _mediator.Send(getRolesQuery, cancellationToken);
@@ -36,14 +35,23 @@ namespace API.Controllers
         
 
         [HttpPost]
-
         [ApiVersion("1.0")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [CMSAuthorize]
-        public async Task<CommandResponse<Membership_Roles>> Roles(UpdateRoleCommand createRoleCommand, CancellationToken cancellationToken)
+        public async Task<CommandResponse<Membership_Roles>> Roles(CreateRoleCommand createRoleCommand, CancellationToken cancellationToken)
         {
+            var result = await _mediator.Send(createRoleCommand, cancellationToken);
+            return result;
+        }
+        [HttpPut("{id:int}")]
+        [ApiVersion("1.0")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<CommandResponse<Membership_Roles>> Roles([FromBody]UpdateRoleCommand createRoleCommand, [FromRoute]int id, CancellationToken cancellationToken)
+        {
+            createRoleCommand.Id = id;
             var result = await _mediator.Send(createRoleCommand, cancellationToken);
             return result;
         }

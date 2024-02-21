@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="DynamicODataToSQL" Version="1.0.5" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.2.4" />

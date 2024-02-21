@@ -8,28 +8,22 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Authentication
 {
-    public class JwtMiddleware
+    public class JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings, IJWTTokenHelper jWTTokenHelper)
     {
-        private readonly RequestDelegate _next;
-        private readonly IConfiguration _configuration;
-        private readonly AppSettings _appSettings;
-
-        public JwtMiddleware(RequestDelegate next, IOptions<AppSettings> appSettings, IConfiguration configuration)
-        {
-            _next = next;
-            _configuration = configuration;
-            _appSettings = appSettings.Value;
-        }
+        private readonly RequestDelegate _next = next;
+        private readonly IJWTTokenHelper jWTTokenHelper = jWTTokenHelper;
+        private readonly AppSettings _appSettings = appSettings.Value;
 
         public async Task Invoke(HttpContext context)
         {
-            var token = context.Request.Headers["Token"].FirstOrDefault();
-
+            var token = context.Request.Headers["Authorization"].FirstOrDefault();
+            attachUserToContext(context, token);
             //if (token == null)
             //    throw new Exception(CommonMessage.Unauthorized);
 
@@ -40,23 +34,15 @@ namespace Infrastructure.Authentication
         {
             try
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(_appSettings.SecretKey);
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
-
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
-
+                
+                var jwtToken = jWTTokenHelper.DecodeJson(token.Replace("Bearer","",true, null).Trim());
+                var userId = jwtToken.First(x => x.Type == nameof(Common.Constants.TokenClaimType.UserId)).Value;
                 // attach user to context on successful jwt validation
-                context.Request.Headers.Add("Token", JWTToken<TokenObject>.CreateToken(new TokenObject { Id = userId, UserType = 0 },
-                    _configuration["Jwt:Key"]));
+                var identity = new ClaimsIdentity(new List<Claim>
+                    {
+                        new Claim("UserId", userId, ClaimValueTypes.Integer32)
+                    }, "Custom");
+                context.User = new ClaimsPrincipal(identity);
             }
             catch
             {
